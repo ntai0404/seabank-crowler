@@ -84,17 +84,37 @@ cp .env.example .env
 
 ---
 
-## ☁️ Cấu hình Tự động hóa (GitHub Actions)
+## ☁️ Hướng dẫn chi tiết thiết lập GitHub Actions
 
-Để hệ thống tự chạy trên GitHub, bạn cần thêm 2 **Repository Secrets**:
-1.  `SPREADSHEET_ID`: ID của Google Sheet.
-2.  `GOOGLE_CREDENTIALS_JSON`: Copy toàn bộ nội dung file `excel_key.json`.
+Để hệ thống có thể tự động chạy trên server của GitHub mà không cần máy tính của bạn bật, hãy làm theo 4 bước sau:
 
-Lịch chạy mặc định: **08:00** và **14:00** hàng ngày (giờ Việt Nam).
+### Bước 1: Lấy thông tin cần thiết
+1.  **SPREADSHEET_ID**: Mở Google Sheet của bạn, ID là chuỗi ký tự nằm giữa `d/` và `/edit` trên thanh địa chỉ.
+    *   Ví dụ: `https://docs.google.com/spreadsheets/d/1abc123.../edit` -> ID là `1abc123...`
+2.  **GOOGLE_CREDENTIALS_JSON**: Mở file `excel_key.json` trong thư mục dự án bằng Notepad, copy **toàn bộ** nội dung bên trong (bao gồm cả dấu ngoặc nhọn `{ }`).
+
+### Bước 2: Thêm Secrets vào GitHub
+1.  Truy cập vào Repository của bạn trên GitHub: `https://github.com/ntai0404/seabank-crowler`.
+2.  Chọn tab **Settings** (Cài đặt) ở thanh menu trên cùng.
+3.  Ở cột bên trái, tìm mục **Secrets and variables** -> Chọn **Actions**.
+4.  Nhấn nút xanh **New repository secret**.
+5.  Thêm lần lượt 2 secret:
+    *   **Name**: `SPREADSHEET_ID` | **Value**: (Dán ID vào đây)
+    *   **Name**: `GOOGLE_CREDENTIALS_JSON` | **Value**: (Dán toàn bộ nội dung file JSON vào đây)
+
+### Bước 3: Kích hoạt Workflow
+1.  Chọn tab **Actions** trên thanh menu GitHub.
+2.  Ở cột bên trái, chọn workflow **Daily Data Crawl**.
+3.  Nếu thấy thông báo màu vàng, hãy nhấn nút **Enable workflow**.
+4.  Để chạy thử ngay lập tức: Nhấn nút **Run workflow** -> Chọn nhánh `main` -> Nhấn nút xanh **Run workflow**.
+
+### Bước 4: Theo dõi kết quả
+*   Sau khi nhấn Run, một tiến trình (job) sẽ hiện ra. Bạn có thể nhấn vào đó để xem log chạy thực tế của các Agent.
+*   Nếu tất cả các bước hiện tích xanh ✅, dữ liệu đã được đẩy thành công vào Google Sheet.
 
 ---
 
-## � Cấu trúc thư mục
+## 📂 Cấu trúc thư mục
 *   `agents/`: Chứa mã nguồn của từng Crawler riêng biệt.
 *   `core/`: Chứa logic dùng chung (kết nối Sheets, cấu hình, BaseAgent).
 *   `plan/`: Chứa tài liệu lập kế hoạch dự án.
