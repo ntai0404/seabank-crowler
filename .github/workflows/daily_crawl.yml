@@ -1,0 +1,73 @@
+name: Daily Data Crawl
+
+on:
+  schedule:
+    # Chạy mỗi ngày lúc 1:00 AM UTC (8:00 AM Vietnam time)
+    - cron: "0 1 * * *"
+    # Chạy thêm lúc 7:00 AM UTC (2:00 PM Vietnam time) — giữa ngày
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+    inputs:
+      agents:
+        description: "Agent(s) cần chạy (all | cafef customs textile vinatex)"
+        required: false
+        default: "all"
+      setup:
+        description: "Chạy setup Google Sheets?"
+        required: false
+        default: "false"
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      # 1. Checkout code
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Python
+      - name: 🐍 Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      # 3. Cài dependencies
+      - name: 📦 Install dependencies
+        run: pip install -r requirements.txt
+
+      # 4. Tạo .env từ GitHub Secrets
+      - name: 🔐 Create .env from secrets
+        run: |
+          echo "SPREADSHEET_ID=${{ secrets.SPREADSHEET_ID }}"       >> .env
+          echo "GOOGLE_CREDENTIALS_JSON=${{ secrets.GOOGLE_CREDENTIALS_JSON }}" >> .env
+          echo "STOCK_HISTORY_DAYS=7"    >> .env
+          echo "REQUEST_DELAY=0.8"       >> .env
+          echo "REQUEST_TIMEOUT=20"      >> .env
+          echo "PLAYWRIGHT_TIMEOUT=60000" >> .env
+
+      # 5. (Tùy chọn) Setup Sheets lần đầu
+      - name: 🗂️ Setup Google Sheets (nếu cần)
+        if: github.event.inputs.setup == 'true'
+        run: python main.py --setup --agents all
+        env:
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+
+      # 6. Chạy agent pipeline
+      - name: 🤖 Run crawler agents
+        run: |
+          AGENTS="${{ github.event.inputs.agents || 'all' }}"
+          python main.py --agents $AGENTS
+        env:
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+
+      # 7. Thông báo kết quả (optional: Slack/Telegram webhook)
+      - name: 📊 Crawl result summary
+        if: always()
+        run: |
+          echo "✅ Pipeline completed at $(date '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "📋 Spreadsheet: https://docs.google.com/spreadsheets/d/${{ secrets.SPREADSHEET_ID }}"

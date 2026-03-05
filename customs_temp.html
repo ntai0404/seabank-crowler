@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Tổng cục Hải Quan Việt Nam</title>
+<meta name="description" content="Cổng thông tin Tổng cục Hải Quan Việt Nam">
+<meta property="og:url"                content="https://www.customs.gov.vn" />
+<meta property="og:type"               content="website" />
+<meta property="og:title"              content="Tổng cục Hải Quan Việt Nam" />
+<meta property="og:description"        content="Cổng thông tin Tổng cục Hải Quan Việt Nam" />
+<meta property="og:image"              content="https://www.customs.gov.vn/resources/images/thumbnail.jpg" />
+<meta property="og:image:type"         content="image/jpeg" />
+<meta property="og:image:width"        content="448" />
+<meta property="og:image:height"       content="262" />
+<meta property="og:image:alt"          content="Tổng cục Hải Quan Việt Nam" />
+
+<link rel="shortcut icon" type="image/ico"
+	href="/VietnamCustoms.ico">
+<!-- iPad icons -->
+<link rel="apple-touch-icon-precomposed"
+	href="/VietnamCustoms.ico"
+	sizes="72x72"/>
+<link rel="apple-touch-icon-precomposed"
+	href="/VietnamCustoms.ico"
+	sizes="144x144"/>
+<!-- iPhone and iPod touch icons -->
+<link rel="apple-touch-icon-precomposed"
+	href="/VietnamCustoms.ico"
+	sizes="57x57"/>
+<link rel="apple-touch-icon-precomposed"
+	href="/VietnamCustoms.ico"
+	sizes="114x114"/>
+<!-- Nokia Symbian -->
+<link rel="nokia-touch-icon"
+	href="/VietnamCustoms.ico"/>
+<!-- Android icon precomposed so it takes precedence -->
+<link rel="apple-touch-icon-precomposed"
+	href="/VietnamCustoms.ico"
+	sizes="1x1"/>
+<script
+	src="/resources/js/jquery-3.6.0.min.js"></script>
+<script
+	src="/resources/js/bootstrap.min.js"></script>
+<script
+	src="/plugins/select2/select2.min.js"></script>
+<script src="/kendo.all.min.js"></script>
+<script src="/scripts/main.js?v=1.4"></script>
+<script
+	src="/plugins/ExportWord/FileSave.js"></script>
+<script
+	src="/plugins/ExportWord/jquery.wordexport.js"></script>
+<script
+	src="/plugins/jquery-confirm/jquery-confirm.js"></script>
+<script
+	src="/plugins/paginate/paginathing.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="/plugins/jquery-confirm/jquery-confirm.css" />
+<link rel="stylesheet"
+	href="/styles/style_cus.css?v=1.1" />
+<script
+	src='/plugins/slimScroll/jquery.slimscroll.min.js'></script>
+<link rel="stylesheet" type="text/css"
+	href="/plugins/dataTable/dataTables.css">
+<script charset="utf8"
+	src="/plugins/dataTable/dataTables.js"></script>
+<script charset="utf8"
+	src="/plugins/dataTable/dataTables.buttons.min.js"></script>
+<script charset="utf8"
+	src="/plugins/dataTable/buttons.flash.min.js"></script>
+<script charset="utf8"
+	src="/plugins/dataTable/jszip.min.js"></script>
+<script charset="utf8"
+	src="/plugins/dataTable/vfs_fonts.js"></script>
+<script charset="utf8"
+	src="/plugins/dataTable/buttons.html5.min.js"></script>
+<script charset="utf8"
+	src="/plugins/dataTable/buttons.print.min.js"></script>
+<script charset="utf8"
+	src="/plugins/dataTable/select.js"></script>
+<link rel="stylesheet"
+	href="/resources/css/font-awesome.min.css" />
+<link rel="stylesheet"
+	href="/resources/css/bootstrap.min.css" />
+<link rel="stylesheet"
+	href="/plugins/kendo/kendo.common.min.css" />
+<link rel="stylesheet"
+	href="/plugins/kendo/kendo.blueopal.min.css" />
+<link rel="stylesheet"
+	href="/styles/main.css?v=125" />
+<link rel="stylesheet"
+	href="/plugins/select2/select2.min.css" />
+<script src="/scripts/js_cus.js"></script>
+<script>
+	var ngon_ngu_session = getParams("ngon_ngu");
+	if (ngon_ngu_session) {
+		setCookie('ngon_ngu_session', (ngon_ngu_session == 'en' ? 'TIENG_ANH'
+				: 'TIENG_VIET'), 365);
+	} else {
+		var checkCookie = getCookie('ngon_ngu_session');
+		if (checkCookie === 'TIENG_ANH') {
+			ngon_ngu_session = 'en';
+		} else {
+			ngon_ngu_session = 'vn';
+		}
+	}
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async
+	src="https://www.googletagmanager.com/gtag/js?id=UA-44050693-1"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	};
+	gtag('js', new Date());
+	gtag('config', 'UA-44050693-1');
+</script>
+<!-- Begin EMC Tracking Code -->
+<script type="text/javascript">
+            var _govaq = window._govaq || [];
+        _govaq.push(['trackPageView']);
+        _govaq.push(['enableLinkTracking']);
+        (function () {
+            _govaq.push(['setTrackerUrl', 'https://f-emc.ngsp.gov.vn/tracking']);
+            _govaq.push(['setSiteId', '294']);
+            var d = document,
+                g = d.createElement('script'),
+                s = d.getElementsByTagName('script')[0];
+            g.type = 'text/javascript';
+            g.async = true;
+            g.defer = true;
+            g.src = 'https://f-emc.ngsp.gov.vn/embed/gov-tracking.min.js';
+            s.parentNode.insertBefore(g, s);
+        })();
+</script>
+<style type="text/css">
+.main_page .region-header {
+	position: absolute;
+	height: 300px;
+	padding: 0px !important;
+}
+
+.main_page .region-position {
+	/* Fix background img */
+	width: 100%;
+	position: absolute;
+	top: 0px;
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+	max-height: 187px;
+	overflow: hidden;
+}
+
+.tnx-module.ad-mod .overlay {
+	display: none;
+	overflow: hidden;
+	position: absolute;
+	z-index: 998;
+	background: #ffffff5c;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	opacity: 1;
+	border: solid 5px #80ff98;
+}
+
+.tnx-module.ad-mod:hover .overlay {
+	display: block;
+}
+
+.tnx-module {
+	position: relative !important;
+}
+
+.tnx-admin-btn {
+	position: absolute !important;
+	bottom: 5px;
+	right: 5px;
+	background: #337ab7;
+	padding: 5px;
+	display: none;
+	z-index: 999;
+}
+
+.tnx-admin-btn a {
+	cursor: pointer;
+	opacity: 0.5;
+	padding: 0 5px;
+	color: #FFF;
+}
+
+.tnx-admin-btn a:hover {
+	opacity: 1;
+}
+
+#tnx-div-modules span {
+	height: 60px;
+	background: #eee;
+	display: block;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+#tnx-div-modules div i {
+	font-size: 10px;
+	width: 100%;
+	text-align: center;
+	display: block;
+	margin-top: 5px;
+	font-style: normal;
+	font-weight: bold;
+	text-decoration: none;
+	word-break: break-word;
+}
+
+.tnx-module-thumb.active span {
+	border: solid 3px #4cff00;
+}
+
+#tnx-div-modules div em {
+	line-height: 62px;
+	font-size: 35px;
+	width: 100%;
+}
+
+/*style for admin*/
+.hollow {
+	background: #fed6d6 !important;
+}
+
+#admin-btn-left a {
+	width: 100%;
+	display: block;
+	margin-bottom: 5px;
+}
+
+.modal-title {
+	float: left;
+}
+
+.tnx-module.dragclone {
+	position: absolute !important;
+	overflow: hidden !important;
+}
+
+.tnx-module.dragclone module {
+	zoom: 0.5;
+}
+
+.tnx-module.dragclone {
+	background: #FFF !important;
+}
+
+#tnx-div-module-items {
+	display: block;
+	width: 100%;
+	overflow: hidden;
+}
+
+.tnx-admin-module-item {
+	margin: 0 2px;
+	display: block;
+	float: left;
+	width: 75px;
+	word-break: break-all;
+	min-height: 110px;
+}
+
+.display_block {
+	overflow: hidden;
+	display: block;
+}
+</style>
+<script type="text/javascript">
+	//get modules by page Id
+	var arrPages = [];
+	var arrRegions = [];
+	var arrModules = [];
+
+	$(document).ready(function() {
+		pageLoad();
+	});
+	var pageId, global_SiteName;
+	var siteName = '';
+	var newRootPath = "";
+
+	function loadComplete(data, textStatus, jqxhr) {
+		var param = jqxhr.params.split("?")[1];
+		var p = parseParamModule(param);
+		var args = param.split("|");
+		eval("var item = loadData('" + param + "')");
+		var moduleId = "#" + p.moduleId;
+		var btnText = "<div class='tnx-admin-btn'>";
+		btnText += "<a onclick='deleteModule(this);' title='Xóa module' class='tnx-admin-btn-add'><span class='fa fa-fw fa-times'></span></a>";
+		btnText += "<a class='tnx-admin-btn-add' title='Sửa module' onclick='editModule(this);'><span class='fa fa-fw fa-edit'></span></a>";
+		btnText += "<a onclick='addModule(this);' title='Thêm mới module' class='tnx-admin-btn-add'><span class='fa fa-fw fa-plus'></span></a>";
+		btnText += "</div>";
+		$(moduleId).append(btnText);
+	}
+
+	function pageLoad() {
+		siteName = window.location.href;
+		if (siteName.indexOf('localhost') >= 0
+				|| siteName.indexOf('10.224.128.185') >= 0
+				|| siteName.indexOf('portal') >= 0
+				|| siteName.indexOf('123.30.210.237') >= 0
+
+		) {
+			siteName = siteDefault;
+		} else if (siteName.indexOf("http://customs.gov.vn") >= 0
+				|| siteName.indexOf("https://customs.gov.vn") >= 0
+				|| siteName.indexOf("http://www.customs.gov.vn") >= 0
+				|| siteName.indexOf("https://www.customs.gov.vn") >= 0
+				|| siteName.indexOf("https://www.customs.gov.vn/") >= 0) {
+			siteName = "https://tongcuc.customs.gov.vn/"
+
+		} else {
+			var pathname = window.location.pathname;
+			if (pathname.length > 1) {
+				pathname = pathname.substring(1);
+				var firstS = pathname.lastIndexOf('/');
+				if (firstS != -1) {
+					pathname = "/" + pathname.substring(0, firstS) + "/";
+				} else {
+					pathname = "/";
+				}
+			}
+			siteName = window.location.origin + pathname;
+		}
+		 if (ngon_ngu_session === 'en') {
+			siteName = siteName + "en/";
+		} 
+		var getListPageUrl = 'bridge?url=' + main_new + '/api/GetListPage';
+		shellService.ExecuteGetAction(getListPageUrl, {
+			site : siteName,
+		}).then(
+				function(ret) {
+					arrPages = ret.d;
+					global_SiteName = arrPages[0].siteName;
+					homePage = $.grep(arrPages, function(a) {
+						return a.siteName == global_SiteName && a.isDefault;
+					})[0];
+					_sitename = homePage.siteName;
+					_chuyenTrang = homePage.maChuyenTrang;
+					_tenDayDu = homePage.tenDayDu;
+					/*Set title name*/
+					$("title")[0].innerHTML = _tenDayDu;
+					pageId = getParams("pageId") == undefined ? homePage.id
+							: getParams("pageId");
+					postShellService.ExecuteGetAction(
+							'bridge?url=' + main_new + '/api/GetPageControl', {
+								pageId : pageId,
+							}).then(
+							function(data) {
+								var pageItem = data.d[0];
+								$("#main").load(
+										"/themes/"
+												+ pageItem.theme.themeName
+												+ "/skin.jsp?a="
+												+ new Date().getMilliseconds(),
+										function() {
+											// 					$("#main").kendoDropTargetArea({
+											// 						filter : ".tnx-region",
+											// 						dragenter : droptargetOnDragEnter,
+											// 						dragleave : droptargetOnDragLeave,
+											// 						drop : droptargetOnDrop
+											// 					});
+										});
+								arrRegions = pageItem.regions;
+								arrModules = pageItem.modules;
+							});
+				});
+	}
+</script>
+</head>
+<body>
+	<div id="main"></div>
+<script id="moduleOptionTemplate" type="text/x-kendo-template">
+    # for (var i = 0; i < data.length; i++) { var item = data[i] #
+    <option value="#=item.id#">#=item.orderBy# | #=item.moduleTitle#</option>
+    # } #
+    <option value="999">--Last--</option>
+	</script>
+	<script id="themeOptionTemplate" type="text/x-kendo-template">
+    # for (var i = 0; i < data.length; i++) { var item = data[i] #
+    <option value="#=item.id#">#=item.name#</option>
+    # } #
+	</script>
+	<script id="moduleListTemplate" type="text/x-kendo-template">
+    # for (var i = 0; i < data.length; i++) { var item = data[i] #
+    <div class="tnx-admin-module-item">
+        <a class="tnx-module-thumb" data-id="#=item.id#" data-module-name="#=item.name#" onclick="chooseModule(this);">
+            <span>
+                <em class="fa fa-fw #=item.icon#">
+                </em>
+            </span>
+            <i>#=item.title#</i>
+        </a>
+    </div>
+    # } #
+</script>
+</body>
+</html>
