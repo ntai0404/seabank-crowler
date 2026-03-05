@@ -1,29 +1,15 @@
-# Credentials — KHÔNG commit lên Git
-credentials.json
-excel_key.json
-
-# Python
+logs/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.venv/
-venv/
-env/
-agents/__pycache__/
-core/__pycache__/
-
-# IDE
+.env
+excel_key.json
+customs_temp.html
+sjc_homepage.html
+null
+temp_*.html
+*.log
+.DS_Store
 .vscode/
 .idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Environment (chứa secret credentials — KHÔNG commit)
-.env
-
-# Logs
-logs/
-*.log
