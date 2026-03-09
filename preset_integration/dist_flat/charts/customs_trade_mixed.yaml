@@ -1,0 +1,18 @@
+version: 1.0.0
+slice_name: "So s\xE1nh Kim ng\u1EA1ch Xu\u1EA5t nh\u1EADp kh\u1EA9u (H\u1EA3i quan)"
+viz_type: mixed_timeseries
+params:
+  adhoc_filters: []
+  groupby:
+  - category
+  metrics:
+  - expression: SUM(export_value)
+    label: "Xu\u1EA5t kh\u1EA9u"
+  metrics_b:
+  - expression: SUM(import_value)
+    label: "Nh\u1EADp kh\u1EA9u"
+  time_grain_sqla: P1M
+  x_axis_label: "Th\xE1ng"
+  y_axis_label: "Gi\xE1 tr\u1ECB (USD)"
+dataset_uuid: 7fe4c117-3243-43d8-8a4b-7459fb54e7de
+uuid: 8c5b078f-9763-4a30-abb9-fd923dc4a506

@@ -1,0 +1,27 @@
+css: ''
+dashboard_title: SeaBank Operations Dashboard
+description: Báo cáo tổng hợp từ Crawler
+metadata:
+  default_filters: '{}'
+  expand_slices: true
+  refresh_frequency: 0
+  timed_refresh_immune_slices: []
+position:
+  DASHBOARD_VERSION_KEY: v2
+  GRID_ID:
+    children:
+    - ROW-1
+    id: GRID_ID
+    type: GRID
+  ROOT_ID:
+    children:
+    - GRID_ID
+    id: ROOT_ID
+    type: ROOT
+  ROW-1:
+    children:
+    - CHART-1
+    id: ROW-1
+    type: ROW
+slug: seabank-ops
+uuid: 8cceb410-f443-4a73-94fd-d4fa14e85e0a

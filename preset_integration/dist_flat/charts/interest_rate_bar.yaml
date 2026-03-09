@@ -1,0 +1,19 @@
+version: 1.0.0
+slice_name: "So s\xE1nh L\xE3i su\u1EA5t huy \u0111\u1ED9ng gi\u1EEFa c\xE1c Ng\xE2n h\xE0ng"
+viz_type: dist_bar
+params:
+  adhoc_filters: []
+  columns:
+  - term
+  groupby:
+  - bank_name
+  metrics:
+  - expression: MAX(rate)
+    label: "L\xE3i su\u1EA5t t\u1ED1i \u0111a"
+  row_limit: 100
+  show_legend: true
+  viz_type: dist_bar
+  x_axis_label: "Ng\xE2n h\xE0ng"
+  y_axis_label: "L\xE3i su\u1EA5t (%)"
+dataset_uuid: b424e2a5-ce63-4fe6-b8a1-841726cd9036
+uuid: 9bef1d12-95d1-4789-b4b6-4d336019cceb

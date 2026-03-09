@@ -13,6 +13,7 @@
 
 import json
 import re
+import time
 from bs4 import BeautifulSoup
 
 from core.base_agent import BaseAgent
@@ -67,7 +68,78 @@ class TextileAgent(BaseAgent):
                 print(f"[VITAS] ❌ Lỗi khi crawl '{page_config['url']}': {e}")
 
         print(f"[VITAS] Tổng cộng: {len(rows)} bài viết (unique).")
-        return {"textile_news": rows}
+        
+        # Cào danh bạ hội viên
+        directory_rows = self._crawl_directory()
+
+        return {
+            "textile_news": rows,
+            "textile_directory": directory_rows
+        }
+
+    def _crawl_directory(self) -> list[list]:
+        """Cào danh bạ doanh nghiệp từ VITAS — dùng Playwright."""
+        print("[VITAS] Crawl danh bạ hội viên (Playwright)...")
+        rows = []
+        url_dir = "http://www.vietnamtextile.org.vn/DanhBa.aspx"
+        try:
+            from playwright.sync_api import sync_playwright
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                page = browser.new_page()
+                page.goto(url_dir, timeout=60000, wait_until="domcontentloaded")
+                time.sleep(5)
+                
+                # Chờ các item danh bạ load
+                try:
+                    page.wait_for_selector("a.pl_vanban_title", timeout=15000)
+                except:
+                    print("  [!] Không thấy selector danh bạ, thử parse thô")
+                
+                # Duyệt qua các tab content_ptab_1 đến content_ptab_4
+                for tab_idx in range(1, 5):
+                    tab_selector = f"#content_ptab_{tab_idx}"
+                    print(f"    [VITAS] Đang kiểm tra tab: {tab_selector}")
+                    
+                    # Thử click vào tab nếu cần (giả định tab render khi visible)
+                    try:
+                        page.click(f"li#ptab_{tab_idx} a", timeout=2000)
+                        time.sleep(1)
+                    except:
+                        pass
+
+                    soup = BeautifulSoup(page.content(), "html.parser")
+                    tab_container = soup.select_one(tab_selector)
+                    if tab_container:
+                        items = tab_container.select("a.pl_vanban_title h2")
+                        for item in items:
+                            name = self._clean_text(item.get_text())
+                            if name and len(name) > 5:
+                                info = ""
+                                parent_link = item.find_parent("a")
+                                if parent_link:
+                                    desc = parent_link.find_next("div", class_="pl_vanban_desc")
+                                    if desc: info = self._clean_text(desc.get_text())
+                                
+                                rows.append([
+                                    self.timestamp, name, "Dệt may", info[:200], ""
+                                ])
+                browser.close()
+            
+            # Remove duplicates
+            unique_rows = []
+            seen = set()
+            for r in rows:
+                if r[1] not in seen:
+                    seen.add(r[1])
+                    unique_rows.append(r)
+            
+            print(f"  ✅ Đã tìm thấy {len(unique_rows)} doanh nghiệp duy nhất.")
+            return unique_rows
+        except Exception as e:
+            print(f"[VITAS] ❌ Lỗi cào danh bạ (Playwright): {e}")
+            print(f"  [TIP] Kiểm tra xem 'playwright install' đã được chạy chưa.")
+            return rows
 
     def _parse_articles(self, soup: BeautifulSoup, base_url: str, category: str) -> list[dict]:
         """Parse danh sách bài viết từ trang VITAS."""

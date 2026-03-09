@@ -1,0 +1,17 @@
+database_name: Seabank Manual
+sqlalchemy_uri: gsheets://
+cache_timeout: null
+expose_in_sqllab: true
+allow_run_async: false
+allow_ctas: false
+allow_cvas: false
+allow_dml: false
+allow_csv_upload: false
+extra:
+  allows_virtual_table_explore: true
+  engine_params:
+    catalog:
+      SeaBank_Data: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng
+impersonate_user: true
+uuid: 482b5b73-c5e8-4f35-a665-7236f5a0904b
+version: 1.0.0

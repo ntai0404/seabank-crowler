@@ -37,8 +37,13 @@ class CustomsAgent(BaseAgent):
         rows = []
         rows.extend(self._crawl_quick_stats())
         rows.extend(self._crawl_monthly_report())
+        
+        commodity_rows = self._crawl_commodity_details()
 
-        return {"customs_trade": rows}
+        return {
+            "customs_trade": rows,
+            "customs_commodity_details": commodity_rows
+        }
 
     # ----------------------------------------------------------
     # 1. Thống kê nhanh (tổng XNK hàng ngày/tháng)
@@ -166,8 +171,73 @@ class CustomsAgent(BaseAgent):
 
         except Exception as e:
             print(f"[CUSTOMS] ❌ Lỗi báo cáo tháng (Playwright): {str(e)[:150]}")
+            print(f"  [TIP] Kiểm tra cài đặt trình duyệt 'playwright install'.")
 
         print(f"[CUSTOMS] Báo cáo tháng: {len(rows)} bản ghi.")
+        return rows
+
+    # ----------------------------------------------------------
+    # 3. Chi tiết mặt hàng (Dệt may, Thủy sản, Giày dép...)
+    # ----------------------------------------------------------
+    def _crawl_commodity_details(self) -> list[list]:
+        """Crawl chi tiết các mặt hàng chủ lực từ trang Hàng hóa."""
+        print("[CUSTOMS] Crawl chi tiết mặt hàng XNK...")
+        rows = []
+        url_commodities = "https://www.customs.gov.vn/index.jsp?pageId=444&group=Hàng hóa"
+        
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                page = browser.new_page()
+                page.goto(url_commodities, timeout=60000, wait_until="domcontentloaded")
+                time.sleep(3)
+                
+                soup = BeautifulSoup(page.content(), "html.parser")
+                # Lấy bài viết đầu tiên
+                first_report = soup.select_one(".news-title") or soup.select_one(".list-news a") or soup.select_one("a[href*='pageId=444']")
+                if first_report and first_report.get("href"):
+                    report_url = first_report["href"]
+                    if not report_url.startswith("http"):
+                        report_url = self.SOURCE_URL + report_url
+                    
+                    # CSS selector ưu tiên: .tkhq_tintuc_chitiet table, table.list, table.Table
+                    tables = report_soup.select(".tkhq_tintuc_chitiet table") or report_soup.select("table.list") or report_soup.select("table.Table") or report_soup.find_all("table")
+                    print(f"    [DEBUG] Found {len(tables)} tables.")
+                    
+                    for table in tables:
+                        table_rows = table.find_all("tr")
+                        if not table_rows: continue
+                        
+                        # Greedy search for data rows
+                        for tr in table_rows:
+                            tds = [td.get_text(strip=True) for td in tr.find_all(["td", "th"])]
+                            if len(tds) < 3: continue
+                            
+                            category = tds[0]
+                            # Lọc các mặt hàng SeaBank quan tâm (Greedy)
+                            keywords = ["dệt", "may", "thanh long", "thủy sản", "giày", "điện", "máy", "gỗ", "sắt", "thép"]
+                            if any(k in category.lower() for k in keywords):
+                                try:
+                                    # Thử tìm số lớn nhất trong các cột (thường là trị giá)
+                                    nums = []
+                                    for t in tds[1:]:
+                                        val = self._parse_number(t)
+                                        if val: nums.append(val)
+                                    
+                                    if nums:
+                                        val_export = nums[0]
+                                        val_import = nums[-1] if len(nums) > 1 else 0
+                                        rows.append([
+                                            self.timestamp, category, period, 
+                                            val_export, val_import, 0
+                                        ])
+                                        print(f"      ✅ Found: {category} -> {val_export}")
+                                except:
+                                    pass
+                browser.close()
+        except Exception as e:
+            print(f"[CUSTOMS] ❌ Lỗi chi tiết mặt hàng: {e}")
+            
         return rows
 
     # ----------------------------------------------------------

@@ -12,8 +12,9 @@ google-api-python-client>=2.100.0
 google-auth>=2.23.0
 google-auth-httplib2>=0.2.0
 
-# Biến môi trường
+# Biến môi trường & Cấu hình
 python-dotenv>=1.0.0
+PyYAML>=6.0.0
 
 # Browser automation (chỉ dùng khi cần — CafeF hiện dùng JSON API)
 playwright>=1.40.0

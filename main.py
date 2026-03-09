@@ -32,6 +32,11 @@ def parse_args():
         action="store_true",
         help="Chạy setup Google Sheets (tạo tabs + headers) trước khi crawl",
     )
+    parser.add_argument(
+        "--preset",
+        action="store_true",
+        help="Tạo bộ Assets ZIP để import lên Preset.io",
+    )
     return parser.parse_args()
 
 
@@ -83,14 +88,23 @@ def main():
     print(f"  Agents: {', '.join(args.agents)}")
     print("=" * 60)
 
+    if args.preset:
+        from preset_integration.preset_builder import build_preset_assets
+        build_preset_assets()
+        sys.exit(0)
+
     try:
         summary = run_pipeline(args.agents, setup=args.setup)
     except KeyboardInterrupt:
         print("\n\n[!] Đã hủy bởi người dùng.")
         sys.exit(0)
     except Exception as e:
-        print(f"\n[ERROR] Lỗi nghiêm trọng: {e}")
-        import traceback; traceback.print_exc()
+        print(f"\n{'='*55}")
+        print(f"  ❌ LỖI NGHIÊM TRỌNG TRONG PIPELINE")
+        print(f"  Error: {e}")
+        print(f"{'='*55}")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
 
     elapsed = time.time() - start

@@ -1,0 +1,25 @@
+version: 1.0.0
+table_name: stock_prices
+main_dttm_col: timestamp
+description: "B\u1EA3ng gi\xE1 c\u1ED5 phi\u1EBFu t\u1EEB CafeF"
+columns:
+- column_name: timestamp
+  verbose_name: "Th\u1EDDi gian c\xE0o"
+  is_dttm: true
+  type: DATETIME
+- column_name: symbol
+  verbose_name: "M\xE3 ch\u1EE9ng kho\xE1n"
+  type: STRING
+- column_name: gia_dong_cua
+  verbose_name: "Gi\xE1 \u0111\xF3ng c\u1EEDa"
+  type: FLOAT
+- column_name: thay_doi
+  verbose_name: "% Thay \u0111\u1ED5i"
+  type: STRING
+metrics:
+- metric_name: avg_price
+  verbose_name: "Gi\xE1 trung b\xECnh"
+  expression: AVG(gia_dong_cua)
+database_uuid: 482b5b73-c5e8-4f35-a665-7236f5a0904b
+schema: SeaBank_Data
+uuid: 78b8f0e6-46d3-405c-9c95-529931613a26

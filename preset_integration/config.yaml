@@ -1,0 +1,12 @@
+# Cấu hình kết nối Preset.io & Google Sheets
+# Bạn có thể thay đổi SPREADSHEET_ID ở đây sau đó chạy preset_builder.py để cập nhật Dashboard
+
+spreadsheet_id: "1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng"
+dashboard_title: "SeaBank Financial Monitor (Hệ thống Giám sát Tài chính)"
+owner_email: "ntai0404@gmail.com"
+
+# Cấu hình màu sắc SeaBank
+theme:
+  main_color: "#E31837" # Đỏ SeaBank
+  secondary_color: "#FFD700" # Vàng Kim
+  background: "dark" # Premium Dark Mode

@@ -1,0 +1,15 @@
+version: 1.0.0
+slice_name: "Danh s\xE1ch Tin t\u1EE9c Ng\xE0nh D\u1EC7t may m\u1EDBi nh\u1EA5t"
+viz_type: table
+params:
+  adhoc_filters: []
+  columns:
+  - published_date
+  - title
+  - url
+  groupby: []
+  metrics: []
+  row_limit: 20
+  viz_type: table
+dataset_uuid: edae1c99-896d-4c6e-9fda-8b64f78a0005
+uuid: c44ea8d3-514f-4fa1-ad6c-2c719631d635

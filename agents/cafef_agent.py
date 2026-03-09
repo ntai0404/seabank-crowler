@@ -39,10 +39,13 @@ class CafeFAgent(BaseAgent):
         forex_rows  = self._crawl_forex()
         gold_rows   = self._crawl_gold()
         macro_rows  = self._crawl_macro()
+        interest_rows = self._crawl_interest_rates()
+        banking_news  = self._crawl_banking_news()
 
         # web_metrics tổng hợp (5 cột chuẩn)
         all_metrics = stock_rows["metrics"] + forex_rows["metrics"] + \
-                      gold_rows["metrics"]  + macro_rows["metrics"]
+                      gold_rows["metrics"]  + macro_rows["metrics"] + \
+                      interest_rows["metrics"] + banking_news["metrics"]
 
         return {
             "web_metrics":      all_metrics,
@@ -50,6 +53,7 @@ class CafeFAgent(BaseAgent):
             "exchange_rates":   forex_rows["dedicated"],
             "gold_prices":      gold_rows["dedicated"],
             "macro_indicators": macro_rows["dedicated"],
+            "bank_interest_rates": interest_rows["dedicated"],
         }
 
     # ----------------------------------------------------------
@@ -210,7 +214,8 @@ class CafeFAgent(BaseAgent):
                 dedicated.append([self.timestamp, cur, buy, buy_ck, sell])
                 print(f"  ✅ {cur}: mua={buy:,} | bán={sell:,}")
         except Exception as e:
-             print(f"[CAFEF] ❌ Lỗi tỷ giá VCB fallback: {e}")
+            print(f"[CAFEF] ❌ Lỗi tỷ giá VCB fallback: {e}")
+            print(f"  [TIP] Có thể do trang VCB thay đổi cấu trúc hoặc không truy cập được.")
         return {"metrics": metrics, "dedicated": dedicated}
 
     # ----------------------------------------------------------
@@ -311,3 +316,92 @@ class CafeFAgent(BaseAgent):
 
         print(f"[CAFEF] Macro: {len(dedicated)} chỉ số.")
         return {"metrics": metrics, "dedicated": dedicated}
+
+    # ----------------------------------------------------------
+    # 5. Lãi suất Ngân hàng
+    # ----------------------------------------------------------
+    def _crawl_interest_rates(self) -> dict:
+        """Crawl bảng lãi suất ngân hàng từ cafef.vn — dùng Playwright cho dữ liệu động."""
+        print("[CAFEF] Crawl lãi suất ngân hàng (Playwright)...")
+        metrics, dedicated = [], []
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                page = browser.new_page()
+                page.goto("https://cafef.vn/du-lieu/lai-suat-ngan-hang.chn", timeout=60000, wait_until="domcontentloaded")
+                time.sleep(5) # Chờ JS render bảng
+                
+                # Chờ table load linh hoạt
+                try:
+                    page.wait_for_selector("#tb-interest-rate", timeout=15000)
+                except:
+                    print("  [!] Không thấy #tb-interest-rate, thử parse content thô")
+                
+                soup = BeautifulSoup(page.content(), 'html.parser')
+                table_body = soup.find('tbody', id='tb-interest-rate') or soup.find('table', class_='table_laisuat')
+                
+                if table_body:
+                    header_terms = ["Ngân hàng", "Không kỳ hạn", "1 tháng", "3 tháng", "6 tháng", "9 tháng", "12 tháng", "18 tháng", "24 tháng", "36 tháng"]
+                    rows = table_body.find_all('tr')
+                    for tr in rows:
+                        tds = tr.find_all('td')
+                        if len(tds) < 2: continue
+                        name_el = tds[0].find('span') or tds[0]
+                        bank_name = name_el.text.strip()
+                        
+                        if not bank_name: continue
+
+                        for i in range(1, len(tds)):
+                            if i >= len(header_terms): break
+                            term = header_terms[i]
+                            rate_val = self._parse_num(tds[i].text)
+                            
+                            if rate_val > 0:
+                                meta = {"bank": bank_name, "term": term, "rate": rate_val}
+                                metrics.append([
+                                    self.timestamp, "cafef.vn",
+                                    f"interest_rate_{bank_name.replace(' ', '_')}_{term}", rate_val,
+                                    json.dumps(meta, ensure_ascii=False)
+                                ])
+                                dedicated.append([self.timestamp, bank_name, term, rate_val, "Huy động"])
+                else:
+                    print("  [DEBUG] Page HTML snippet:", soup.get_text()[:500])
+                browser.close()
+                print(f"  ✅ Đã cào {len(dedicated)} mốc lãi suất.")
+        except Exception as e:
+            print(f"[CAFEF] ❌ Lỗi lãi suất (Playwright): {e}")
+            print(f"  [TIP] Kiểm tra xem 'playwright install' đã được chạy chưa.")
+        
+        return {"metrics": metrics, "dedicated": dedicated}
+        return {"metrics": metrics, "dedicated": dedicated}
+
+    # ----------------------------------------------------------
+    # 6. Tin tức Banking & BĐS
+    # ----------------------------------------------------------
+    def _crawl_banking_news(self) -> dict:
+        """Crawl tin tức ngân hàng & BĐS (dành cho metric news_count)"""
+        print("[CAFEF] Crawl tin tức Banking/BĐS...")
+        metrics = []
+        categories = {
+            "banking": "https://cafef.vn/tai-chinh-ngan-hang.chn",
+            "real_estate": "https://cafef.vn/bat-dong-san.chn"
+        }
+        
+        for cat, url in categories.items():
+            try:
+                resp = self.get(url)
+                soup = BeautifulSoup(resp.text, 'html.parser')
+                # Đếm số lượng bài viết mới trong box tin chính
+                news_items = soup.find_all(class_=['tl-item', 'tlitem', 'box-category-item'])
+                count = len(news_items)
+                
+                metrics.append([
+                    self.timestamp, "cafef.vn",
+                    f"news_count_{cat}", count,
+                    json.dumps({"url": url, "category": cat}, ensure_ascii=False)
+                ])
+                print(f"  ✅ {cat}: {count} tin mới.")
+            except Exception as e:
+                print(f"  ❌ {cat}: {e}")
+                
+        return {"metrics": metrics}

@@ -1,0 +1,81 @@
+dashboard_title: "SeaBank Financial Monitor (H\u1EC7 th\u1ED1ng Gi\xE1m s\xE1t T\xE0i ch\xEDnh)"
+version: 1.0.0
+description: "H\u1EC7 th\u1ED1ng Gi\xE1m s\xE1t T\xE0i ch\xEDnh SeaBank - Theo d\xF5i realtime L\xE3i su\u1EA5t, C\u1ED5 phi\u1EBFu v\xE0 Tin t\u1EE9c."
+css: '.dashboard-header { background-color: #E31837 !important; color: white !important; border-radius: 10px; padding: 20px; text-align: center; }
+
+  .slice_container { border: 1px solid #FFD700; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); background-color: #1a1a1a; }
+
+  .dashboard-component-chart-holder { padding: 10px; }
+
+  '
+position:
+  GRID_ID:
+    children:
+    - ROW-1
+    - ROW-2
+    - ROW-3
+    id: GRID_ID
+    type: GRID
+  ROW-1:
+    children:
+    - CHART-1
+    - CHART-2
+    id: ROW-1
+    type: ROW
+  ROW-2:
+    children:
+    - CHART-3
+    - CHART-4
+    id: ROW-2
+    type: ROW
+  ROW-3:
+    children:
+    - CHART-5
+    id: ROW-3
+    type: ROW
+  CHART-1:
+    id: CHART-1
+    meta:
+      chartId: 1
+      sliceName: "So s\xE1nh L\xE3i su\u1EA5t huy \u0111\u1ED9ng gi\u1EEFa c\xE1c Ng\xE2n h\xE0ng"
+      uuid: 9bef1d12-95d1-4789-b4b6-4d336019cceb
+      width: 6
+      height: 50
+    type: CHART
+  CHART-2:
+    id: CHART-2
+    meta:
+      chartId: 2
+      sliceName: "Bi\u1EBFn \u0111\u1ED9ng Gi\xE1 C\u1ED5 phi\u1EBFu Ng\xE2n h\xE0ng & B\u0110S"
+      uuid: 3848a129-1867-4898-8e65-3b4659771474
+      width: 6
+      height: 50
+    type: CHART
+  CHART-3:
+    id: CHART-3
+    meta:
+      chartId: 3
+      sliceName: "So s\xE1nh Kim ng\u1EA1ch Xu\u1EA5t nh\u1EADp kh\u1EA9u (H\u1EA3i quan)"
+      uuid: 8c5b078f-9763-4a30-abb9-fd923dc4a506
+      width: 12
+      height: 50
+    type: CHART
+  CHART-4:
+    id: CHART-4
+    meta:
+      chartId: 4
+      sliceName: "Th\u1ED1ng k\xEA Tin t\u1EE9c theo Ch\u1EE7 \u0111\u1EC1 (24h qua)"
+      uuid: f672b554-d8ed-41cf-9392-336545a0c609
+      width: 12
+      height: 30
+    type: CHART
+  CHART-5:
+    id: CHART-5
+    meta:
+      chartId: 5
+      sliceName: "Danh s\xE1ch Tin t\u1EE9c Ng\xE0nh D\u1EC7t may m\u1EDBi nh\u1EA5t"
+      uuid: c44ea8d3-514f-4fa1-ad6c-2c719631d635
+      width: 12
+      height: 50
+    type: CHART
+uuid: 3c254d70-ce52-40c5-8b5c-7938a49fe43a

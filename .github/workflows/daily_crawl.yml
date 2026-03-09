@@ -36,27 +36,20 @@ jobs:
 
       # 3. Cài dependencies
       - name: 📦 Install dependencies
-        run: pip install -r requirements.txt
-
-      # 4. Tạo .env từ GitHub Secrets
-      - name: 🔐 Create .env from secrets
         run: |
-          echo "SPREADSHEET_ID=${{ secrets.SPREADSHEET_ID }}"       >> .env
-          echo "GOOGLE_CREDENTIALS_JSON=${{ secrets.GOOGLE_CREDENTIALS_JSON }}" >> .env
-          echo "STOCK_HISTORY_DAYS=7"    >> .env
-          echo "REQUEST_DELAY=0.8"       >> .env
-          echo "REQUEST_TIMEOUT=20"      >> .env
-          echo "PLAYWRIGHT_TIMEOUT=60000" >> .env
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
 
-      # 5. (Tùy chọn) Setup Sheets lần đầu
+      # 4. Chạy setup (nếu chọn)
       - name: 🗂️ Setup Google Sheets (nếu cần)
-        if: github.event.inputs.setup == 'true'
+        if: github.event.inputs.setup == 'true' || github.event.inputs.setup == 'yes'
         run: python main.py --setup --agents all
         env:
           SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
           GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+          PYTHONIOENCODING: utf-8
 
-      # 6. Chạy agent pipeline
+      # 5. Chạy agent pipeline
       - name: 🤖 Run crawler agents
         run: |
           AGENTS="${{ github.event.inputs.agents || 'all' }}"
@@ -64,8 +57,9 @@ jobs:
         env:
           SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
           GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+          PYTHONIOENCODING: utf-8
 
-      # 7. Thông báo kết quả (optional: Slack/Telegram webhook)
+      # 6. Thông báo kết quả
       - name: 📊 Crawl result summary
         if: always()
         run: |

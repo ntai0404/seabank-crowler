@@ -1,0 +1,32 @@
+version: 1.0.0
+table_name: customs_trade
+main_dttm_col: timestamp
+description: Dữ liệu Kim ngạch Xuất nhập khẩu (Hải quan)
+columns:
+- column_name: timestamp
+  verbose_name: Thời gian cập nhật
+  is_dttm: true
+  type: DATETIME
+- column_name: source
+  verbose_name: Nguồn dữ liệu
+  type: STRING
+- column_name: category
+  verbose_name: Danh mục
+  type: STRING
+- column_name: period
+  verbose_name: Giai đoạn
+  type: STRING
+- column_name: value_usd
+  verbose_name: Giá trị (USD)
+  type: FLOAT
+- column_name: unit
+  verbose_name: Đơn vị
+  type: STRING
+metrics:
+- metric_name: sum_export
+  verbose_name: Tổng Xuất khẩu
+  expression: SUM(value_usd)
+database_uuid: 44b8f6ce-d922-4857-8478-41d81a929111
+schema: SeaBank_Data
+sql: SELECT * FROM "customs_trade"
+uuid: 44b8f6ce-d922-4857-8478-41d81a929119

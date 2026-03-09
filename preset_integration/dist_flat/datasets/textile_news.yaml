@@ -1,0 +1,21 @@
+version: 1.0.0
+table_name: textile_news
+main_dttm_col: timestamp
+description: "Tin t\u1EE9c ng\xE0nh d\u1EC7t may t\u1EEB VITAS"
+columns:
+- column_name: timestamp
+  verbose_name: "Th\u1EDDi gian c\xE0o"
+  is_dttm: true
+  type: DATETIME
+- column_name: title
+  verbose_name: "Ti\xEAu \u0111\u1EC1 b\xE0i vi\u1EBFt"
+  type: STRING
+- column_name: url
+  verbose_name: "\u0110\u01B0\u1EDDng d\u1EABn"
+  type: STRING
+- column_name: published_date
+  verbose_name: "Ng\xE0y \u0111\u0103ng"
+  type: STRING
+database_uuid: 482b5b73-c5e8-4f35-a665-7236f5a0904b
+schema: SeaBank_Data
+uuid: edae1c99-896d-4c6e-9fda-8b64f78a0005
