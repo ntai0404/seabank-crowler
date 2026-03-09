@@ -13,13 +13,15 @@ if _env_file.exists():
     load_dotenv(_env_file)
 
 # ---- Google Sheets ----
-SPREADSHEET_ID: str = os.environ["SPREADSHEET_ID"]
+SPREADSHEET_ID: str = os.environ["SPREADSHEET_ID"].strip()
 SCOPES: list[str] = ["https://www.googleapis.com/auth/spreadsheets"]
 
 # ---- Credentials ----
 # Ưu tiên: biến môi trường JSON (GitHub Actions) → file local
 _cred_json_str: str | None = os.environ.get("GOOGLE_CREDENTIALS_JSON")
-_cred_file: str             = os.environ.get("CREDENTIALS_FILE", "excel_key.json")
+if _cred_json_str:
+    _cred_json_str = _cred_json_str.strip()
+_cred_file: str             = os.environ.get("CREDENTIALS_FILE", "excel_key.json").strip()
 
 def get_credentials_source() -> tuple[str, str | dict]:
     """
@@ -28,7 +30,11 @@ def get_credentials_source() -> tuple[str, str | dict]:
       - ("file", "path") nếu có credentials file (local)
     """
     if _cred_json_str:
-        return ("json", json.loads(_cred_json_str))
+        try:
+            return ("json", json.loads(_cred_json_str))
+        except json.JSONDecodeError as e:
+            print(f"[CONFIG] ❌ Lỗi parse JSON từ GOOGLE_CREDENTIALS_JSON: {e}")
+            raise
     if Path(_cred_file).exists():
         return ("file", _cred_file)
     raise FileNotFoundError(
@@ -39,10 +45,10 @@ def get_credentials_source() -> tuple[str, str | dict]:
     )
 
 # ---- Crawl settings ----
-STOCK_HISTORY_DAYS: int   = int(os.environ.get("STOCK_HISTORY_DAYS", "7"))
-REQUEST_DELAY: float       = float(os.environ.get("REQUEST_DELAY", "0.5"))
-REQUEST_TIMEOUT: int       = int(os.environ.get("REQUEST_TIMEOUT", "15"))
-PLAYWRIGHT_TIMEOUT: int    = int(os.environ.get("PLAYWRIGHT_TIMEOUT", "45000"))
+STOCK_HISTORY_DAYS: int   = int(os.environ.get("STOCK_HISTORY_DAYS", "7").strip())
+REQUEST_DELAY: float       = float(os.environ.get("REQUEST_DELAY", "0.5").strip())
+REQUEST_TIMEOUT: int       = int(os.environ.get("REQUEST_TIMEOUT", "15").strip())
+PLAYWRIGHT_TIMEOUT: int    = int(os.environ.get("PLAYWRIGHT_TIMEOUT", "45000").strip())
 
 # ---- Sheet tab names ----
 SHEETS: dict[str, str] = {
