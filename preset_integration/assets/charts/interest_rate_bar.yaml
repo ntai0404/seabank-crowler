@@ -8,8 +8,13 @@ params:
   groupby:
   - bank_name
   metrics:
-  - expression: MAX(rate)
-    label: Lãi suất tối đa
+  - aggregate: MAX
+    column:
+      column_name: rate
+      type: FLOAT
+    expressionType: SIMPLE
+    label: MAX(rate)
+    optionName: metric_max_rate
   row_limit: 100
   show_legend: true
   viz_type: dist_bar

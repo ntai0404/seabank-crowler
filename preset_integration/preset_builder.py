@@ -26,24 +26,24 @@ def build_preset_assets():
         
     spreadsheet_id = config.get("spreadsheet_id")
     dashboard_title = config.get("dashboard_title", "SeaBank Monitor")
-
-    # 2. Database UUID (Đã "dò" thấy)
-    MANUAL_DB_UUID = "482b5b73-c5e8-4f35-a665-7236f5a0904b"
     
-    # 3. UUID cố định (Dãy 131...) mới hoàn toàn cho v1.31
-    U_DS_INTEREST = "1318f6ce-d922-4857-8478-41d81a929111"
-    U_DS_STOCK    = "1318f6ce-d922-4857-8478-41d81a929112"
-    U_DS_NEWS     = "1318f6ce-d922-4857-8478-41d81a929113"
-    U_DS_METRICS  = "1318f6ce-d922-4857-8478-41d81a929114"
-    U_DS_CUSTOMS  = "1318f6ce-d922-4857-8478-41d81a929115"
-    U_DASH        = "1318f6ce-d922-4857-8478-41d81a929116"
+    # 2. Database UUID (Lấy từ config hoặc fallback)
+    MANUAL_DB_UUID = config.get("database_uuid", "482b5b73-c5e8-4f35-a665-7236f5a0904b")
+    
+    # 3. UUID cố định (Dãy 551...) mới hoàn toàn cho v1.56
+    U_DS_INTEREST = "5518f6ce-d922-4857-8478-41d81a929111"
+    U_DS_STOCK    = "5518f6ce-d922-4857-8478-41d81a929112"
+    U_DS_NEWS     = "5518f6ce-d922-4857-8478-41d81a929113"
+    U_DS_METRICS  = "5518f6ce-d922-4857-8478-41d81a929114"
+    U_DS_CUSTOMS  = "5518f6ce-d922-4857-8478-41d81a929115"
+    U_DASH        = "5518f6ce-d922-4857-8478-41d81a929116"
     
     CHART_UUIDS = {
-        "interest_rate_bar.yaml":   "1318f6ce-d922-4857-8478-41d81a929121",
-        "stock_trend_line.yaml":    "1318f6ce-d922-4857-8478-41d81a929122",
-        "customs_trade_mixed.yaml": "1318f6ce-d922-4857-8478-41d81a929123",
-        "web_metrics_table.yaml":   "1318f6ce-d922-4857-8478-41d81a929124",
-        "textile_news_table.yaml":  "1318f6ce-d922-4857-8478-41d81a929125"
+        "interest_rate_bar.yaml":   "5518f6ce-d922-4857-8478-41d81a929121",
+        "stock_trend_line.yaml":    "5518f6ce-d922-4857-8478-41d81a929122",
+        "customs_trade_mixed.yaml": "5518f6ce-d922-4857-8478-41d81a929123",
+        "web_metrics_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929124",
+        "textile_news_table.yaml":  "5518f6ce-d922-4857-8478-41d81a929125"
     }
 
     CHART_MAP = {
@@ -66,11 +66,11 @@ def build_preset_assets():
             if file.endswith(".yaml"):
                 rel_path = Path(root).relative_to(template_dir)
                 
-                # HEADLESS: Bỏ qua folder database
-                if rel_path.name == "databases" or file == "google_sheets.yaml":
-                    continue
-
-                target_subdir = build_dir / rel_path
+                # Rename datasets folder to datasources for Preset
+                if rel_path.name == "datasets":
+                    target_subdir = build_dir / "datasources"
+                else:
+                    target_subdir = build_dir / rel_path
                 target_subdir.mkdir(parents=True, exist_ok=True)
                 
                 source_file = Path(root) / file
@@ -79,20 +79,93 @@ def build_preset_assets():
                 with open(source_file, 'r', encoding='utf-8') as f:
                     content = f.read()
                 
+                # Replace placeholders
                 content = content.replace("${DASHBOARD_TITLE}", dashboard_title)
+                content = content.replace("${DATABASE_UUID}", MANUAL_DB_UUID)
+                spreadsheet_url = f"https://docs.google.com/spreadsheets/d/{spreadsheet_id}"
+                content = content.replace("${SPREADSHEET_URL}", spreadsheet_url)
                 
                 data = yaml.safe_load(content)
-                data["version"] = "1.0.0"
 
-                # A. DATASETS
+                # A. DATASETS - Match exact Preset.io export format & field order
                 if rel_path.name == "datasets":
-                    data["database_uuid"] = MANUAL_DB_UUID
-                    data["schema"] = "SeaBank_Data"
-                    if "interest" in file: data["uuid"] = U_DS_INTEREST
-                    elif "stock" in file: data["uuid"] = U_DS_STOCK
-                    elif "news" in file: data["uuid"] = U_DS_NEWS
-                    elif "metrics" in file: data["uuid"] = U_DS_METRICS
-                    elif "customs" in file: data["uuid"] = U_DS_CUSTOMS
+                    # Create ordered dict matching Preset export field order
+                    ordered_data = {}
+                    
+                    # 1-4: Basic identification fields
+                    ordered_data["table_name"] = data.get("table_name")
+                    ordered_data["main_dttm_col"] = data.get("main_dttm_col")
+                    ordered_data["currency_code_column"] = None
+                    ordered_data["description"] = data.get("description")
+                    
+                    # 5-9: Configuration fields
+                    ordered_data["default_endpoint"] = None
+                    ordered_data["offset"] = 0
+                    ordered_data["cache_timeout"] = None
+                    ordered_data["catalog"] = None
+                    ordered_data["schema"] = None
+                    
+                    # 14-19: Behavior flags
+                    ordered_data["filter_select_enabled"] = True
+                    ordered_data["fetch_values_predicate"] = None
+                    ordered_data["extra"] = None
+                    ordered_data["normalize_columns"] = False
+                    ordered_data["always_filter_main_dttm"] = False
+                    ordered_data["folders"] = None
+                    
+                    # 20: UUID (assign based on filename)
+                    if "interest" in file: ordered_data["uuid"] = U_DS_INTEREST
+                    elif "stock" in file: ordered_data["uuid"] = U_DS_STOCK
+                    elif "news" in file: ordered_data["uuid"] = U_DS_NEWS
+                    elif "metrics" in file: ordered_data["uuid"] = U_DS_METRICS
+                    elif "customs" in file: ordered_data["uuid"] = U_DS_CUSTOMS
+                    else: ordered_data["uuid"] = data.get("uuid")
+                    
+                    # 21: Metrics (with proper fields)
+                    if "metrics" in data:
+                        ordered_metrics = []
+                        for metric in data["metrics"]:
+                            m = {}
+                            m["metric_name"] = metric.get("metric_name")
+                            m["verbose_name"] = metric.get("verbose_name")
+                            m["metric_type"] = None
+                            m["expression"] = metric.get("expression")
+                            m["description"] = None
+                            m["d3format"] = None
+                            m["currency"] = None
+                            m["extra"] = None
+                            m["warning_text"] = None
+                            ordered_metrics.append(m)
+                        ordered_data["metrics"] = ordered_metrics
+                    
+                    # 22: Columns (with proper field order and values)
+                    if "columns" in data:
+                        ordered_columns = []
+                        for col in data["columns"]:
+                            c = {}
+                            c["column_name"] = col.get("column_name")
+                            c["verbose_name"] = col.get("verbose_name")
+                            # Set is_dttm based on type
+                            c["is_dttm"] = col.get("is_dttm", col.get("type") == "DATETIME")
+                            c["is_active"] = True
+                            c["type"] = col.get("type")
+                            c["advanced_data_type"] = None
+                            c["groupby"] = True
+                            c["filterable"] = True
+                            c["expression"] = None
+                            c["description"] = None
+                            c["python_date_format"] = None
+                            c["datetime_format"] = None
+                            c["extra"] = None
+                            ordered_columns.append(c)
+                        ordered_data["columns"] = ordered_columns
+                    
+                    # 23-24: Last fields (version and database_uuid at END!)
+                    ordered_data["version"] = "1.0.0"
+                    ordered_data["database_uuid"] = MANUAL_DB_UUID
+                    
+                    # Replace data with ordered version
+                    data = ordered_data
                 
                 # B. CHARTS
                 elif rel_path.name == "charts":
@@ -109,26 +182,68 @@ def build_preset_assets():
                                 ck = {"CHART-1":"interest_rate_bar.yaml","CHART-2":"stock_trend_line.yaml","CHART-3":"customs_trade_mixed.yaml","CHART-4":"web_metrics_table.yaml","CHART-5":"textile_news_table.yaml"}.get(k)
                                 if ck in CHART_UUIDS: 
                                     v["meta"]["uuid"] = CHART_UUIDS[ck]
+                
+                # D. DATABASES
+                elif rel_path.name == "databases":
+                    # UUID already replaced via placeholder
+                    # Spreadsheet URL already replaced via placeholder
+                    pass
 
+                # Write as YAML format (matching Preset export format)
                 with open(target_file, 'w', encoding='utf-8', newline='\n') as f:
-                    yaml.safe_dump(data, f, default_flow_style=False, sort_keys=False, width=20000, indent=2, allow_unicode=True)
-                print(f"  ✅ {rel_path if str(rel_path) != '.' else ''}/{file}")
+                    yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+                
+                # Print with correct folder name
+                display_path = "datasources" if rel_path.name == "datasets" else str(rel_path if str(rel_path) != '.' else '')
+                print(f"  ✅ {display_path}/{file}")
 
-    # 5. Đóng gói ZIP 
-    zip_fn = str(base_dir.parent / "seabank_preset_assets.zip")
+    # 5. Đóng gói ZIP (Dashboard Export Structure - full export with charts & dashboards)
+    export_name = f"seabank_dashboard_{datetime.now().strftime('%Y%m%dT%H%M%S')}"
+    zip_fn = str(base_dir.parent / f"{export_name}.zip")
+    database_name = "Seabank_Manual"
+    
     with zipfile.ZipFile(zip_fn, 'w', zipfile.ZIP_DEFLATED) as z:
-        metadata = {"version": "1.0.0", "type": "Dashboard", "timestamp": datetime.now().isoformat()}
-        z.writestr(f"{root_name}/metadata.yaml", yaml.dump(metadata).replace("\r\n", "\n"))
+        # Metadata.yaml - Dashboard type
+        metadata = {
+            "version": "1.0.0",
+            "type": "Dashboard",
+            "timestamp": datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + '+00:00'
+        }
+        metadata_content = yaml.dump(metadata, allow_unicode=True, default_flow_style=False, sort_keys=False)
+        z.writestr(f"{export_name}/metadata.yaml", metadata_content)
         
-        base_dist = base_dir / "dist"
-        for root, _, files in os.walk(base_dist):
-            for file in files:
-                abs_p = Path(root) / file
-                rel_p = abs_p.relative_to(base_dist).as_posix()
-                with open(abs_p, 'r', encoding='utf-8') as f:
-                    z.writestr(rel_p, f.read().replace("\r\n", "\n"))
+        # Database file: databases/DatabaseName.yaml
+        db_path = build_dir / "databases" / "google_sheets.yaml"
+        if db_path.exists():
+            with open(db_path, 'r', encoding='utf-8') as f:
+                db_content = f.read()
+            z.writestr(f"{export_name}/databases/{database_name}.yaml", db_content)
+        
+        # Dataset files: datasets/DatabaseName/table.yaml
+        datasets_dir = build_dir / "datasources"
+        if datasets_dir.exists():
+            for dataset_file in datasets_dir.glob("*.yaml"):
+                with open(dataset_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                z.writestr(f"{export_name}/datasets/{database_name}/{dataset_file.name}", content)
+        
+        # Chart files: charts/chart.yaml
+        charts_dir = build_dir / "charts"
+        if charts_dir.exists():
+            for chart_file in charts_dir.glob("*.yaml"):
+                with open(chart_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                z.writestr(f"{export_name}/charts/{chart_file.name}", content)
+        
+        # Dashboard files: dashboards/dashboard.yaml
+        dashboards_dir = build_dir / "dashboards"
+        if dashboards_dir.exists():
+            for dashboard_file in dashboards_dir.glob("*.yaml"):
+                with open(dashboard_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                z.writestr(f"{export_name}/dashboards/{dashboard_file.name}", content)
 
-    print(f"--- ✨ HOÀN TẤT: {zip_fn} v1.31 (Native Mirror Fix) ---")
+    print(f"--- ✨ HOÀN TẤT: {zip_fn} v1.48 (Dashboard Export with Charts) ---")
 
 if __name__ == "__main__":
     build_preset_assets()

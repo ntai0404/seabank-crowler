@@ -60,7 +60,7 @@ class TextileAgent(BaseAgent):
                             article.get("title", ""),
                             article.get("url", ""),
                             article.get("category", ""),
-                            article.get("published_date", ""),
+                            article.get("published_date", "") or self.timestamp[:10],
                             article.get("summary", ""),
                         ])
                 print(f"[VITAS] '{page_config['category']}': {len(articles)} bài")

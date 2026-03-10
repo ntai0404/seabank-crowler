@@ -1,11 +1,27 @@
-database_name: Google Sheets (SeaBank)
+database_name: Seabank Manual
 sqlalchemy_uri: gsheets://
-version: 1.0.0
+cache_timeout: null
+expose_in_sqllab: true
+allow_run_async: false
+allow_ctas: false
+allow_cvas: false
+allow_dml: false
+allow_csv_upload: false
 extra:
+  allows_virtual_table_explore: true
   engine_params:
     catalog:
-      SeaBank_Data: ${SPREADSHEET_ID}
-  metadata_cache_timeout: {}
-  metadata_params: {}
-  schemas_allowed_for_csv_upload: []
-uuid: 44b8f6ce-d922-4857-8478-41d81a929111
+      bank_interest_rates: ${SPREADSHEET_URL}/edit#gid=104546095
+      stock_prices: ${SPREADSHEET_URL}/edit#gid=1053154058
+      customs_trade: ${SPREADSHEET_URL}/edit#gid=196298747
+      textile_news: ${SPREADSHEET_URL}/edit#gid=2076182069
+      web_metrics: ${SPREADSHEET_URL}/edit#gid=1240866762
+      vinatex_news: ${SPREADSHEET_URL}/edit#gid=1798702884
+      exchange_rates: ${SPREADSHEET_URL}/edit#gid=735502666
+      gold_prices: ${SPREADSHEET_URL}/edit#gid=836009090
+      macro_indicators: ${SPREADSHEET_URL}/edit#gid=2019952555
+      customs_commodity_details: ${SPREADSHEET_URL}/edit#gid=887085080
+      textile_directory: ${SPREADSHEET_URL}/edit#gid=1806266969
+impersonate_user: false
+uuid: ${DATABASE_UUID}
+version: 1.0.0

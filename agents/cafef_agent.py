@@ -59,6 +59,14 @@ class CafeFAgent(BaseAgent):
     # ----------------------------------------------------------
     # 1. Giá cổ phiếu
     # ----------------------------------------------------------
+    @staticmethod
+    def _to_float(v, default=0.0):
+        """Parse Vietnamese comma-decimal strings (e.g. '23,5') to float."""
+        try:
+            return float(str(v).replace(',', '.'))
+        except (ValueError, TypeError):
+            return default
+
     def _crawl_stocks(self) -> dict:
         """Crawl giá cổ phiếu qua JSON API — không cần Playwright."""
         print(f"[CAFEF] Crawl cổ phiếu — {len(STOCK_SYMBOLS)} mã...")
@@ -85,17 +93,17 @@ class CafeFAgent(BaseAgent):
                     continue
 
                 r = records[0]
-                price = r.get("GiaDongCua", 0)
+                price = self._to_float(r.get("GiaDongCua", 0))
                 meta  = {
                     "symbol":        symbol,
                     "ngay":          r.get("Ngay", ""),
-                    "gia_mo_cua":    r.get("GiaMoCua", 0),
-                    "gia_cao_nhat":  r.get("GiaCaoNhat", 0),
-                    "gia_thap_nhat": r.get("GiaThapNhat", 0),
+                    "gia_mo_cua":    self._to_float(r.get("GiaMoCua", 0)),
+                    "gia_cao_nhat":  self._to_float(r.get("GiaCaoNhat", 0)),
+                    "gia_thap_nhat": self._to_float(r.get("GiaThapNhat", 0)),
                     "gia_dong_cua":  price,
-                    "thay_doi":      r.get("ThayDoi", ""),
-                    "khoi_luong":    r.get("KhoiLuongKhopLenh", 0),
-                    "gia_tri":       r.get("GiaTriKhopLenh", 0),
+                    "thay_doi":      self._to_float(r.get("ThayDoi", 0)),
+                    "khoi_luong":    self._to_float(r.get("KhoiLuongKhopLenh", 0)),
+                    "gia_tri":       self._to_float(r.get("GiaTriKhopLenh", 0)),
                 }
 
                 metrics.append([
@@ -109,7 +117,7 @@ class CafeFAgent(BaseAgent):
                     meta["gia_thap_nhat"], meta["gia_dong_cua"],
                     meta["thay_doi"], meta["khoi_luong"], meta["gia_tri"],
                 ])
-                print(f"  ✅ {symbol}: {price:,}")
+                print(f"  ✅ {symbol}: {price}")
 
             except Exception as e:
                 print(f"  ❌ {symbol}: {e}")
@@ -190,9 +198,18 @@ class CafeFAgent(BaseAgent):
         return {"metrics": metrics, "dedicated": dedicated}
 
     def _parse_num(self, t):
+        """Parse số từ chuỗi HTML: '5,50' → 5.5, '6.00%' → 6.0"""
         import re
-        c = re.sub(r'[^\d]', '', t)
-        return float(c) if c else 0
+        c = re.sub(r'[^\d,\.]', '', str(t).strip())
+        if not c:
+            return 0
+        # Định dạng VN: '5,50' → '5.50'
+        if ',' in c and '.' not in c:
+            c = c.replace(',', '.')
+        try:
+            return float(c)
+        except (ValueError, TypeError):
+            return 0
 
     def _crawl_forex_vcb(self):
         print("  Dùng fallback VCB XML...")

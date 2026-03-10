@@ -5,6 +5,10 @@ spreadsheet_id: "1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng"
 dashboard_title: "SeaBank Financial Monitor (Hệ thống Giám sát Tài chính)"
 owner_email: "ntai0404@gmail.com"
 
+# Database UUID từ Preset.io
+# Lấy từ: Settings > Database Connections > SeaBank_Data > Copy UUID
+database_uuid: "79d4cb67-a8e3-435e-9d43-bdc4866142c6"
+
 # Cấu hình màu sắc SeaBank
 theme:
   main_color: "#E31837" # Đỏ SeaBank

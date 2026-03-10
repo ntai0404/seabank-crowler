@@ -36,8 +36,8 @@ class CustomsAgent(BaseAgent):
     def crawl(self) -> dict[str, list[list]]:
         rows = []
         rows.extend(self._crawl_quick_stats())
-        rows.extend(self._crawl_monthly_report())
-        
+        # monthly_report tạo ra dữ liệu category rác (tiêu đề bài báo, số liệu lẫn lộn)
+        # → chỉ lấy quick_stats (7 dòng sạch) cho customs_trade
         commodity_rows = self._crawl_commodity_details()
 
         return {

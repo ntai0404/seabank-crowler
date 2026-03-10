@@ -9,7 +9,14 @@ customs_temp.html
 sjc_homepage.html
 null
 temp_*.html
+temp_*.json
 *.log
 .DS_Store
 .vscode/
 .idea/
+
+# Preset export zip files (build artifacts)
+*.zip
+preset_official_export/
+our_v41.json
+preset_official.json

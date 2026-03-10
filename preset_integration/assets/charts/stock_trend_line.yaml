@@ -6,11 +6,17 @@ params:
   groupby:
   - symbol
   metrics:
-  - expression: AVG(gia_dong_cua)
-    label: Giá đóng cửa TB
+  - aggregate: AVG
+    column:
+      column_name: gia_dong_cua
+      type: FLOAT
+    expressionType: SIMPLE
+    label: AVG(gia_dong_cua)
+    optionName: metric_avg_price
+  granularity_sqla: timestamp
   series_type: line
   time_grain_sqla: P1D
   x_axis_label: Thời gian
-  y_axis_label: Giá (VNĐ)
+  y_axis_label: Giá (VND)
 dataset_uuid: 44b8f6ce-d922-4857-8478-41d81a929112
 uuid: 44b8f6ce-d922-4857-8478-41d81a929116

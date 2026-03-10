@@ -22,8 +22,8 @@ def reset_spreadsheet():
 
     requests_body = []
     
-    # 5 tabs cần xử lý
-    target_sheets = ["web_metrics", "stock_prices", "exchange_rates", "gold_prices", "macro_indicators"]
+    # tabs cần xử lý
+    target_sheets = ["web_metrics", "stock_prices", "exchange_rates", "gold_prices", "macro_indicators", "customs_trade", "bank_interest_rates", "textile_news"]
     
     for sheet in spreadsheet.get("sheets", []):
         sheet_name = sheet["properties"]["title"]
