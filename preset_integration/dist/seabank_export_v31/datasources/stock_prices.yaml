@@ -51,6 +51,58 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
+- column_name: ngay
+  verbose_name: Ngày giao dịch
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: gia_mo_cua
+  verbose_name: Giá mở cửa
+  is_dttm: false
+  is_active: true
+  type: FLOAT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: gia_cao_nhat
+  verbose_name: Giá cao nhất
+  is_dttm: false
+  is_active: true
+  type: FLOAT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: gia_thap_nhat
+  verbose_name: Giá thấp nhất
+  is_dttm: false
+  is_active: true
+  type: FLOAT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
 - column_name: gia_dong_cua
   verbose_name: Giá đóng cửa
   is_dttm: false
@@ -69,6 +121,32 @@ columns:
   is_dttm: false
   is_active: true
   type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: khoi_luong
+  verbose_name: Khối lượng
+  is_dttm: false
+  is_active: true
+  type: FLOAT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: gia_tri
+  verbose_name: Giá trị
+  is_dttm: false
+  is_active: true
+  type: FLOAT
   advanced_data_type: null
   groupby: true
   filterable: true

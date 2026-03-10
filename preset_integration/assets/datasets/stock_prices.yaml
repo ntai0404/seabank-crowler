@@ -10,12 +10,30 @@ columns:
 - column_name: symbol
   verbose_name: Mã chứng khoán
   type: STRING
+- column_name: ngay
+  verbose_name: Ngày giao dịch
+  type: STRING
+- column_name: gia_mo_cua
+  verbose_name: Giá mở cửa
+  type: FLOAT
+- column_name: gia_cao_nhat
+  verbose_name: Giá cao nhất
+  type: FLOAT
+- column_name: gia_thap_nhat
+  verbose_name: Giá thấp nhất
+  type: FLOAT
 - column_name: gia_dong_cua
   verbose_name: Giá đóng cửa
   type: FLOAT
 - column_name: thay_doi
   verbose_name: "% Thay đổi"
   type: STRING
+- column_name: khoi_luong
+  verbose_name: Khối lượng
+  type: FLOAT
+- column_name: gia_tri
+  verbose_name: Giá trị
+  type: FLOAT
 metrics:
 - metric_name: avg_price
   verbose_name: Giá trung bình
