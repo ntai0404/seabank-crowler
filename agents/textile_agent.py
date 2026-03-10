@@ -52,16 +52,34 @@ class TextileAgent(BaseAgent):
                 )
                 for article in articles:
                     url_key = article.get("url", "")
-                    if url_key not in seen_urls:
-                        seen_urls.add(url_key)
+                    # Chống trùng theo _4-ID bài (cùng bài có thể có _3-XX khác nhau)
+                    _m = re.search(r"_4-(\d+)", url_key)
+                    dedup_key = _m.group(1) if _m else url_key
+                    if dedup_key not in seen_urls:
+                        seen_urls.add(dedup_key)
+                        # Nếu không có ngày từ tóm tắt, fetch trang bài để lấy pc_datetime
+                        date = article.get("published_date", "")
+                        if not date and url_key:
+                            try:
+                                art_resp = self.get(url_key)
+                                art_soup = BeautifulSoup(art_resp.text, "html.parser")
+                                dt_el = art_soup.find(class_="pc_datetime")
+                                if dt_el:
+                                    dm2 = re.search(r"(\d{1,2})/(\d{1,2})/(\d{4})",
+                                                    dt_el.get_text())
+                                    if dm2:
+                                        date = (f"{dm2.group(3)}-{dm2.group(2).zfill(2)}"
+                                                f"-{dm2.group(1).zfill(2)}")
+                            except Exception:
+                                pass
                         rows.append([
                             self.timestamp,
                             "vietnamtextile.org.vn",
                             article.get("title", ""),
-                            article.get("url", ""),
+                            url_key,
                             article.get("category", ""),
-                            article.get("published_date", "") or self.timestamp[:10],
-                            article.get("summary", ""),
+                            date or self.timestamp[:10],
+                            article.get("summary", "") or "—",
                         ])
                 print(f"[VITAS] '{page_config['category']}': {len(articles)} bài")
             except Exception as e:
@@ -142,20 +160,66 @@ class TextileAgent(BaseAgent):
             return rows
 
     def _parse_articles(self, soup: BeautifulSoup, base_url: str, category: str) -> list[dict]:
-        """Parse danh sách bài viết từ trang VITAS."""
+        """Parse danh sách bài viết từ trang VITAS.
+
+        Cấu trúc VITAS:
+          - div.pl_c  : card bài nổi bật (có tóm tắt, đôi khi có ngày trong text)
+          - div#*ucHotPost* > div.pl_display_list > div.pl_item : danh sách bài mới nhất (title-only)
+        Tránh div.pl_item nằm trong gallery ảnh (div.pl_display_top-detail).
+        """
         articles = []
-
-        # VITAS dùng tag <article>, <li> và <div class="news-item">
-        selectors = [
-            soup.find_all("article"),
-            soup.find_all("div", class_=lambda c: c and "news" in c.lower()),
-            soup.find_all("li", class_=lambda c: c and "item" in c.lower()),
-        ]
-
         seen_hrefs = set()
-        for selector_results in selectors:
-            for el in selector_results:
-                link = el.find("a", href=True)
+
+        # 1. pl_c featured cards — có summary và đôi khi date trong text tóm tắt
+        for card in soup.find_all("div", class_="pl_c"):
+            link = card.find("a", href=re.compile(r"_4-\d+"))
+            if not link:
+                continue
+            href = link["href"].strip()
+            if href in seen_hrefs:
+                continue
+            seen_hrefs.add(href)
+
+            heading = card.find("h2")
+            title = self._clean_text((heading or link).get_text())
+            if not title or len(title) < 10:
+                continue
+
+            full_url = href if href.startswith("http") else base_url + href
+
+            # Summary: text of the second div inside pl_brief (after pl_right_c)
+            brief_el = card.find(class_="pl_brief")
+            summary = ""
+            if brief_el:
+                right_c = brief_el.find(class_="pl_right_c")
+                if right_c:
+                    for sib in right_c.next_siblings:
+                        t = self._clean_text(getattr(sib, "get_text", lambda: "")())
+                        if len(t) > 20:
+                            summary = t[:250]
+                            break
+
+            # Date: embedded in summary text as dd/mm/yyyy
+            date_text = ""
+            dm = re.search(r"(\d{1,2})/(\d{1,2})/(\d{4})", summary)
+            if dm:
+                date_text = f"{dm.group(3)}-{dm.group(2).zfill(2)}-{dm.group(1).zfill(2)}"
+
+            articles.append({
+                "title":          title,
+                "url":            full_url,
+                "category":       category,
+                "published_date": date_text,
+                "summary":        summary,
+            })
+
+        # 2. ucHotPost listing — title-only entries không có trong pl_c
+        for box in soup.find_all(id=re.compile(r"ucHotPost")):
+            listing = box.find("div", class_="pl_display_list")
+            if not listing:
+                continue
+            for item in listing.find_all("div", class_="pl_item"):
+                link = item.find("a", href=re.compile(r"_4-\d+"))
                 if not link:
                     continue
                 href = link["href"].strip()
@@ -163,39 +227,18 @@ class TextileAgent(BaseAgent):
                     continue
                 seen_hrefs.add(href)
 
-                title = self._clean_text(link.get_text())
-                if not title or len(title) < 10:
-                    # Try to find h2/h3 inside element
-                    heading = el.find(["h1","h2","h3","h4"])
-                    if heading:
-                        title = self._clean_text(heading.get_text())
-
+                heading = item.find(["h2", "h3"])
+                title = self._clean_text((heading or link).get_text())
                 if not title or len(title) < 10:
                     continue
 
-                full_url = href if href.startswith("http") else base_url + "/" + href.lstrip("/")
-
-                # Tìm summary
-                summary_el = el.find("p") or el.find("div", class_=lambda c: c and "desc" in (c or "").lower())
-                summary = self._clean_text(summary_el.get_text()) if summary_el else ""
-
-                # Tìm ngày đăng
-                date_text = ""
-                date_el = el.find(class_=lambda c: c and any(d in (c or "").lower() for d in ["date","time","ngay"]))
-                if date_el:
-                    date_text = self._clean_text(date_el.get_text())
-                else:
-                    # Try to find date pattern in text
-                    match = re.search(r"\d{1,2}/\d{1,2}/\d{4}", el.get_text())
-                    if match:
-                        date_text = match.group()
-
+                full_url = href if href.startswith("http") else base_url + href
                 articles.append({
                     "title":          title,
                     "url":            full_url,
                     "category":       category,
-                    "published_date": date_text,
-                    "summary":        summary[:300],
+                    "published_date": "",
+                    "summary":        "",
                 })
 
         return articles
