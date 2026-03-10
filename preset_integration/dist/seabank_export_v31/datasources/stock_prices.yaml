@@ -1,0 +1,81 @@
+table_name: stock_prices
+main_dttm_col: timestamp
+currency_code_column: null
+description: Bảng giá cổ phiếu từ CafeF
+default_endpoint: null
+offset: 0
+cache_timeout: null
+catalog: null
+schema: null
+filter_select_enabled: true
+fetch_values_predicate: null
+extra: null
+normalize_columns: false
+always_filter_main_dttm: false
+folders: null
+uuid: 5518f6ce-d922-4857-8478-41d81a929112
+metrics:
+- metric_name: avg_price
+  verbose_name: Giá trung bình
+  metric_type: null
+  expression: AVG(gia_dong_cua)
+  description: null
+  d3format: null
+  currency: null
+  extra: null
+  warning_text: null
+columns:
+- column_name: timestamp
+  verbose_name: Thời gian cào
+  is_dttm: true
+  is_active: true
+  type: DATETIME
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: symbol
+  verbose_name: Mã chứng khoán
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: gia_dong_cua
+  verbose_name: Giá đóng cửa
+  is_dttm: false
+  is_active: true
+  type: FLOAT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: thay_doi
+  verbose_name: '% Thay đổi'
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+version: 1.0.0
+database_uuid: 79d4cb67-a8e3-435e-9d43-bdc4866142c6

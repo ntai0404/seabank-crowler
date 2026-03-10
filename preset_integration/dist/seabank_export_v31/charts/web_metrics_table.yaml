@@ -10,5 +10,5 @@ params:
   metrics: []
   row_limit: 100
   viz_type: table
-dataset_uuid: 1318f6ce-d922-4857-8478-41d81a929114
-uuid: 1318f6ce-d922-4857-8478-41d81a929124
+dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929114
+uuid: 5518f6ce-d922-4857-8478-41d81a929124

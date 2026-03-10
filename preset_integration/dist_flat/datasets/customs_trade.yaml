@@ -1,31 +1,32 @@
 version: 1.0.0
 table_name: customs_trade
 main_dttm_col: timestamp
-description: "D\u1EEF li\u1EC7u Kim ng\u1EA1ch Xu\u1EA5t nh\u1EADp kh\u1EA9u (H\u1EA3i quan)"
+description: Dữ liệu Kim ngạch Xuất nhập khẩu (Hải quan)
 columns:
 - column_name: timestamp
-  verbose_name: "Th\u1EDDi gian c\u1EADp nh\u1EADt"
+  verbose_name: Thời gian cập nhật
   is_dttm: true
   type: DATETIME
 - column_name: source
-  verbose_name: "Ngu\u1ED3n d\u1EEF li\u1EC7u"
+  verbose_name: Nguồn dữ liệu
   type: STRING
 - column_name: category
-  verbose_name: "Danh m\u1EE5c"
+  verbose_name: Danh mục
   type: STRING
 - column_name: period
-  verbose_name: "Giai \u0111o\u1EA1n"
+  verbose_name: Giai đoạn
   type: STRING
 - column_name: value_usd
-  verbose_name: "Gi\xE1 tr\u1ECB (USD)"
+  verbose_name: Giá trị (USD)
   type: FLOAT
 - column_name: unit
-  verbose_name: "\u0110\u01A1n v\u1ECB"
+  verbose_name: Đơn vị
   type: STRING
 metrics:
 - metric_name: sum_export
-  verbose_name: "T\u1ED5ng Xu\u1EA5t kh\u1EA9u"
+  verbose_name: Tổng Xuất khẩu
   expression: SUM(value_usd)
 database_uuid: 482b5b73-c5e8-4f35-a665-7236f5a0904b
 schema: SeaBank_Data
-uuid: 7fe4c117-3243-43d8-8a4b-7459fb54e7de
+sql: SELECT * FROM "customs_trade"
+uuid: 1318f6ce-d922-4857-8478-41d81a929115

@@ -1,18 +1,19 @@
 version: 1.0.0
 table_name: web_metrics
 main_dttm_col: timestamp
-description: "Ch\u1EC9 s\u1ED1 \u0111o l\u01B0\u1EDDng tin t\u1EE9c t\u1EEB website"
+description: Chỉ số đo lường tin tức từ website
 columns:
 - column_name: timestamp
-  verbose_name: "Th\u1EDDi gian c\xE0o"
+  verbose_name: Thời gian cào
   is_dttm: true
   type: DATETIME
 - column_name: metric_name
-  verbose_name: "T\xEAn ch\u1EC9 s\u1ED1"
+  verbose_name: Tên chỉ số
   type: STRING
 - column_name: metric_value
-  verbose_name: "Gi\xE1 tr\u1ECB"
+  verbose_name: Giá trị
   type: INTEGER
 database_uuid: 482b5b73-c5e8-4f35-a665-7236f5a0904b
 schema: SeaBank_Data
-uuid: f1ce2434-c433-47d9-b854-155fda36aae6
+sql: SELECT * FROM "web_metrics"
+uuid: 1318f6ce-d922-4857-8478-41d81a929114

@@ -8,12 +8,17 @@ params:
   groupby:
   - bank_name
   metrics:
-  - expression: MAX(rate)
-    label: Lãi suất tối đa
+  - aggregate: MAX
+    column:
+      column_name: rate
+      type: FLOAT
+    expressionType: SIMPLE
+    label: MAX(rate)
+    optionName: metric_max_rate
   row_limit: 100
   show_legend: true
   viz_type: dist_bar
   x_axis_label: Ngân hàng
   y_axis_label: Lãi suất (%)
-dataset_uuid: 1318f6ce-d922-4857-8478-41d81a929111
-uuid: 1318f6ce-d922-4857-8478-41d81a929121
+dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929111
+uuid: 5518f6ce-d922-4857-8478-41d81a929121

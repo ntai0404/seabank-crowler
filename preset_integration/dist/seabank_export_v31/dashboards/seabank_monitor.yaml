@@ -1,10 +1,13 @@
 version: 1.0.0
 css: ''
 dashboard_title: SeaBank Financial Monitor (Hệ thống Giám sát Tài chính)
-description: Hệ thống Giám sát Tài chính SeaBank - Theo dõi realtime Lãi suất, Cổ phiếu và Tin tức.
+description: Hệ thống Giám sát Tài chính SeaBank - Theo dõi realtime Lãi suất, Cổ
+  phiếu và Tin tức.
+published: true
 metadata:
-  color_scheme: null
+  color_scheme: ''
   color_scheme_domain: []
+  cross_filters_enabled: false
   default_filters: '{}'
   expand_slices: true
   filter_sets_configuration: []
@@ -12,6 +15,7 @@ metadata:
   native_filter_configuration: []
   refresh_frequency: 0
   shared_label_colors: {}
+  show_native_filters: true
   timed_refresh_immune_slices: []
 position:
   DASHBOARD_VERSION_KEY: v2
@@ -25,25 +29,65 @@ position:
     - ROW-1
     - ROW-2
     - ROW-3
+    - ROW-4
+    - ROW-5
     id: GRID_ID
     type: GRID
+    parents:
+    - ROOT_ID
   ROW-1:
     children:
     - CHART-1
     - CHART-2
     id: ROW-1
+    meta:
+      background: BACKGROUND_TRANSPARENT
     type: ROW
+    parents:
+    - ROOT_ID
+    - GRID_ID
   ROW-2:
     children:
     - CHART-3
     - CHART-4
     id: ROW-2
+    meta:
+      background: BACKGROUND_TRANSPARENT
     type: ROW
+    parents:
+    - ROOT_ID
+    - GRID_ID
   ROW-3:
     children:
     - CHART-5
     id: ROW-3
+    meta:
+      background: BACKGROUND_TRANSPARENT
     type: ROW
+    parents:
+    - ROOT_ID
+    - GRID_ID
+  ROW-4:
+    children:
+    - CHART-6
+    - CHART-7
+    id: ROW-4
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    type: ROW
+    parents:
+    - ROOT_ID
+    - GRID_ID
+  ROW-5:
+    children:
+    - CHART-8
+    id: ROW-5
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    type: ROW
+    parents:
+    - ROOT_ID
+    - GRID_ID
   CHART-1:
     children: []
     id: CHART-1
@@ -51,9 +95,13 @@ position:
       chartId: 1
       height: 50
       sliceName: So sánh Lãi suất huy động giữa các Ngân hàng
-      uuid: 1318f6ce-d922-4857-8478-41d81a929121
+      uuid: 5518f6ce-d922-4857-8478-41d81a929121
       width: 6
     type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-1
   CHART-2:
     children: []
     id: CHART-2
@@ -61,9 +109,13 @@ position:
       chartId: 2
       height: 50
       sliceName: Biến động Giá Cổ phiếu Ngân hàng & BĐS
-      uuid: 1318f6ce-d922-4857-8478-41d81a929122
+      uuid: 5518f6ce-d922-4857-8478-41d81a929122
       width: 6
     type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-1
   CHART-3:
     children: []
     id: CHART-3
@@ -71,26 +123,82 @@ position:
       chartId: 3
       height: 50
       sliceName: So sánh Kim ngạch Xuất nhập khẩu (Hải quan)
-      uuid: 1318f6ce-d922-4857-8478-41d81a929123
+      uuid: 5518f6ce-d922-4857-8478-41d81a929123
       width: 12
     type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-2
   CHART-4:
     children: []
     id: CHART-4
     meta:
+      chartId: 4
       height: 30
       sliceName: Thống kê Tin tức theo Chủ đề (24h qua)
-      uuid: 1318f6ce-d922-4857-8478-41d81a929124
+      uuid: 5518f6ce-d922-4857-8478-41d81a929124
       width: 12
     type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-2
   CHART-5:
     children: []
     id: CHART-5
     meta:
+      chartId: 5
       height: 50
       sliceName: Danh sách Tin tức Ngành Dệt may mới nhất
-      uuid: 1318f6ce-d922-4857-8478-41d81a929125
+      uuid: 5518f6ce-d922-4857-8478-41d81a929125
       width: 12
     type: CHART
-uuid: 1318f6ce-d922-4857-8478-41d81a929116
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-3
+  CHART-6:
+    children: []
+    id: CHART-6
+    meta:
+      chartId: 6
+      height: 40
+      sliceName: Tỷ giá Ngoại tệ Vietcombank (Mua/Bán)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929126
+      width: 5
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-4
+  CHART-7:
+    children: []
+    id: CHART-7
+    meta:
+      chartId: 7
+      height: 40
+      sliceName: So sánh Lãi suất Tiền gửi các Ngân hàng (12 tháng)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929128
+      width: 7
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-4
+  CHART-8:
+    children: []
+    id: CHART-8
+    meta:
+      chartId: 8
+      height: 50
+      sliceName: Bảng Giá Cổ phiếu Ngân hàng (VCB, BID, CTG, MBB, ACB, TCB...)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929127
+      width: 12
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-5
+uuid: 5518f6ce-d922-4857-8478-41d81a929116
 slug: seabank-monitor

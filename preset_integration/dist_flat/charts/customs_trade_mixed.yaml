@@ -1,18 +1,17 @@
 version: 1.0.0
-slice_name: "So s\xE1nh Kim ng\u1EA1ch Xu\u1EA5t nh\u1EADp kh\u1EA9u (H\u1EA3i quan)"
-viz_type: mixed_timeseries
+slice_name: Diễn biến Kim ngạch Hải quan theo Danh mục
+viz_type: echarts_timeseries_line
 params:
   adhoc_filters: []
   groupby:
   - category
   metrics:
-  - expression: SUM(export_value)
-    label: "Xu\u1EA5t kh\u1EA9u"
-  metrics_b:
-  - expression: SUM(import_value)
-    label: "Nh\u1EADp kh\u1EA9u"
+  - expression: SUM(value_usd)
+    label: Kim ngạch
+  series_type: line
   time_grain_sqla: P1M
-  x_axis_label: "Th\xE1ng"
-  y_axis_label: "Gi\xE1 tr\u1ECB (USD)"
-dataset_uuid: 7fe4c117-3243-43d8-8a4b-7459fb54e7de
-uuid: 8c5b078f-9763-4a30-abb9-fd923dc4a506
+  viz_type: echarts_timeseries_line
+  x_axis_label: Thời gian
+  y_axis_label: Giá trị (USD)
+dataset_uuid: 1318f6ce-d922-4857-8478-41d81a929115
+uuid: 1318f6ce-d922-4857-8478-41d81a929123

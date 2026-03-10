@@ -1,28 +1,29 @@
 version: 1.0.0
 table_name: bank_interest_rates
 main_dttm_col: timestamp
-description: "B\u1EA3ng l\xE3i su\u1EA5t huy \u0111\u1ED9ng t\u1EEB c\xE1c ng\xE2n h\xE0ng"
+description: Bảng lãi suất huy động từ các ngân hàng
 columns:
 - column_name: timestamp
-  verbose_name: "Th\u1EDDi gian c\u1EADp nh\u1EADt"
+  verbose_name: Thời gian cập nhật
   is_dttm: true
   type: DATETIME
 - column_name: bank_name
-  verbose_name: "T\xEAn Ng\xE2n h\xE0ng"
+  verbose_name: Tên Ngân hàng
   type: STRING
 - column_name: term
-  verbose_name: "K\u1EF3 h\u1EA1n"
+  verbose_name: Kỳ hạn
   type: STRING
 - column_name: rate
-  verbose_name: "L\xE3i su\u1EA5t (%/n\u0103m)"
+  verbose_name: Lãi suất (%/năm)
   type: FLOAT
 - column_name: type
-  verbose_name: "Lo\u1EA1i h\xECnh"
+  verbose_name: Loại hình
   type: STRING
 metrics:
 - metric_name: max_rate
-  verbose_name: "L\xE3i su\u1EA5t cao nh\u1EA5t"
+  verbose_name: Lãi suất cao nhất
   expression: MAX(rate)
 database_uuid: 482b5b73-c5e8-4f35-a665-7236f5a0904b
 schema: SeaBank_Data
-uuid: b424e2a5-ce63-4fe6-b8a1-841726cd9036
+sql: SELECT * FROM "bank_interest_rates"
+uuid: 1318f6ce-d922-4857-8478-41d81a929111

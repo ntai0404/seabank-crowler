@@ -1,0 +1,53 @@
+version: 1.0.0
+slice_name: Bảng Giá Cổ phiếu Ngân hàng (VCB, BID, CTG, MBB, ACB, TCB...)
+viz_type: table
+params:
+  adhoc_filters:
+  - clause: WHERE
+    expressionType: SQL
+    sqlExpression: "symbol IN ('VCB','BID','CTG','MBB','ACB','TCB','VPB','STB','LPB','HDB','SSB','SHB','EIB','TPB','VIB','OCB','MSB','BAB','NAB','KLB','SGB','NVB','BVB','VAB')"
+    subject: symbol
+  columns:
+  - symbol
+  - ngay
+  - gia_mo_cua
+  - gia_cao_nhat
+  - gia_thap_nhat
+  - gia_dong_cua
+  - thay_doi
+  groupby: []
+  metrics: []
+  row_limit: 30
+  order_by_cols:
+  - '["symbol", true]'
+  include_search: true
+  table_timestamp_format: smart_date
+  column_config:
+    symbol:
+      label: "Mã CK"
+      width: 70
+    ngay:
+      label: "Ngày GD"
+      width: 100
+    gia_mo_cua:
+      label: "Mở cửa"
+      width: 80
+      d3NumberFormat: ",.2f"
+    gia_cao_nhat:
+      label: "Cao nhất"
+      width: 80
+      d3NumberFormat: ",.2f"
+    gia_thap_nhat:
+      label: "Thấp nhất"
+      width: 80
+      d3NumberFormat: ",.2f"
+    gia_dong_cua:
+      label: "Đóng cửa"
+      width: 80
+      d3NumberFormat: ",.2f"
+    thay_doi:
+      label: "+/- (%)"
+      width: 80
+  viz_type: table
+dataset_uuid: 44b8f6ce-d922-4857-8478-41d81a929112
+uuid: 44b8f6ce-d922-4857-8478-41d81a929127

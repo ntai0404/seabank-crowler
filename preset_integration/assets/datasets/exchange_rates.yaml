@@ -1,0 +1,29 @@
+version: 1.0.0
+table_name: exchange_rates
+main_dttm_col: timestamp
+description: Tỷ giá ngoại tệ từ Vietcombank
+columns:
+- column_name: timestamp
+  verbose_name: Thời gian cập nhật
+  is_dttm: true
+  type: DATETIME
+- column_name: currency
+  verbose_name: Ngoại tệ
+  type: STRING
+- column_name: buy_cash
+  verbose_name: Mua tiền mặt
+  type: FLOAT
+- column_name: buy_transfer
+  verbose_name: Mua chuyển khoản
+  type: FLOAT
+- column_name: sell
+  verbose_name: Bán ra
+  type: FLOAT
+metrics:
+- metric_name: avg_sell
+  verbose_name: Tỷ giá bán trung bình
+  expression: AVG(sell)
+database_uuid: 44b8f6ce-d922-4857-8478-41d81a929111
+schema: SeaBank_Data
+sql: SELECT * FROM "exchange_rates"
+uuid: 44b8f6ce-d922-4857-8478-41d81a929116

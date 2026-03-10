@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: "Bi\u1EBFn \u0111\u1ED9ng Gi\xE1 C\u1ED5 phi\u1EBFu Ng\xE2n h\xE0ng & B\u0110S"
+slice_name: Biến động Giá Cổ phiếu Ngân hàng & BĐS
 viz_type: echarts_timeseries_line
 params:
   adhoc_filters: []
@@ -7,10 +7,11 @@ params:
   - symbol
   metrics:
   - expression: AVG(gia_dong_cua)
-    label: "Gi\xE1 \u0111\xF3ng c\u1EEDa TB"
+    label: Giá đóng cửa TB
   series_type: line
   time_grain_sqla: P1D
-  x_axis_label: "Th\u1EDDi gian"
-  y_axis_label: "Gi\xE1 (VN\u0110)"
-dataset_uuid: 78b8f0e6-46d3-405c-9c95-529931613a26
-uuid: 3848a129-1867-4898-8e65-3b4659771474
+  x_axis_label: Thời gian
+  y_axis_label: Giá (VNĐ)
+  viz_type: echarts_timeseries_line
+dataset_uuid: 1318f6ce-d922-4857-8478-41d81a929112
+uuid: 1318f6ce-d922-4857-8478-41d81a929122

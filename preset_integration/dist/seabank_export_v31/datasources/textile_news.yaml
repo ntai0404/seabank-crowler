@@ -1,0 +1,71 @@
+table_name: textile_news
+main_dttm_col: timestamp
+currency_code_column: null
+description: Tin tức ngành dệt may từ VITAS
+default_endpoint: null
+offset: 0
+cache_timeout: null
+catalog: null
+schema: null
+filter_select_enabled: true
+fetch_values_predicate: null
+extra: null
+normalize_columns: false
+always_filter_main_dttm: false
+folders: null
+uuid: 5518f6ce-d922-4857-8478-41d81a929113
+columns:
+- column_name: timestamp
+  verbose_name: Thời gian cào
+  is_dttm: true
+  is_active: true
+  type: DATETIME
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: title
+  verbose_name: Tiêu đề bài viết
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: url
+  verbose_name: Đường dẫn
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: published_date
+  verbose_name: Ngày đăng
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+version: 1.0.0
+database_uuid: 79d4cb67-a8e3-435e-9d43-bdc4866142c6

@@ -31,27 +31,34 @@ def build_preset_assets():
     MANUAL_DB_UUID = config.get("database_uuid", "482b5b73-c5e8-4f35-a665-7236f5a0904b")
     
     # 3. UUID cố định (Dãy 551...) mới hoàn toàn cho v1.56
-    U_DS_INTEREST = "5518f6ce-d922-4857-8478-41d81a929111"
-    U_DS_STOCK    = "5518f6ce-d922-4857-8478-41d81a929112"
-    U_DS_NEWS     = "5518f6ce-d922-4857-8478-41d81a929113"
-    U_DS_METRICS  = "5518f6ce-d922-4857-8478-41d81a929114"
-    U_DS_CUSTOMS  = "5518f6ce-d922-4857-8478-41d81a929115"
-    U_DASH        = "5518f6ce-d922-4857-8478-41d81a929116"
+    U_DS_INTEREST  = "5518f6ce-d922-4857-8478-41d81a929111"
+    U_DS_STOCK     = "5518f6ce-d922-4857-8478-41d81a929112"
+    U_DS_NEWS      = "5518f6ce-d922-4857-8478-41d81a929113"
+    U_DS_METRICS   = "5518f6ce-d922-4857-8478-41d81a929114"
+    U_DS_CUSTOMS   = "5518f6ce-d922-4857-8478-41d81a929115"
+    U_DASH         = "5518f6ce-d922-4857-8478-41d81a929116"
+    U_DS_EXCHANGE  = "5518f6ce-d922-4857-8478-41d81a929117"
     
     CHART_UUIDS = {
-        "interest_rate_bar.yaml":   "5518f6ce-d922-4857-8478-41d81a929121",
-        "stock_trend_line.yaml":    "5518f6ce-d922-4857-8478-41d81a929122",
-        "customs_trade_mixed.yaml": "5518f6ce-d922-4857-8478-41d81a929123",
-        "web_metrics_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929124",
-        "textile_news_table.yaml":  "5518f6ce-d922-4857-8478-41d81a929125"
+        "interest_rate_bar.yaml":      "5518f6ce-d922-4857-8478-41d81a929121",
+        "stock_trend_line.yaml":       "5518f6ce-d922-4857-8478-41d81a929122",
+        "customs_trade_mixed.yaml":    "5518f6ce-d922-4857-8478-41d81a929123",
+        "web_metrics_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929124",
+        "textile_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929125",
+        "exchange_rates_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929126",
+        "bank_stocks_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929127",
+        "interest_rate_12m_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929128",
     }
 
     CHART_MAP = {
-        "interest_rate_bar.yaml":   U_DS_INTEREST,
-        "stock_trend_line.yaml":    U_DS_STOCK,
-        "customs_trade_mixed.yaml": U_DS_CUSTOMS,
-        "web_metrics_table.yaml":   U_DS_METRICS,
-        "textile_news_table.yaml":  U_DS_NEWS
+        "interest_rate_bar.yaml":      U_DS_INTEREST,
+        "stock_trend_line.yaml":       U_DS_STOCK,
+        "customs_trade_mixed.yaml":    U_DS_CUSTOMS,
+        "web_metrics_table.yaml":      U_DS_METRICS,
+        "textile_news_table.yaml":     U_DS_NEWS,
+        "exchange_rates_table.yaml":   U_DS_EXCHANGE,
+        "bank_stocks_table.yaml":      U_DS_STOCK,
+        "interest_rate_12m_bar.yaml":  U_DS_INTEREST,
     }
 
     template_dir = base_dir / "assets"
@@ -119,6 +126,7 @@ def build_preset_assets():
                     elif "news" in file: ordered_data["uuid"] = U_DS_NEWS
                     elif "metrics" in file: ordered_data["uuid"] = U_DS_METRICS
                     elif "customs" in file: ordered_data["uuid"] = U_DS_CUSTOMS
+                    elif "exchange" in file: ordered_data["uuid"] = U_DS_EXCHANGE
                     else: ordered_data["uuid"] = data.get("uuid")
                     
                     # 21: Metrics (with proper fields)
@@ -179,8 +187,17 @@ def build_preset_assets():
                     if "position" in data:
                         for k, v in data["position"].items():
                             if k.startswith("CHART-"):
-                                ck = {"CHART-1":"interest_rate_bar.yaml","CHART-2":"stock_trend_line.yaml","CHART-3":"customs_trade_mixed.yaml","CHART-4":"web_metrics_table.yaml","CHART-5":"textile_news_table.yaml"}.get(k)
-                                if ck in CHART_UUIDS: 
+                                ck = {
+                                    "CHART-1": "interest_rate_bar.yaml",
+                                    "CHART-2": "stock_trend_line.yaml",
+                                    "CHART-3": "customs_trade_mixed.yaml",
+                                    "CHART-4": "web_metrics_table.yaml",
+                                    "CHART-5": "textile_news_table.yaml",
+                                    "CHART-6": "exchange_rates_table.yaml",
+                                    "CHART-7": "interest_rate_12m_bar.yaml",
+                                    "CHART-8": "bank_stocks_table.yaml",
+                                }.get(k)
+                                if ck in CHART_UUIDS:
                                     v["meta"]["uuid"] = CHART_UUIDS[ck]
                 
                 # D. DATABASES

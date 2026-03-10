@@ -25,15 +25,16 @@ class TextileAgent(BaseAgent):
     SOURCE_NAME = "vitas"
     SOURCE_URL  = "http://www.vietnamtextile.org.vn"
 
+    # Crawl 3 trang đầu mỗi chuyên mục để có ~20-25 bài
     _PAGES = [
-        {"url": "http://www.vietnamtextile.org.vn/tin-tuc-su-kien_p1_1-1.html",
-         "category": "Tin tức sự kiện"},
-        {"url": "http://www.vietnamtextile.org.vn/thi-truong_p1_1-1_2-3.html",
-         "category": "Thị trường"},
-        {"url": "http://www.vietnamtextile.org.vn/chinh-sach-phap-luat_p1_1-1_2-5.html",
-         "category": "Chính sách pháp luật"},
-        {"url": "http://www.vietnamtextile.org.vn/",
-         "category": "Trang chủ"},
+        {"url": "http://www.vietnamtextile.org.vn/tin-tuc-su-kien_p1_1-1.html",  "category": "Tin tức sự kiện"},
+        {"url": "http://www.vietnamtextile.org.vn/tin-tuc-su-kien_p1_1-2.html",  "category": "Tin tức sự kiện"},
+        {"url": "http://www.vietnamtextile.org.vn/tin-tuc-su-kien_p1_1-3.html",  "category": "Tin tức sự kiện"},
+        {"url": "http://www.vietnamtextile.org.vn/thi-truong_p1_1-1_2-3.html",   "category": "Thị trường"},
+        {"url": "http://www.vietnamtextile.org.vn/thi-truong_p1_1-2_2-3.html",   "category": "Thị trường"},
+        {"url": "http://www.vietnamtextile.org.vn/chinh-sach-phap-luat_p1_1-1_2-5.html", "category": "Chính sách pháp luật"},
+        {"url": "http://www.vietnamtextile.org.vn/chinh-sach-phap-luat_p1_1-2_2-5.html", "category": "Chính sách pháp luật"},
+        {"url": "http://www.vietnamtextile.org.vn/",                              "category": "Trang chủ"},
     ]
 
     def crawl(self) -> dict[str, list[list]]:

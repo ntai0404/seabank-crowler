@@ -5,11 +5,30 @@ params:
   adhoc_filters: []
   columns:
   - published_date
+  - category
   - title
+  - summary
   - url
   groupby: []
   metrics: []
-  row_limit: 20
+  row_limit: 15
+  order_desc: true
+  include_search: true
+  column_config:
+    published_date:
+      label: Ngày đăng
+      width: 110
+    category:
+      label: Chuyên mục
+      width: 140
+    title:
+      label: Tiêu đề bài viết
+      width: 380
+    summary:
+      label: Tóm tắt
+    url:
+      label: Đường dẫn
+      width: 120
   viz_type: table
-dataset_uuid: 1318f6ce-d922-4857-8478-41d81a929113
-uuid: 1318f6ce-d922-4857-8478-41d81a929125
+dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929113
+uuid: 5518f6ce-d922-4857-8478-41d81a929125

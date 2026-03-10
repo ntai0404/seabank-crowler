@@ -1,0 +1,27 @@
+database_name: Seabank Manual
+sqlalchemy_uri: gsheets://
+cache_timeout: null
+expose_in_sqllab: true
+allow_run_async: false
+allow_ctas: false
+allow_cvas: false
+allow_dml: false
+allow_csv_upload: false
+extra:
+  allows_virtual_table_explore: true
+  engine_params:
+    catalog:
+      bank_interest_rates: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=104546095
+      stock_prices: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=1053154058
+      customs_trade: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=196298747
+      textile_news: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=2076182069
+      web_metrics: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=1240866762
+      vinatex_news: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=1798702884
+      exchange_rates: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=735502666
+      gold_prices: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=836009090
+      macro_indicators: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=2019952555
+      customs_commodity_details: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=887085080
+      textile_directory: https://docs.google.com/spreadsheets/d/1QBbKfdaEPsAwNWjIS9g71bnLoqAOMX75kQAM4KeJwng/edit#gid=1806266969
+impersonate_user: false
+uuid: 79d4cb67-a8e3-435e-9d43-bdc4866142c6
+version: 1.0.0
