@@ -47,7 +47,7 @@ def build_preset_assets():
         "textile_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929125",
         "exchange_rates_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929126",
         "bank_stocks_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929127",
-        "interest_rate_12m_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929128",
+        "interest_rate_12m_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929139",
     }
 
     CHART_MAP = {

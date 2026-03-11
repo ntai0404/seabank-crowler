@@ -179,7 +179,7 @@ position:
       chartId: 7
       height: 40
       sliceName: So sánh Lãi suất Tiền gửi các Ngân hàng (12 tháng)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929128
+      uuid: 5518f6ce-d922-4857-8478-41d81a929139
       width: 7
     type: CHART
     parents:
