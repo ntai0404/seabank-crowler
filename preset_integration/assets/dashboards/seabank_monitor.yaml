@@ -134,7 +134,7 @@ position:
     id: CHART-4
     meta:
       chartId: 4
-      height: 30
+      height: 70
       sliceName: Danh sách Tin tức Ngân hàng & BĐS mới nhất (kèm link)
       uuid: 1318f6ce-d922-4857-8478-41d81a929140
       width: 12

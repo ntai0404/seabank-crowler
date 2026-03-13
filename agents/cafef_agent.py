@@ -71,9 +71,9 @@ class CafeFAgent(BaseAgent):
 
     @staticmethod
     def _to_iso_date(date_text: str) -> str:
-        """Chuyển dd/mm/yyyy sang yyyy-mm-dd để Preset parse đúng kiểu ngày."""
+        """Chuyển dd/mm/yyyy sang yyyy-mm-dd 09:00:00 để gsheets connector nhận là DATETIME."""
         try:
-            return datetime.strptime(str(date_text).strip(), "%d/%m/%Y").strftime("%Y-%m-%d")
+            return datetime.strptime(str(date_text).strip(), "%d/%m/%Y").strftime("%Y-%m-%d 09:00:00")
         except (ValueError, TypeError):
             return str(date_text).strip()
 
