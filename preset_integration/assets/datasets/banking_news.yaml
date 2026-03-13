@@ -1,0 +1,31 @@
+version: 1.0.0
+table_name: banking_news
+main_dttm_col: timestamp
+description: Tin tức mới nhất từ CafeF cho nhóm ngân hàng và bất động sản
+columns:
+- column_name: timestamp
+  verbose_name: Thời gian cào
+  is_dttm: true
+  type: DATETIME
+- column_name: source
+  verbose_name: Nguồn tin
+  type: STRING
+- column_name: title
+  verbose_name: Tiêu đề bài viết
+  type: STRING
+- column_name: url
+  verbose_name: Đường dẫn
+  type: STRING
+- column_name: category
+  verbose_name: Chủ đề
+  type: STRING
+- column_name: published_date
+  verbose_name: Ngày ghi nhận
+  type: STRING
+- column_name: summary
+  verbose_name: Tóm tắt
+  type: STRING
+database_uuid: 44b8f6ce-d922-4857-8478-41d81a929111
+schema: SeaBank_Data
+sql: SELECT * FROM "banking_news"
+uuid: 44b8f6ce-d922-4857-8478-41d81a929118

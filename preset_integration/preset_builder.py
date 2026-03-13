@@ -38,12 +38,23 @@ def build_preset_assets():
     U_DS_CUSTOMS   = "5518f6ce-d922-4857-8478-41d81a929115"
     U_DASH         = "5518f6ce-d922-4857-8478-41d81a929116"
     U_DS_EXCHANGE  = "5518f6ce-d922-4857-8478-41d81a929117"
+    U_DS_BANKING   = "5518f6ce-d922-4857-8478-41d81a929118"
+
+    DATASET_UUIDS = {
+        "bank_interest_rates.yaml": U_DS_INTEREST,
+        "stock_prices.yaml": U_DS_STOCK,
+        "textile_news.yaml": U_DS_NEWS,
+        "web_metrics.yaml": U_DS_METRICS,
+        "customs_trade.yaml": U_DS_CUSTOMS,
+        "exchange_rates.yaml": U_DS_EXCHANGE,
+        "banking_news.yaml": U_DS_BANKING,
+    }
     
     CHART_UUIDS = {
         "interest_rate_bar.yaml":      "5518f6ce-d922-4857-8478-41d81a929121",
         "stock_trend_line.yaml":       "5518f6ce-d922-4857-8478-41d81a929122",
         "customs_trade_mixed.yaml":    "5518f6ce-d922-4857-8478-41d81a929123",
-        "web_metrics_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929124",
+        "banking_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929141",
         "textile_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929125",
         "exchange_rates_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929126",
         "bank_stocks_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929127",
@@ -54,7 +65,7 @@ def build_preset_assets():
         "interest_rate_bar.yaml":      U_DS_INTEREST,
         "stock_trend_line.yaml":       U_DS_STOCK,
         "customs_trade_mixed.yaml":    U_DS_CUSTOMS,
-        "web_metrics_table.yaml":      U_DS_METRICS,
+        "banking_news_table.yaml":     U_DS_BANKING,
         "textile_news_table.yaml":     U_DS_NEWS,
         "exchange_rates_table.yaml":   U_DS_EXCHANGE,
         "bank_stocks_table.yaml":      U_DS_STOCK,
@@ -121,13 +132,7 @@ def build_preset_assets():
                     ordered_data["folders"] = None
                     
                     # 20: UUID (assign based on filename)
-                    if "interest" in file: ordered_data["uuid"] = U_DS_INTEREST
-                    elif "stock" in file: ordered_data["uuid"] = U_DS_STOCK
-                    elif "news" in file: ordered_data["uuid"] = U_DS_NEWS
-                    elif "metrics" in file: ordered_data["uuid"] = U_DS_METRICS
-                    elif "customs" in file: ordered_data["uuid"] = U_DS_CUSTOMS
-                    elif "exchange" in file: ordered_data["uuid"] = U_DS_EXCHANGE
-                    else: ordered_data["uuid"] = data.get("uuid")
+                    ordered_data["uuid"] = DATASET_UUIDS.get(file, data.get("uuid"))
                     
                     # 21: Metrics (with proper fields)
                     if "metrics" in data:
@@ -191,7 +196,7 @@ def build_preset_assets():
                                     "CHART-1": "interest_rate_bar.yaml",
                                     "CHART-2": "stock_trend_line.yaml",
                                     "CHART-3": "customs_trade_mixed.yaml",
-                                    "CHART-4": "web_metrics_table.yaml",
+                                    "CHART-4": "banking_news_table.yaml",
                                     "CHART-5": "textile_news_table.yaml",
                                     "CHART-6": "exchange_rates_table.yaml",
                                     "CHART-7": "interest_rate_12m_bar.yaml",

@@ -1,0 +1,41 @@
+version: 1.0.0
+slice_name: Danh sách Tin tức Ngân hàng & BĐS chi tiết (có link)
+viz_type: table
+params:
+  adhoc_filters: []
+  columns:
+  - published_date
+  - source
+  - category
+  - title
+  - summary
+  - url
+  groupby: []
+  metrics: []
+  row_limit: 100
+  order_desc: true
+  order_by_cols:
+  - '["published_date", false]'
+  include_search: true
+  column_config:
+    published_date:
+      label: Ngày ghi nhận
+      width: 110
+    source:
+      label: Nguồn
+      width: 90
+    category:
+      label: Chủ đề
+      width: 140
+    title:
+      label: Tiêu đề bài viết
+      width: 380
+    summary:
+      label: Tóm tắt
+      width: 360
+    url:
+      label: Đường dẫn
+      width: 160
+  viz_type: table
+dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929118
+uuid: 5518f6ce-d922-4857-8478-41d81a929141

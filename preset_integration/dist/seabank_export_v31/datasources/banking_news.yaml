@@ -1,7 +1,7 @@
-table_name: stock_prices
-main_dttm_col: ngay
+table_name: banking_news
+main_dttm_col: timestamp
 currency_code_column: null
-description: Bảng giá cổ phiếu từ CafeF
+description: Tin tức mới nhất từ CafeF cho nhóm ngân hàng và bất động sản
 default_endpoint: null
 offset: 0
 cache_timeout: null
@@ -13,17 +13,7 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929112
-metrics:
-- metric_name: avg_price
-  verbose_name: Giá trung bình
-  metric_type: null
-  expression: AVG(gia_dong_cua)
-  description: null
-  d3format: null
-  currency: null
-  extra: null
-  warning_text: null
+uuid: 5518f6ce-d922-4857-8478-41d81a929118
 columns:
 - column_name: timestamp
   verbose_name: Thời gian cào
@@ -38,8 +28,8 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: symbol
-  verbose_name: Mã chứng khoán
+- column_name: source
+  verbose_name: Nguồn tin
   is_dttm: false
   is_active: true
   type: STRING
@@ -51,73 +41,8 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: ngay
-  verbose_name: Ngày giao dịch
-  is_dttm: true
-  is_active: true
-  type: DATETIME
-  advanced_data_type: null
-  groupby: true
-  filterable: true
-  expression: null
-  description: null
-  python_date_format: null
-  datetime_format: null
-  extra: null
-- column_name: gia_mo_cua
-  verbose_name: Giá mở cửa
-  is_dttm: false
-  is_active: true
-  type: FLOAT
-  advanced_data_type: null
-  groupby: true
-  filterable: true
-  expression: null
-  description: null
-  python_date_format: null
-  datetime_format: null
-  extra: null
-- column_name: gia_cao_nhat
-  verbose_name: Giá cao nhất
-  is_dttm: false
-  is_active: true
-  type: FLOAT
-  advanced_data_type: null
-  groupby: true
-  filterable: true
-  expression: null
-  description: null
-  python_date_format: null
-  datetime_format: null
-  extra: null
-- column_name: gia_thap_nhat
-  verbose_name: Giá thấp nhất
-  is_dttm: false
-  is_active: true
-  type: FLOAT
-  advanced_data_type: null
-  groupby: true
-  filterable: true
-  expression: null
-  description: null
-  python_date_format: null
-  datetime_format: null
-  extra: null
-- column_name: gia_dong_cua
-  verbose_name: Giá đóng cửa
-  is_dttm: false
-  is_active: true
-  type: FLOAT
-  advanced_data_type: null
-  groupby: true
-  filterable: true
-  expression: null
-  description: null
-  python_date_format: null
-  datetime_format: null
-  extra: null
-- column_name: thay_doi
-  verbose_name: '% Thay đổi'
+- column_name: title
+  verbose_name: Tiêu đề bài viết
   is_dttm: false
   is_active: true
   type: STRING
@@ -129,11 +54,11 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: khoi_luong
-  verbose_name: Khối lượng
+- column_name: url
+  verbose_name: Đường dẫn
   is_dttm: false
   is_active: true
-  type: FLOAT
+  type: STRING
   advanced_data_type: null
   groupby: true
   filterable: true
@@ -142,11 +67,37 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: gia_tri
-  verbose_name: Giá trị
+- column_name: category
+  verbose_name: Chủ đề
   is_dttm: false
   is_active: true
-  type: FLOAT
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: published_date
+  verbose_name: Ngày ghi nhận
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: summary
+  verbose_name: Tóm tắt
+  is_dttm: false
+  is_active: true
+  type: STRING
   advanced_data_type: null
   groupby: true
   filterable: true

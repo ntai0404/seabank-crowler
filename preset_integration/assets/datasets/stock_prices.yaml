@@ -1,6 +1,6 @@
 version: 1.0.0
 table_name: stock_prices
-main_dttm_col: timestamp
+main_dttm_col: ngay
 description: Bảng giá cổ phiếu từ CafeF
 columns:
 - column_name: timestamp
@@ -12,7 +12,8 @@ columns:
   type: STRING
 - column_name: ngay
   verbose_name: Ngày giao dịch
-  type: STRING
+  is_dttm: true
+  type: DATETIME
 - column_name: gia_mo_cua
   verbose_name: Giá mở cửa
   type: FLOAT

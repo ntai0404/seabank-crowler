@@ -3,6 +3,7 @@ slice_name: Biến động Giá Cổ phiếu Ngân hàng & BĐS
 viz_type: echarts_timeseries_line
 params:
   adhoc_filters: []
+  time_range: No filter
   groupby:
   - symbol
   metrics:
@@ -13,9 +14,10 @@ params:
     expressionType: SIMPLE
     label: AVG(gia_dong_cua)
     optionName: metric_avg_price
-  granularity_sqla: timestamp
+  granularity_sqla: ngay
   series_type: line
   time_grain_sqla: P1D
+  row_limit: 50000
   x_axis_label: Thời gian
   y_axis_label: Giá (VND)
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929112

@@ -1,22 +1,27 @@
 version: 1.0.0
 slice_name: So sanh Kim ngach Xuat nhap khau (Hai quan)
-viz_type: echarts_timeseries_bar
+viz_type: dist_bar
 params:
-  adhoc_filters: []
+  adhoc_filters:
+  - clause: WHERE
+    expressionType: SQL
+    sqlExpression: period LIKE '%(tỷ USD)'
+  columns:
+  - period
   groupby:
   - category
   metrics:
-  - aggregate: SUM
+  - aggregate: MAX
     column:
       column_name: value_usd
       type: FLOAT
     expressionType: SIMPLE
-    label: SUM(value_usd)
-    optionName: metric_sum_value
-  granularity_sqla: timestamp
-  time_grain_sqla: P1M
-  x_axis_label: Thang
+    label: MAX(value_usd)
+    optionName: metric_max_value
+  row_limit: 500
+  show_legend: true
+  x_axis_label: Giai đoạn
   y_axis_label: Gia tri (USD)
-  stack: true
+  viz_type: dist_bar
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929115
 uuid: 5518f6ce-d922-4857-8478-41d81a929123

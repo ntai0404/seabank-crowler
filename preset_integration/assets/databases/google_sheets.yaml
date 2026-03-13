@@ -15,6 +15,7 @@ extra:
       stock_prices: ${SPREADSHEET_URL}/edit#gid=1053154058
       customs_trade: ${SPREADSHEET_URL}/edit#gid=196298747
       textile_news: ${SPREADSHEET_URL}/edit#gid=2076182069
+      banking_news: ${SPREADSHEET_URL}/edit#gid=1153949100
       web_metrics: ${SPREADSHEET_URL}/edit#gid=1240866762
       vinatex_news: ${SPREADSHEET_URL}/edit#gid=1798702884
       exchange_rates: ${SPREADSHEET_URL}/edit#gid=735502666

@@ -136,8 +136,8 @@ position:
     meta:
       chartId: 4
       height: 30
-      sliceName: Thống kê Tin tức theo Chủ đề (24h qua)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929124
+      sliceName: Danh sách Tin tức Ngân hàng & BĐS mới nhất (kèm link)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929141
       width: 12
     type: CHART
     parents:
