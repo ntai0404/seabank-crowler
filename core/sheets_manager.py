@@ -23,6 +23,8 @@ SHEET_HEADERS: dict[str, list[str]] = {
                          "category", "published_date", "summary"],
     "vinatex_news":     ["timestamp", "source", "title", "url",
                          "lang", "published_date", "summary"],
+    "banking_news":     ["timestamp", "source", "title", "url",
+                         "category", "published_date", "summary"],
     "bank_interest_rates": ["timestamp", "bank_name", "term", "rate", "type"],
     "customs_commodity_details": ["timestamp", "category", "period", "export_value", "import_value", "change_pct"],
     "textile_directory": ["timestamp", "company_name", "business_type", "address", "website"],

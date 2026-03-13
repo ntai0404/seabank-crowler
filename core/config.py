@@ -45,7 +45,7 @@ def get_credentials_source() -> tuple[str, str | dict]:
     )
 
 # ---- Crawl settings ----
-STOCK_HISTORY_DAYS: int   = int(os.environ.get("STOCK_HISTORY_DAYS", "7").strip())
+STOCK_HISTORY_DAYS: int   = int(os.environ.get("STOCK_HISTORY_DAYS", "365").strip())
 REQUEST_DELAY: float       = float(os.environ.get("REQUEST_DELAY", "0.5").strip())
 REQUEST_TIMEOUT: int       = int(os.environ.get("REQUEST_TIMEOUT", "15").strip())
 PLAYWRIGHT_TIMEOUT: int    = int(os.environ.get("PLAYWRIGHT_TIMEOUT", "45000").strip())
@@ -63,6 +63,7 @@ SHEETS: dict[str, str] = {
     # Dệt may
     "textile_news":     "textile_news",      # Tin tức VITAS
     "vinatex_news":     "vinatex_news",      # Tin tức Vinatex
+    "banking_news":     "banking_news",      # Tin tức ngân hàng & BĐS
 }
 
 # ---- Danh sách mã chứng khoán (~350 mã, bao phủ 99% thanh khoản) ----

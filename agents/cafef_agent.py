@@ -27,6 +27,7 @@ class CafeFAgent(BaseAgent):
 
     SOURCE_NAME = "cafef"
     SOURCE_URL  = "https://cafef.vn"
+    REPLACE_SHEETS = {"stock_prices", "banking_news"}
 
     # ---- API endpoints ----
     _EP_STOCK   = "https://s.cafef.vn/Ajax/PageNew/DataHistory/PriceHistory.ashx"
@@ -54,6 +55,7 @@ class CafeFAgent(BaseAgent):
             "gold_prices":      gold_rows["dedicated"],
             "macro_indicators": macro_rows["dedicated"],
             "bank_interest_rates": interest_rows["dedicated"],
+            "banking_news":     banking_news["dedicated"],
         }
 
     # ----------------------------------------------------------
@@ -66,6 +68,14 @@ class CafeFAgent(BaseAgent):
             return float(str(v).replace(',', '.'))
         except (ValueError, TypeError):
             return default
+
+    @staticmethod
+    def _to_iso_date(date_text: str) -> str:
+        """Chuyển dd/mm/yyyy sang yyyy-mm-dd để Preset parse đúng kiểu ngày."""
+        try:
+            return datetime.strptime(str(date_text).strip(), "%d/%m/%Y").strftime("%Y-%m-%d")
+        except (ValueError, TypeError):
+            return str(date_text).strip()
 
     def _crawl_stocks(self) -> dict:
         """Crawl giá cổ phiếu qua JSON API — không cần Playwright."""
@@ -85,25 +95,25 @@ class CafeFAgent(BaseAgent):
                         "StartDate": start_date,
                         "EndDate":   end_date,
                         "PageIndex": 1,
-                        "PageSize":  1,
+                        "PageSize":  STOCK_HISTORY_DAYS,
                     }
                 )
                 records = data.get("Data", {}).get("Data", [])
                 if not records:
                     continue
 
-                r = records[0]
-                price = self._to_float(r.get("GiaDongCua", 0))
+                latest_record = records[0]
+                price = self._to_float(latest_record.get("GiaDongCua", 0))
                 meta  = {
                     "symbol":        symbol,
-                    "ngay":          r.get("Ngay", ""),
-                    "gia_mo_cua":    self._to_float(r.get("GiaMoCua", 0)),
-                    "gia_cao_nhat":  self._to_float(r.get("GiaCaoNhat", 0)),
-                    "gia_thap_nhat": self._to_float(r.get("GiaThapNhat", 0)),
+                    "ngay":          self._to_iso_date(latest_record.get("Ngay", "")),
+                    "gia_mo_cua":    self._to_float(latest_record.get("GiaMoCua", 0)),
+                    "gia_cao_nhat":  self._to_float(latest_record.get("GiaCaoNhat", 0)),
+                    "gia_thap_nhat": self._to_float(latest_record.get("GiaThapNhat", 0)),
                     "gia_dong_cua":  price,
-                    "thay_doi":      self._to_float(r.get("ThayDoi", 0)),
-                    "khoi_luong":    self._to_float(r.get("KhoiLuongKhopLenh", 0)),
-                    "gia_tri":       self._to_float(r.get("GiaTriKhopLenh", 0)),
+                    "thay_doi":      self._to_float(latest_record.get("ThayDoi", 0)),
+                    "khoi_luong":    self._to_float(latest_record.get("KhoiLuongKhopLenh", 0)),
+                    "gia_tri":       self._to_float(latest_record.get("GiaTriKhopLenh", 0)),
                 }
 
                 metrics.append([
@@ -111,12 +121,19 @@ class CafeFAgent(BaseAgent):
                     f"stock_price_{symbol}", price,
                     json.dumps(meta, ensure_ascii=False),
                 ])
-                dedicated.append([
-                    self.timestamp, symbol, meta["ngay"],
-                    meta["gia_mo_cua"], meta["gia_cao_nhat"],
-                    meta["gia_thap_nhat"], meta["gia_dong_cua"],
-                    meta["thay_doi"], meta["khoi_luong"], meta["gia_tri"],
-                ])
+                seen_dates = set()
+                for record in records:
+                    trading_date = self._to_iso_date(record.get("Ngay", ""))
+                    if not trading_date or trading_date in seen_dates:
+                        continue
+                    seen_dates.add(trading_date)
+                    dedicated.append([
+                        self.timestamp, symbol, trading_date,
+                        self._to_float(record.get("GiaMoCua", 0)), self._to_float(record.get("GiaCaoNhat", 0)),
+                        self._to_float(record.get("GiaThapNhat", 0)), self._to_float(record.get("GiaDongCua", 0)),
+                        self._to_float(record.get("ThayDoi", 0)), self._to_float(record.get("KhoiLuongKhopLenh", 0)),
+                        self._to_float(record.get("GiaTriKhopLenh", 0)),
+                    ])
                 print(f"  ✅ {symbol}: {price}")
 
             except Exception as e:
@@ -398,11 +415,12 @@ class CafeFAgent(BaseAgent):
     def _crawl_banking_news(self) -> dict:
         """Crawl tin tức ngân hàng & BĐS (dành cho metric news_count)"""
         print("[CAFEF] Crawl tin tức Banking/BĐS...")
-        metrics = []
+        metrics, dedicated = [], []
         categories = {
             "banking": "https://cafef.vn/tai-chinh-ngan-hang.chn",
             "real_estate": "https://cafef.vn/bat-dong-san.chn"
         }
+        seen_urls = set()
         
         for cat, url in categories.items():
             try:
@@ -417,8 +435,35 @@ class CafeFAgent(BaseAgent):
                     f"news_count_{cat}", count,
                     json.dumps({"url": url, "category": cat}, ensure_ascii=False)
                 ])
+
+                for item in news_items[:15]:
+                    anchor = item.find('a', href=True)
+                    if not anchor:
+                        continue
+                    article_url = anchor.get('href', '').strip()
+                    if article_url.startswith('/'):
+                        article_url = f"{self.SOURCE_URL}{article_url}"
+                    if not article_url.startswith('http') or article_url in seen_urls:
+                        continue
+
+                    title = anchor.get_text(' ', strip=True)
+                    summary_el = item.find(class_=['sapo', 'desc', 'tl-sapo']) or item.find('p')
+                    summary = summary_el.get_text(' ', strip=True) if summary_el else ''
+                    if not title:
+                        continue
+
+                    seen_urls.add(article_url)
+                    dedicated.append([
+                        self.timestamp,
+                        'cafef.vn',
+                        title,
+                        article_url,
+                        cat,
+                        self.timestamp.split(' ')[0],
+                        summary,
+                    ])
                 print(f"  ✅ {cat}: {count} tin mới.")
             except Exception as e:
                 print(f"  ❌ {cat}: {e}")
                 
-        return {"metrics": metrics}
+        return {"metrics": metrics, "dedicated": dedicated}
