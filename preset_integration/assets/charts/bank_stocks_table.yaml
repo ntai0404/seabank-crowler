@@ -17,8 +17,9 @@ params:
   - thay_doi
   groupby: []
   metrics: []
-  row_limit: 30
+  row_limit: 200
   order_by_cols:
+  - '["ngay", false]'
   - '["symbol", true]'
   include_search: true
   table_timestamp_format: smart_date

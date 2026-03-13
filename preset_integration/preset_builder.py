@@ -52,12 +52,12 @@ def build_preset_assets():
     
     CHART_UUIDS = {
         "interest_rate_bar.yaml":      "5518f6ce-d922-4857-8478-41d81a929121",
-        "stock_trend_line.yaml":       "5518f6ce-d922-4857-8478-41d81a929122",
-        "customs_trade_mixed.yaml":    "5518f6ce-d922-4857-8478-41d81a929123",
-        "banking_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929141",
+        "stock_trend_line.yaml":       "5518f6ce-d922-4857-8478-41d81a929150",
+        "customs_trade_mixed.yaml":    "5518f6ce-d922-4857-8478-41d81a929151",
+        "banking_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929154",
         "textile_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929125",
-        "exchange_rates_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929126",
-        "bank_stocks_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929127",
+        "exchange_rates_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929152",
+        "bank_stocks_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929153",
         "interest_rate_12m_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929149",
     }
 

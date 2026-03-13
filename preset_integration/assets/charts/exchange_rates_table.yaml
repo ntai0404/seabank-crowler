@@ -4,18 +4,23 @@ viz_type: table
 params:
   adhoc_filters: []
   columns:
+  - timestamp
   - currency
   - buy_cash
   - buy_transfer
   - sell
   groupby: []
   metrics: []
-  row_limit: 20
+  row_limit: 100
   order_by_cols:
+  - '["timestamp", false]'
   - '["currency", true]'
   include_search: false
   table_timestamp_format: smart_date
   column_config:
+    timestamp:
+      label: "Thời điểm"
+      width: 135
     currency:
       label: "Ngoại tệ"
       width: 100
