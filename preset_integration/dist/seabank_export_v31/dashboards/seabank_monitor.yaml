@@ -109,7 +109,7 @@ position:
       chartId: 2
       height: 50
       sliceName: Biến động Giá Cổ phiếu Ngân hàng & BĐS
-      uuid: 5518f6ce-d922-4857-8478-41d81a929122
+      uuid: 5518f6ce-d922-4857-8478-41d81a929161
       width: 6
     type: CHART
     parents:
@@ -123,7 +123,7 @@ position:
       chartId: 3
       height: 50
       sliceName: So sánh Kim ngạch Xuất nhập khẩu (Hải quan)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929123
+      uuid: 5518f6ce-d922-4857-8478-41d81a929162
       width: 12
     type: CHART
     parents:
@@ -135,9 +135,9 @@ position:
     id: CHART-4
     meta:
       chartId: 4
-      height: 30
+      height: 70
       sliceName: Danh sách Tin tức Ngân hàng & BĐS mới nhất (kèm link)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929141
+      uuid: 5518f6ce-d922-4857-8478-41d81a929154
       width: 12
     type: CHART
     parents:
@@ -165,7 +165,7 @@ position:
       chartId: 6
       height: 40
       sliceName: Tỷ giá Ngoại tệ Vietcombank (Mua/Bán)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929126
+      uuid: 5518f6ce-d922-4857-8478-41d81a929152
       width: 5
     type: CHART
     parents:
@@ -193,7 +193,7 @@ position:
       chartId: 8
       height: 50
       sliceName: Bảng Giá Cổ phiếu Ngân hàng (VCB, BID, CTG, MBB, ACB, TCB...)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929127
+      uuid: 5518f6ce-d922-4857-8478-41d81a929153
       width: 12
     type: CHART
     parents:
