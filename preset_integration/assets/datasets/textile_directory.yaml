@@ -1,0 +1,29 @@
+version: 1.0.0
+table_name: textile_directory
+main_dttm_col: timestamp
+description: Danh ba doanh nghiep hoi vien VITAS
+columns:
+- column_name: timestamp
+  verbose_name: Thoi gian cap nhat
+  is_dttm: true
+  type: DATETIME
+- column_name: company_name
+  verbose_name: Ten doanh nghiep
+  type: STRING
+- column_name: business_type
+  verbose_name: Nhom linh vuc
+  type: STRING
+- column_name: address
+  verbose_name: Dia chi
+  type: STRING
+- column_name: website
+  verbose_name: Website
+  type: STRING
+metrics:
+- metric_name: company_count
+  verbose_name: So doanh nghiep
+  expression: COUNT(*)
+database_uuid: ${DATABASE_UUID}
+schema: SeaBank_Data
+sql: SELECT * FROM "textile_directory"
+uuid: 44b8f6ce-d922-4857-8478-41d81a929130

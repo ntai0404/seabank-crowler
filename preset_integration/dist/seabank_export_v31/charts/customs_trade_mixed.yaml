@@ -9,22 +9,20 @@ params:
   - clause: WHERE
     expressionType: SQL
     sqlExpression: category IN ('Xuất khẩu','Nhập khẩu')
-  columns:
-  - category
   groupby:
-  - period
+  - category
   metrics:
   - aggregate: MAX
     column:
       column_name: value_usd
       type: FLOAT
     expressionType: SIMPLE
-    label: MAX(value_usd)
+    label: Giá trị (tỷ USD)
     optionName: metric_max_value
-  row_limit: 500
-  show_legend: true
-  x_axis_label: Giai đoạn báo cáo
+  row_limit: 50
+  show_legend: false
+  x_axis_label: Loại kim ngạch
   y_axis_label: Giá trị (tỷ USD)
   viz_type: dist_bar
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929115
-uuid: 5518f6ce-d922-4857-8478-41d81a929162
+uuid: 5518f6ce-d922-4857-8478-41d81a929202

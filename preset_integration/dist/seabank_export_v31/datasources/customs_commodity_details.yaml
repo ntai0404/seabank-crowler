@@ -1,7 +1,7 @@
-table_name: bank_interest_rates
+table_name: customs_commodity_details
 main_dttm_col: timestamp
 currency_code_column: null
-description: Bảng lãi suất huy động từ các ngân hàng
+description: Du lieu tong hop xuat nhap khau theo ky
 default_endpoint: null
 offset: 0
 cache_timeout: null
@@ -13,12 +13,21 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929111
+uuid: 5518f6ce-d922-4857-8478-41d81a929120
 metrics:
-- metric_name: max_rate
-  verbose_name: Lãi suất cao nhất
+- metric_name: avg_export_value
+  verbose_name: Xuat khau TB
   metric_type: null
-  expression: MAX(rate)
+  expression: AVG(export_value)
+  description: null
+  d3format: null
+  currency: null
+  extra: null
+  warning_text: null
+- metric_name: avg_import_value
+  verbose_name: Nhap khau TB
+  metric_type: null
+  expression: AVG(import_value)
   description: null
   d3format: null
   currency: null
@@ -26,7 +35,7 @@ metrics:
   warning_text: null
 columns:
 - column_name: timestamp
-  verbose_name: Thời gian cập nhật
+  verbose_name: Thoi gian cap nhat
   is_dttm: true
   is_active: true
   type: DATETIME
@@ -38,8 +47,8 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: bank_name
-  verbose_name: Tên Ngân hàng
+- column_name: category
+  verbose_name: Nhom du lieu
   is_dttm: false
   is_active: true
   type: STRING
@@ -51,8 +60,8 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: term
-  verbose_name: Kỳ hạn
+- column_name: period
+  verbose_name: Ky bao cao
   is_dttm: false
   is_active: true
   type: STRING
@@ -64,8 +73,8 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: rate
-  verbose_name: Lãi suất (%/năm)
+- column_name: export_value
+  verbose_name: Gia tri xuat khau
   is_dttm: false
   is_active: true
   type: FLOAT
@@ -77,11 +86,11 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: type
-  verbose_name: Loại hình
+- column_name: import_value
+  verbose_name: Gia tri nhap khau
   is_dttm: false
   is_active: true
-  type: STRING
+  type: FLOAT
   advanced_data_type: null
   groupby: true
   filterable: true
@@ -90,6 +99,19 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-sql: SELECT * FROM "bank_interest_rates"
+- column_name: change_pct
+  verbose_name: Bien dong phan tram
+  is_dttm: false
+  is_active: true
+  type: FLOAT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+sql: SELECT * FROM "customs_commodity_details"
 version: 1.0.0
 database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d

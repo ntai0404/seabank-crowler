@@ -37,8 +37,12 @@ def build_preset_assets():
     U_DS_METRICS   = "5518f6ce-d922-4857-8478-41d81a929114"
     U_DS_CUSTOMS   = "5518f6ce-d922-4857-8478-41d81a929115"
     U_DASH         = "5518f6ce-d922-4857-8478-41d81a929116"
+    U_DASH_LONG    = "5518f6ce-d922-4857-8478-41d81a929216"
     U_DS_EXCHANGE  = "5518f6ce-d922-4857-8478-41d81a929117"
     U_DS_BANKING   = "5518f6ce-d922-4857-8478-41d81a929118"
+    U_DS_GOLD      = "5518f6ce-d922-4857-8478-41d81a929119"
+    U_DS_COMMODITY = "5518f6ce-d922-4857-8478-41d81a929120"
+    U_DS_DIRECTORY = "5518f6ce-d922-4857-8478-41d81a929130"
 
     DATASET_UUIDS = {
         "bank_interest_rates.yaml": U_DS_INTEREST,
@@ -48,6 +52,9 @@ def build_preset_assets():
         "customs_trade.yaml": U_DS_CUSTOMS,
         "exchange_rates.yaml": U_DS_EXCHANGE,
         "banking_news.yaml": U_DS_BANKING,
+        "gold_prices.yaml": U_DS_GOLD,
+        "customs_commodity_details.yaml": U_DS_COMMODITY,
+        "textile_directory.yaml": U_DS_DIRECTORY,
     }
     
     CHART_UUIDS = {
@@ -59,6 +66,10 @@ def build_preset_assets():
         "exchange_rates_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929152",
         "bank_stocks_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929153",
         "interest_rate_12m_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929149",
+        "gold_prices_trend_line.yaml": "5518f6ce-d922-4857-8478-41d81a929221",
+        "customs_export_by_period.yaml": "5518f6ce-d922-4857-8478-41d81a929222",
+        "customs_import_by_period.yaml": "5518f6ce-d922-4857-8478-41d81a929223",
+        "textile_directory_type_bar.yaml": "5518f6ce-d922-4857-8478-41d81a929224",
     }
 
     CHART_MAP = {
@@ -70,6 +81,15 @@ def build_preset_assets():
         "exchange_rates_table.yaml":   U_DS_EXCHANGE,
         "bank_stocks_table.yaml":      U_DS_STOCK,
         "interest_rate_12m_bar.yaml":  U_DS_INTEREST,
+        "gold_prices_trend_line.yaml": U_DS_GOLD,
+        "customs_export_by_period.yaml": U_DS_COMMODITY,
+        "customs_import_by_period.yaml": U_DS_COMMODITY,
+        "textile_directory_type_bar.yaml": U_DS_DIRECTORY,
+    }
+
+    DASHBOARD_UUIDS = {
+        "seabank_monitor.yaml": U_DASH,
+        "seabank_longterm_monitor.yaml": U_DASH_LONG,
     }
 
     template_dir = base_dir / "assets"
@@ -190,8 +210,7 @@ def build_preset_assets():
                 
                 # C. DASHBOARD
                 elif rel_path.name == "dashboards":
-                    data["uuid"] = U_DASH
-                    data["dashboard_title"] = dashboard_title
+                    data["uuid"] = DASHBOARD_UUIDS.get(file, data.get("uuid", str(uuid.uuid4())))
                     if "position" in data:
                         for k, v in data["position"].items():
                             if k.startswith("CHART-"):
@@ -204,6 +223,10 @@ def build_preset_assets():
                                     "CHART-6": "exchange_rates_table.yaml",
                                     "CHART-7": "interest_rate_12m_bar.yaml",
                                     "CHART-8": "bank_stocks_table.yaml",
+                                    "CHART-101": "gold_prices_trend_line.yaml",
+                                    "CHART-102": "customs_export_by_period.yaml",
+                                    "CHART-103": "customs_import_by_period.yaml",
+                                    "CHART-104": "textile_directory_type_bar.yaml",
                                 }.get(k)
                                 if ck in CHART_UUIDS:
                                     v["meta"]["uuid"] = CHART_UUIDS[ck]

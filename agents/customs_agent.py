@@ -199,47 +199,49 @@ class CustomsAgent(BaseAgent):
                 time.sleep(3)
                 
                 soup = BeautifulSoup(page.content(), "html.parser")
-                # Lấy bài viết đầu tiên
-                first_report = soup.select_one(".news-title") or soup.select_one(".list-news a") or soup.select_one("a[href*='pageId=444']")
-                if first_report and first_report.get("href"):
-                    report_url = first_report["href"]
-                    if not report_url.startswith("http"):
-                        report_url = self.SOURCE_URL + report_url
-                    
-                    # CSS selector ưu tiên: .tkhq_tintuc_chitiet table, table.list, table.Table
-                    tables = report_soup.select(".tkhq_tintuc_chitiet table") or report_soup.select("table.list") or report_soup.select("table.Table") or report_soup.find_all("table")
-                    print(f"    [DEBUG] Found {len(tables)} tables.")
-                    
-                    for table in tables:
-                        table_rows = table.find_all("tr")
-                        if not table_rows: continue
-                        
-                        # Greedy search for data rows
-                        for tr in table_rows:
-                            tds = [td.get_text(strip=True) for td in tr.find_all(["td", "th"])]
-                            if len(tds) < 3: continue
-                            
-                            category = tds[0]
-                            # Lọc các mặt hàng SeaBank quan tâm (Greedy)
-                            keywords = ["dệt", "may", "thanh long", "thủy sản", "giày", "điện", "máy", "gỗ", "sắt", "thép"]
-                            if any(k in category.lower() for k in keywords):
-                                try:
-                                    # Thử tìm số lớn nhất trong các cột (thường là trị giá)
-                                    nums = []
-                                    for t in tds[1:]:
-                                        val = self._parse_number(t)
-                                        if val: nums.append(val)
-                                    
-                                    if nums:
-                                        val_export = nums[0]
-                                        val_import = nums[-1] if len(nums) > 1 else 0
-                                        rows.append([
-                                            self.timestamp, category, period, 
-                                            val_export, val_import, 0
-                                        ])
-                                        print(f"      ✅ Found: {category} -> {val_export}")
-                                except:
-                                    pass
+                table = soup.select_one("table.list")
+                if table:
+                    by_period: dict[str, dict[str, float | str]] = {}
+                    for tr in table.find_all("tr"):
+                        cells = [self._clean_text(td.get_text(" ", strip=True)) for td in tr.find_all(["td", "th"])]
+                        if len(cells) < 8 or cells[0] == "#":
+                            continue
+
+                        category = cells[1]
+                        period = cells[2] or cells[3]
+                        value = self._parse_number(cells[4])
+                        change_pct = self._parse_number(cells[5])
+                        if not category or not period or value is None:
+                            continue
+
+                        bucket = by_period.setdefault(period, {
+                            "export_value": 0.0,
+                            "import_value": 0.0,
+                            "change_pct": 0.0,
+                        })
+
+                        category_lower = category.lower()
+                        if category_lower == "xuất khẩu":
+                            bucket["export_value"] = value
+                        elif category_lower == "nhập khẩu":
+                            bucket["import_value"] = value
+                        elif category_lower == "xuất nhập khẩu" and change_pct is not None:
+                            bucket["change_pct"] = change_pct
+
+                    for period, bucket in by_period.items():
+                        if not bucket["export_value"] and not bucket["import_value"]:
+                            continue
+                        rows.append([
+                            self.timestamp,
+                            "Tổng hợp XNK",
+                            period,
+                            bucket["export_value"],
+                            bucket["import_value"],
+                            bucket["change_pct"],
+                        ])
+                        print(
+                            f"      ✅ {period}: XK={bucket['export_value']} | NK={bucket['import_value']}"
+                        )
                 browser.close()
         except Exception as e:
             print(f"[CUSTOMS] ❌ Lỗi chi tiết mặt hàng: {e}")
@@ -349,3 +351,9 @@ class CustomsAgent(BaseAgent):
             return float(cleaned) if cleaned else None
         except (ValueError, TypeError):
             return None
+
+    @staticmethod
+    def _clean_text(text: str) -> str:
+        if not text:
+            return ""
+        return " ".join(text.split()).strip()

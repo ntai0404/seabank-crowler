@@ -233,6 +233,10 @@ class CafeFAgent(BaseAgent):
         # Định dạng VN: '5,50' → '5.50'
         if ',' in c and '.' not in c:
             c = c.replace(',', '.')
+        elif '.' in c and c.count('.') > 1 and ',' not in c:
+            c = c.replace('.', '')
+        elif ',' in c and '.' in c:
+            c = c.replace('.', '').replace(',', '.')
         try:
             return float(c)
         except (ValueError, TypeError):
@@ -247,9 +251,9 @@ class CafeFAgent(BaseAgent):
             root = ET.fromstring(r.text)
             for ex in root.findall('Exrate'):
                 cur = ex.get('CurrencyCode', '').strip()
-                buy = float(ex.get('Buy', '0').replace(',', ''))
-                buy_ck = float(ex.get('Transfer', '0').replace(',', ''))
-                sell = float(ex.get('Sell', '0').replace(',', ''))
+                buy = self._parse_num(ex.get('Buy', '0'))
+                buy_ck = self._parse_num(ex.get('Transfer', '0'))
+                sell = self._parse_num(ex.get('Sell', '0'))
                 
                 if not cur or sell == 0: continue
                 
@@ -279,28 +283,36 @@ class CafeFAgent(BaseAgent):
             # Tìm bảng giá vàng
             table = soup.find("table")
             if table:
+                current_region = ""
                 for tr in table.find_all("tr")[1:]:
-                    tds = tr.find_all("td")
-                    if len(tds) >= 3:
-                        g_type = tds[0].get_text(strip=True)
-                        buy    = self._parse_num(tds[1].get_text())
-                        sell   = self._parse_num(tds[2].get_text())
-                        
-                        # Quy đổi về VNĐ/lượng (website thường để đơn vị VND hoặc triệu/lượng)
-                        if buy < 1000: buy *= 1000
-                        if buy < 1000000: buy *= 1000
-                        if sell < 1000: sell *= 1000
-                        if sell < 1000000: sell *= 1000
+                    tds = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
+                    if len(tds) < 3:
+                        continue
 
-                        if g_type and sell > 0:
-                            meta = {"gold_type": g_type, "buy": buy, "sell": sell, "unit": "VNĐ/lượng"}
-                            metrics.append([
-                                self.timestamp, "webgia.com",
-                                f"gold_price_{g_type.replace(' ', '_')}", sell,
-                                json.dumps(meta, ensure_ascii=False),
-                            ])
-                            dedicated.append([self.timestamp, g_type, buy, sell])
-                            print(f"  ✅ {g_type}: {sell:,}")
+                    if len(tds) >= 4:
+                        region = tds[0].strip()
+                        g_type = tds[1].strip()
+                        buy = self._parse_num(tds[-2])
+                        sell = self._parse_num(tds[-1])
+                        if region:
+                            current_region = region
+                    else:
+                        g_type = tds[0].strip()
+                        buy = self._parse_num(tds[1])
+                        sell = self._parse_num(tds[2])
+
+                    if not g_type or buy <= 0 or sell <= 0:
+                        continue
+
+                    gold_type = f"{current_region} - {g_type}" if current_region else g_type
+                    meta = {"gold_type": gold_type, "buy": buy, "sell": sell, "unit": "VNĐ/chỉ"}
+                    metrics.append([
+                        self.timestamp, "webgia.com",
+                        f"gold_price_{gold_type.replace(' ', '_')}", sell,
+                        json.dumps(meta, ensure_ascii=False),
+                    ])
+                    dedicated.append([self.timestamp, gold_type, buy, sell])
+                    print(f"  ✅ {gold_type}: {sell:,}")
                             
         except Exception as e:
             print(f"[CAFEF] ❌ Lỗi giá vàng WebGia: {e}")

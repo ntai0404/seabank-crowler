@@ -1,7 +1,7 @@
-table_name: bank_interest_rates
+table_name: textile_directory
 main_dttm_col: timestamp
 currency_code_column: null
-description: Bảng lãi suất huy động từ các ngân hàng
+description: Danh ba doanh nghiep hoi vien VITAS
 default_endpoint: null
 offset: 0
 cache_timeout: null
@@ -13,12 +13,12 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929111
+uuid: 5518f6ce-d922-4857-8478-41d81a929130
 metrics:
-- metric_name: max_rate
-  verbose_name: Lãi suất cao nhất
+- metric_name: company_count
+  verbose_name: So doanh nghiep
   metric_type: null
-  expression: MAX(rate)
+  expression: COUNT(*)
   description: null
   d3format: null
   currency: null
@@ -26,7 +26,7 @@ metrics:
   warning_text: null
 columns:
 - column_name: timestamp
-  verbose_name: Thời gian cập nhật
+  verbose_name: Thoi gian cap nhat
   is_dttm: true
   is_active: true
   type: DATETIME
@@ -38,8 +38,8 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: bank_name
-  verbose_name: Tên Ngân hàng
+- column_name: company_name
+  verbose_name: Ten doanh nghiep
   is_dttm: false
   is_active: true
   type: STRING
@@ -51,8 +51,8 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: term
-  verbose_name: Kỳ hạn
+- column_name: business_type
+  verbose_name: Nhom linh vuc
   is_dttm: false
   is_active: true
   type: STRING
@@ -64,21 +64,8 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: rate
-  verbose_name: Lãi suất (%/năm)
-  is_dttm: false
-  is_active: true
-  type: FLOAT
-  advanced_data_type: null
-  groupby: true
-  filterable: true
-  expression: null
-  description: null
-  python_date_format: null
-  datetime_format: null
-  extra: null
-- column_name: type
-  verbose_name: Loại hình
+- column_name: address
+  verbose_name: Dia chi
   is_dttm: false
   is_active: true
   type: STRING
@@ -90,6 +77,19 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-sql: SELECT * FROM "bank_interest_rates"
+- column_name: website
+  verbose_name: Website
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+sql: SELECT * FROM "textile_directory"
 version: 1.0.0
 database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d

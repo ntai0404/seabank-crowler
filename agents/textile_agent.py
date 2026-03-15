@@ -15,6 +15,7 @@ import json
 import re
 import time
 from datetime import datetime
+from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
 from core.base_agent import BaseAgent
@@ -27,7 +28,7 @@ class TextileAgent(BaseAgent):
     SOURCE_URL  = "http://www.vietnamtextile.org.vn"
 
     # Dedup theo URL (col 3) để không ghi trùng bài cũ khi chạy lại
-    UPSERT_KEY_COLUMNS = {"textile_news": [3]}
+    UPSERT_KEY_COLUMNS = {"textile_news": [3], "textile_directory": [1]}
 
     @staticmethod
     def _normalize_published_date(raw_date: str) -> str:
@@ -122,68 +123,93 @@ class TextileAgent(BaseAgent):
         }
 
     def _crawl_directory(self) -> list[list]:
-        """Cào danh bạ doanh nghiệp từ VITAS — dùng Playwright."""
-        print("[VITAS] Crawl danh bạ hội viên (Playwright)...")
+        """Cào danh bạ doanh nghiệp từ VITAS qua trang hội viên và trang chi tiết."""
+        print("[VITAS] Crawl danh bạ hội viên...")
         rows = []
-        url_dir = "http://www.vietnamtextile.org.vn/DanhBa.aspx"
-        try:
-            from playwright.sync_api import sync_playwright
-            with sync_playwright() as p:
-                browser = p.chromium.launch(headless=True)
-                page = browser.new_page()
-                page.goto(url_dir, timeout=60000, wait_until="domcontentloaded")
-                time.sleep(5)
-                
-                # Chờ các item danh bạ load
-                try:
-                    page.wait_for_selector("a.pl_vanban_title", timeout=15000)
-                except:
-                    print("  [!] Không thấy selector danh bạ, thử parse thô")
-                
-                # Duyệt qua các tab content_ptab_1 đến content_ptab_4
-                for tab_idx in range(1, 5):
-                    tab_selector = f"#content_ptab_{tab_idx}"
-                    print(f"    [VITAS] Đang kiểm tra tab: {tab_selector}")
-                    
-                    # Thử click vào tab nếu cần (giả định tab render khi visible)
-                    try:
-                        page.click(f"li#ptab_{tab_idx} a", timeout=2000)
-                        time.sleep(1)
-                    except:
-                        pass
+        listing_url = "http://www.vietnamtextile.org.vn/hoi-vien-vitas_p1_1-1_2-1_3-676.html"
+        seen_pages = {listing_url}
+        seen_companies = set()
 
-                    soup = BeautifulSoup(page.content(), "html.parser")
-                    tab_container = soup.select_one(tab_selector)
-                    if tab_container:
-                        items = tab_container.select("a.pl_vanban_title h2")
-                        for item in items:
-                            name = self._clean_text(item.get_text())
-                            if name and len(name) > 5:
-                                info = ""
-                                parent_link = item.find_parent("a")
-                                if parent_link:
-                                    desc = parent_link.find_next("div", class_="pl_vanban_desc")
-                                    if desc: info = self._clean_text(desc.get_text())
-                                
-                                rows.append([
-                                    self.timestamp, name, "Dệt may", info[:200], ""
-                                ])
-                browser.close()
-            
-            # Remove duplicates
-            unique_rows = []
-            seen = set()
-            for r in rows:
-                if r[1] not in seen:
-                    seen.add(r[1])
-                    unique_rows.append(r)
-            
-            print(f"  ✅ Đã tìm thấy {len(unique_rows)} doanh nghiệp duy nhất.")
-            return unique_rows
-        except Exception as e:
-            print(f"[VITAS] ❌ Lỗi cào danh bạ (Playwright): {e}")
-            print(f"  [TIP] Kiểm tra xem 'playwright install' đã được chạy chưa.")
+        try:
+            first_soup = BeautifulSoup(self.get(listing_url).text, "html.parser")
+            page_urls = [listing_url]
+            for anchor in first_soup.find_all("a", href=True):
+                href = anchor["href"].strip()
+                if "hoi-vien-vitas" not in href:
+                    continue
+                full_url = urljoin(self.SOURCE_URL, href)
+                if full_url not in seen_pages:
+                    seen_pages.add(full_url)
+                    page_urls.append(full_url)
+
+            for page_url in page_urls:
+                soup = BeautifulSoup(self.get(page_url).text, "html.parser")
+                company_items = self._parse_directory_listing_page(soup)
+                print(f"    [VITAS] {page_url}: {len(company_items)} hội viên")
+
+                for company in company_items:
+                    company_name = company["company_name"]
+                    if not company_name or company_name in seen_companies:
+                        continue
+                    seen_companies.add(company_name)
+
+                    address, website = self._fetch_directory_detail(company["detail_url"])
+                    rows.append([
+                        self.timestamp,
+                        company_name,
+                        company["business_type"],
+                        address[:200],
+                        website,
+                    ])
+                    time.sleep(0.1)
+
+            print(f"  ✅ Đã tìm thấy {len(rows)} doanh nghiệp duy nhất.")
             return rows
+        except Exception as e:
+            print(f"[VITAS] ❌ Lỗi cào danh bạ hội viên: {e}")
+            return rows
+
+    def _parse_directory_listing_page(self, soup: BeautifulSoup) -> list[dict[str, str]]:
+        """Parse 1 trang danh sách hội viên để lấy tên, nhóm ngành và link chi tiết."""
+        items = []
+        for table in soup.find_all("table"):
+            for tr in table.find_all("tr"):
+                cells = [self._clean_text(td.get_text(" ", strip=True)) for td in tr.find_all(["th", "td"])]
+                if len(cells) < 2:
+                    continue
+                link = tr.find("a", href=re.compile(r"DanhBa\.aspx\?i=\d+"))
+                if not link:
+                    continue
+
+                company_name = self._clean_text(link.get_text())
+                business_type = cells[-1] if len(cells) >= 3 else ""
+                if not company_name:
+                    continue
+
+                items.append({
+                    "company_name": company_name,
+                    "business_type": business_type,
+                    "detail_url": urljoin(self.SOURCE_URL, link["href"]),
+                })
+        return items
+
+    def _fetch_directory_detail(self, detail_url: str) -> tuple[str, str]:
+        """Lấy địa chỉ và website từ trang chi tiết hội viên."""
+        try:
+            soup = BeautifulSoup(self.get(detail_url).text, "html.parser")
+            text = self._clean_text(soup.get_text(" ", strip=True))
+            address_match = re.search(r"Địa chỉ:\s*(.*?)(?:Website:|Email:|$)", text)
+            address = self._clean_text(address_match.group(1)) if address_match else ""
+
+            website = ""
+            for anchor in soup.find_all("a", href=True):
+                href = anchor["href"].strip()
+                if href.startswith("http") and "vietnamtextile.org.vn" not in href:
+                    website = href
+                    break
+            return address, website
+        except Exception:
+            return "", ""
 
     def _parse_articles(self, soup: BeautifulSoup, base_url: str, category: str) -> list[dict]:
         """Parse danh sách bài viết từ trang VITAS.

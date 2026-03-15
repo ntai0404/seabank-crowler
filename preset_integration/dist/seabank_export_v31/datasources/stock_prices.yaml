@@ -6,14 +6,14 @@ default_endpoint: null
 offset: 0
 cache_timeout: null
 catalog: null
-schema: null
+schema: SeaBank_Data
 filter_select_enabled: true
 fetch_values_predicate: null
 extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929112
+uuid: 5518f6ce-d922-4857-8478-41d81a929212
 metrics:
 - metric_name: avg_price
   verbose_name: Giá trung bình
@@ -155,5 +155,7 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
+sql: SELECT timestamp, symbol, datetime(ngay) AS ngay, gia_mo_cua, gia_cao_nhat, gia_thap_nhat,
+  gia_dong_cua, thay_doi, khoi_luong, gia_tri FROM "stock_prices"
 version: 1.0.0
-database_uuid: 79d4cb67-a8e3-435e-9d43-bdc4866142c6
+database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d

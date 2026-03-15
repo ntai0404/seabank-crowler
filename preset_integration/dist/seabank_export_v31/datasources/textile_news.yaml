@@ -6,7 +6,7 @@ default_endpoint: null
 offset: 0
 cache_timeout: null
 catalog: null
-schema: null
+schema: SeaBank_Data
 filter_select_enabled: true
 fetch_values_predicate: null
 extra: null
@@ -67,5 +67,6 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
+sql: SELECT * FROM "textile_news"
 version: 1.0.0
-database_uuid: 79d4cb67-a8e3-435e-9d43-bdc4866142c6
+database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d

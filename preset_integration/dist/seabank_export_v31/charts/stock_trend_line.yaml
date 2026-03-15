@@ -10,8 +10,11 @@ params:
   groupby:
   - symbol
   metrics:
-  - expressionType: SQL
-    sqlExpression: AVG(CAST(gia_dong_cua AS FLOAT))
+  - aggregate: AVG
+    column:
+      column_name: gia_dong_cua
+      type: FLOAT
+    expressionType: SIMPLE
     label: Giá đóng cửa TB
     optionName: metric_avg_price
   granularity_sqla: ngay
@@ -20,5 +23,5 @@ params:
   row_limit: 50000
   x_axis_label: Thời gian
   y_axis_label: Giá (VND)
-dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929112
-uuid: 5518f6ce-d922-4857-8478-41d81a929161
+dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929212
+uuid: 5518f6ce-d922-4857-8478-41d81a929201

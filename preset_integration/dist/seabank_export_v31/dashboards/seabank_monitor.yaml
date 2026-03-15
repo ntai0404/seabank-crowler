@@ -109,7 +109,7 @@ position:
       chartId: 2
       height: 50
       sliceName: Biến động Giá Cổ phiếu Ngân hàng & BĐS
-      uuid: 5518f6ce-d922-4857-8478-41d81a929161
+      uuid: 5518f6ce-d922-4857-8478-41d81a929201
       width: 6
     type: CHART
     parents:
@@ -123,7 +123,7 @@ position:
       chartId: 3
       height: 50
       sliceName: So sánh Kim ngạch Xuất nhập khẩu (Hải quan)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929162
+      uuid: 5518f6ce-d922-4857-8478-41d81a929202
       width: 12
     type: CHART
     parents:

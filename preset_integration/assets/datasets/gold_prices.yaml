@@ -1,0 +1,29 @@
+version: 1.0.0
+table_name: gold_prices
+main_dttm_col: timestamp
+description: Du lieu gia vang SJC theo thoi gian
+columns:
+- column_name: timestamp
+  verbose_name: Thoi gian cap nhat
+  is_dttm: true
+  type: DATETIME
+- column_name: gold_type
+  verbose_name: Loai vang
+  type: STRING
+- column_name: buy_price
+  verbose_name: Gia mua vao
+  type: FLOAT
+- column_name: sell_price
+  verbose_name: Gia ban ra
+  type: FLOAT
+metrics:
+- metric_name: avg_sell_price
+  verbose_name: Gia ban trung binh
+  expression: AVG(sell_price)
+- metric_name: avg_buy_price
+  verbose_name: Gia mua trung binh
+  expression: AVG(buy_price)
+database_uuid: ${DATABASE_UUID}
+schema: SeaBank_Data
+sql: SELECT * FROM "gold_prices"
+uuid: 44b8f6ce-d922-4857-8478-41d81a929119
