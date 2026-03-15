@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Xuat khau vs Nhap khau theo Ky (Chi tiet Hai quan)
+slice_name: Xuat khau vs Nhap khau theo Ky (Chi tiet Hai quan) (v4)
 viz_type: dist_bar
 params:
   adhoc_filters: []
@@ -23,8 +23,9 @@ params:
   row_limit: 20
   show_legend: true
   order_desc: false
-  x_axis_label: ""
-  y_axis_label: Gia tri (ty USD)
+  orientation: horizontal
+  x_axis_label: Gia tri (ty USD)
+  y_axis_label: ""
   y_axis_bounds:
   - 0
   - null

@@ -1,9 +1,8 @@
 version: 1.0.0
-slice_name: Xu huong Gia vang SJC theo ngay (v3)
-viz_type: echarts_timeseries_line
+slice_name: Mat bang Gia vang SJC hien tai (v4)
+viz_type: dist_bar
 params:
   adhoc_filters: []
-  time_range: No filter
   groupby:
   - gold_type
   metrics:
@@ -14,14 +13,13 @@ params:
     expressionType: SIMPLE
     label: Gia ban
     optionName: metric_max_sell_price
-  granularity_sqla: snapshot_dttm
-  series_type: line
-  time_grain_sqla: P1D
-  row_limit: 50000
-  x_axis_label: Ngay cap nhat
+  row_limit: 20
+  show_legend: false
+  order_desc: true
+  x_axis_label: Loai vang
   y_axis_label: Gia ban (VND)
   y_axis_bounds:
   - 0
   - null
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929239
-uuid: 5518f6ce-d922-4857-8478-41d81a929209
+uuid: 5518f6ce-d922-4857-8478-41d81a929212

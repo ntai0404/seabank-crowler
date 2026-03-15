@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Co cau Hoi vien VITAS theo Nhom nganh (v3)
+slice_name: Co cau Hoi vien VITAS theo Nhom nganh (v4)
 viz_type: dist_bar
 params:
   adhoc_filters:
@@ -19,8 +19,8 @@ params:
   row_limit: 8
   show_legend: false
   order_desc: true
-  orientation: horizontal
-  x_axis_label: So doanh nghiep
+  orientation: vertical
+  x_axis_label: ""
   y_axis_label: ""
   y_axis_bounds:
   - 0

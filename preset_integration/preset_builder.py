@@ -65,9 +65,9 @@ def build_preset_assets():
         "exchange_rates_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929152",
         "bank_stocks_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929153",
         "interest_rate_12m_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929149",
-        "gold_prices_trend_line.yaml": "5518f6ce-d922-4857-8478-41d81a929209",
-        "customs_commodity_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929210",
-        "textile_directory_type_bar.yaml": "5518f6ce-d922-4857-8478-41d81a929211",
+        "gold_prices_trend_line.yaml": "5518f6ce-d922-4857-8478-41d81a929212",
+        "customs_commodity_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929213",
+        "textile_directory_type_bar.yaml": "5518f6ce-d922-4857-8478-41d81a929214",
     }
 
     CHART_MAP = {
