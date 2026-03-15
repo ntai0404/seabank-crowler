@@ -6,7 +6,10 @@ params:
   - clause: WHERE
     expressionType: SQL
     sqlExpression: "symbol IN ('VCB','BID','CTG','MBB','ACB','TCB','VPB','STB','LPB','HDB','SSB','SHB','EIB','TPB','VIB','OCB','MSB','BAB','NAB','KLB','SGB','NVB','BVB','VAB')"
-  time_range: Last year
+  - clause: WHERE
+    expressionType: SQL
+    sqlExpression: "CAST(ngay AS DATE) >= DATE_SUB(CURRENT_DATE(), INTERVAL 365 DAY)"
+  time_range: No filter
   groupby:
   - symbol
   metrics:
@@ -21,4 +24,4 @@ params:
   x_axis_label: Thời gian
   y_axis_label: Giá (VND)
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929112
-uuid: 5518f6ce-d922-4857-8478-41d81a929181
+uuid: 5518f6ce-d922-4857-8478-41d81a929191

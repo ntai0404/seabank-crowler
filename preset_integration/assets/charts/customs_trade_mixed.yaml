@@ -1,6 +1,6 @@
 ﻿version: 1.0.0
 slice_name: So sánh Kim ngạch Xuất khẩu và Nhập khẩu (Hải quan)
-viz_type: grouped_bar
+viz_type: bar
 params:
   adhoc_filters:
   - clause: WHERE
@@ -25,6 +25,6 @@ params:
   show_legend: true
   x_axis_label: Giai đoạn báo cáo
   y_axis_label: Giá trị (tỷ USD)
-  viz_type: grouped_bar
+  viz_type: bar
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929115
-uuid: 5518f6ce-d922-4857-8478-41d81a929182
+uuid: 5518f6ce-d922-4857-8478-41d81a929192
