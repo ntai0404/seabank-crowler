@@ -1,6 +1,6 @@
 ﻿version: 1.0.0
 slice_name: So sánh Kim ngạch Xuất khẩu và Nhập khẩu (Hải quan)
-viz_type: dist_bar
+viz_type: grouped_bar
 params:
   adhoc_filters:
   - clause: WHERE
@@ -19,12 +19,12 @@ params:
       column_name: value_usd
       type: FLOAT
     expressionType: SIMPLE
-    label: MAX(value_usd)
+    label: Giá trị (tỷ USD)
     optionName: metric_max_value
   row_limit: 500
   show_legend: true
   x_axis_label: Giai đoạn báo cáo
   y_axis_label: Giá trị (tỷ USD)
-  viz_type: dist_bar
+  viz_type: grouped_bar
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929115
-uuid: 5518f6ce-d922-4857-8478-41d81a929172
+uuid: 5518f6ce-d922-4857-8478-41d81a929182
