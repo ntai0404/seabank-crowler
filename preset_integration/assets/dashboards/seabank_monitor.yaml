@@ -30,6 +30,7 @@ position:
     - ROW-3
     - ROW-4
     - ROW-5
+    - ROW-6
     id: GRID_ID
     type: GRID
     parents:
@@ -81,6 +82,18 @@ position:
     children:
     - CHART-8
     id: ROW-5
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    type: ROW
+    parents:
+    - ROOT_ID
+    - GRID_ID
+  ROW-6:
+    children:
+    - CHART-9
+    - CHART-10
+    - CHART-11
+    id: ROW-6
     meta:
       background: BACKGROUND_TRANSPARENT
     type: ROW
@@ -199,5 +212,47 @@ position:
     - ROOT_ID
     - GRID_ID
     - ROW-5
+  CHART-9:
+    children: []
+    id: CHART-9
+    meta:
+      chartId: 9
+      height: 45
+      sliceName: Xu huong Gia vang SJC theo thoi gian
+      uuid: 1318f6ce-d922-4857-8478-41d81a929203
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-6
+  CHART-10:
+    children: []
+    id: CHART-10
+    meta:
+      chartId: 10
+      height: 45
+      sliceName: Xuat khau vs Nhap khau theo Ky (Chi tiet Hai quan)
+      uuid: 1318f6ce-d922-4857-8478-41d81a929204
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-6
+  CHART-11:
+    children: []
+    id: CHART-11
+    meta:
+      chartId: 11
+      height: 45
+      sliceName: Co cau Hoi vien VITAS theo Nhom nganh
+      uuid: 1318f6ce-d922-4857-8478-41d81a929205
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-6
 uuid: 1318f6ce-d922-4857-8478-41d81a929116
 slug: seabank-monitor

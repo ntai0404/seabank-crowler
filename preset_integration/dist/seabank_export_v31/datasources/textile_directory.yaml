@@ -13,12 +13,12 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929130
+uuid: 5518f6ce-d922-4857-8478-41d81a929221
 metrics:
 - metric_name: company_count
   verbose_name: So doanh nghiep
   metric_type: null
-  expression: COUNT(*)
+  expression: COUNT(company_name)
   description: null
   d3format: null
   currency: null
@@ -52,7 +52,7 @@ columns:
   datetime_format: null
   extra: null
 - column_name: business_type
-  verbose_name: Nhom linh vuc
+  verbose_name: Nhom nganh
   is_dttm: false
   is_active: true
   type: STRING

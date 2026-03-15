@@ -1,7 +1,7 @@
 table_name: customs_commodity_details
 main_dttm_col: timestamp
 currency_code_column: null
-description: Du lieu tong hop xuat nhap khau theo ky
+description: Tong hop chi tiet xuat nhap khau theo ky bao cao
 default_endpoint: null
 offset: 0
 cache_timeout: null
@@ -13,21 +13,21 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929120
+uuid: 5518f6ce-d922-4857-8478-41d81a929220
 metrics:
-- metric_name: avg_export_value
-  verbose_name: Xuat khau TB
+- metric_name: max_export_value
+  verbose_name: Xuat khau lon nhat
   metric_type: null
-  expression: AVG(export_value)
+  expression: MAX(export_value)
   description: null
   d3format: null
   currency: null
   extra: null
   warning_text: null
-- metric_name: avg_import_value
-  verbose_name: Nhap khau TB
+- metric_name: max_import_value
+  verbose_name: Nhap khau lon nhat
   metric_type: null
-  expression: AVG(import_value)
+  expression: MAX(import_value)
   description: null
   d3format: null
   currency: null
@@ -74,7 +74,7 @@ columns:
   datetime_format: null
   extra: null
 - column_name: export_value
-  verbose_name: Gia tri xuat khau
+  verbose_name: Xuat khau
   is_dttm: false
   is_active: true
   type: FLOAT
@@ -87,7 +87,7 @@ columns:
   datetime_format: null
   extra: null
 - column_name: import_value
-  verbose_name: Gia tri nhap khau
+  verbose_name: Nhap khau
   is_dttm: false
   is_active: true
   type: FLOAT
@@ -100,7 +100,7 @@ columns:
   datetime_format: null
   extra: null
 - column_name: change_pct
-  verbose_name: Bien dong phan tram
+  verbose_name: Bien dong
   is_dttm: false
   is_active: true
   type: FLOAT

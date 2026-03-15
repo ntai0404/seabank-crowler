@@ -1,7 +1,7 @@
 version: 1.0.0
 table_name: customs_commodity_details
 main_dttm_col: timestamp
-description: Du lieu tong hop xuat nhap khau theo ky
+description: Tong hop chi tiet xuat nhap khau theo ky bao cao
 columns:
 - column_name: timestamp
   verbose_name: Thoi gian cap nhat
@@ -14,22 +14,22 @@ columns:
   verbose_name: Ky bao cao
   type: STRING
 - column_name: export_value
-  verbose_name: Gia tri xuat khau
+  verbose_name: Xuat khau
   type: FLOAT
 - column_name: import_value
-  verbose_name: Gia tri nhap khau
+  verbose_name: Nhap khau
   type: FLOAT
 - column_name: change_pct
-  verbose_name: Bien dong phan tram
+  verbose_name: Bien dong
   type: FLOAT
 metrics:
-- metric_name: avg_export_value
-  verbose_name: Xuat khau TB
-  expression: AVG(export_value)
-- metric_name: avg_import_value
-  verbose_name: Nhap khau TB
-  expression: AVG(import_value)
+- metric_name: max_export_value
+  verbose_name: Xuat khau lon nhat
+  expression: MAX(export_value)
+- metric_name: max_import_value
+  verbose_name: Nhap khau lon nhat
+  expression: MAX(import_value)
 database_uuid: ${DATABASE_UUID}
 schema: SeaBank_Data
 sql: SELECT * FROM "customs_commodity_details"
-uuid: 44b8f6ce-d922-4857-8478-41d81a929120
+uuid: 44b8f6ce-d922-4857-8478-41d81a929220

@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Xu huong Gia Vang SJC (Dai han)
+slice_name: Xu huong Gia vang SJC theo thoi gian
 viz_type: echarts_timeseries_line
 params:
   adhoc_filters: []
@@ -13,12 +13,12 @@ params:
       type: FLOAT
     expressionType: SIMPLE
     label: Gia ban TB
-    optionName: metric_avg_sell
+    optionName: metric_avg_sell_price
   granularity_sqla: timestamp
   series_type: line
   time_grain_sqla: P1D
   row_limit: 50000
   x_axis_label: Thoi gian
   y_axis_label: Gia ban (VND)
-dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929119
-uuid: 44b8f6ce-d922-4857-8478-41d81a929221
+dataset_uuid: 44b8f6ce-d922-4857-8478-41d81a929219
+uuid: 44b8f6ce-d922-4857-8478-41d81a929203

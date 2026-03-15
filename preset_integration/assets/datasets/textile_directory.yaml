@@ -11,7 +11,7 @@ columns:
   verbose_name: Ten doanh nghiep
   type: STRING
 - column_name: business_type
-  verbose_name: Nhom linh vuc
+  verbose_name: Nhom nganh
   type: STRING
 - column_name: address
   verbose_name: Dia chi
@@ -22,8 +22,8 @@ columns:
 metrics:
 - metric_name: company_count
   verbose_name: So doanh nghiep
-  expression: COUNT(*)
+  expression: COUNT(company_name)
 database_uuid: ${DATABASE_UUID}
 schema: SeaBank_Data
 sql: SELECT * FROM "textile_directory"
-uuid: 44b8f6ce-d922-4857-8478-41d81a929130
+uuid: 44b8f6ce-d922-4857-8478-41d81a929221
