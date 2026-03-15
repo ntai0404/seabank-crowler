@@ -1,15 +1,18 @@
 ﻿version: 1.0.0
-slice_name: So sanh Kim ngach Xuat nhap khau (Hai quan)
+slice_name: So sanh Xuat khau va Nhap khau (Hai quan)
 viz_type: dist_bar
 params:
   adhoc_filters:
   - clause: WHERE
     expressionType: SQL
     sqlExpression: "period LIKE '%(tỷ USD)'"
+  - clause: WHERE
+    expressionType: SQL
+    sqlExpression: "category IN ('Xuất khẩu','Nhập khẩu')"
   columns:
-  - period
-  groupby:
   - category
+  groupby:
+  - period
   metrics:
   - aggregate: MAX
     column:
@@ -20,8 +23,8 @@ params:
     optionName: metric_max_value
   row_limit: 500
   show_legend: true
-  x_axis_label: Giai đoạn
-  y_axis_label: Gia tri (USD)
+  x_axis_label: Chi tieu
+  y_axis_label: Gia tri (ty USD)
   viz_type: dist_bar
 dataset_uuid: 44b8f6ce-d922-4857-8478-41d81a929113
 uuid: 44b8f6ce-d922-4857-8478-41d81a929117
