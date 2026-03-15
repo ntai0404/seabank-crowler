@@ -110,3 +110,11 @@ STOCK_SYMBOLS: list[str] = list(dict.fromkeys([
     "BMI","MIG","PVI","VNR","PTI","BIC","ABI","PRE","GEX",
     "FIT","TSC","VKC","HHS","TTH",
 ]))
+
+# Nhóm mã ngân hàng hiển thị trong dashboard bảng/biểu đồ cổ phiếu.
+# Chỉ nhóm này cần lưu lịch sử chi tiết vào tab stock_prices để tránh vượt giới hạn cell của Google Sheets.
+BANK_STOCK_SYMBOLS: list[str] = [
+    "VCB", "BID", "CTG", "MBB", "ACB", "TCB", "VPB", "STB",
+    "LPB", "HDB", "SSB", "SHB", "EIB", "TPB", "VIB", "OCB",
+    "MSB", "BAB", "NAB", "KLB", "SGB", "NVB", "BVB", "VAB",
+]

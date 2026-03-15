@@ -18,7 +18,7 @@ from playwright.sync_api import sync_playwright
 
 from core.base_agent import BaseAgent
 from core.config import (
-    STOCK_SYMBOLS, STOCK_HISTORY_DAYS, REQUEST_DELAY
+    STOCK_SYMBOLS, STOCK_HISTORY_DAYS, REQUEST_DELAY, BANK_STOCK_SYMBOLS
 )
 
 
@@ -81,6 +81,7 @@ class CafeFAgent(BaseAgent):
         """Crawl giá cổ phiếu qua JSON API — không cần Playwright."""
         print(f"[CAFEF] Crawl cổ phiếu — {len(STOCK_SYMBOLS)} mã...")
         metrics, dedicated = [], []
+        dashboard_symbols = set(BANK_STOCK_SYMBOLS)
 
         end_date   = datetime.now().strftime("%d/%m/%Y")
         start_date = (datetime.now() - timedelta(days=STOCK_HISTORY_DAYS)).strftime("%d/%m/%Y")
@@ -122,6 +123,9 @@ class CafeFAgent(BaseAgent):
                     json.dumps(meta, ensure_ascii=False),
                 ])
                 seen_dates = set()
+                if symbol not in dashboard_symbols:
+                    print(f"  ℹ️ {symbol}: chỉ lưu metric tổng hợp (bỏ lịch sử chi tiết)")
+                    continue
                 for record in records:
                     trading_date = self._to_iso_date(record.get("Ngay", ""))
                     if not trading_date or trading_date in seen_dates:
