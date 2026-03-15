@@ -16,6 +16,9 @@ columns:
 - column_name: period_group
   verbose_name: Nhom ky bao cao
   type: STRING
+- column_name: period_label
+  verbose_name: Ky bao cao ngan
+  type: STRING
 - column_name: period_sort
   verbose_name: Thu tu ky bao cao
   type: FLOAT
@@ -46,6 +49,7 @@ sql: SELECT
     WHEN period LIKE 'K%-T%-____' THEN 'Ky'
     ELSE 'Khac'
   END AS period_group,
+  REPLACE(period, '-20', '/') AS period_label,
   CASE
     WHEN period = 'K2-T1-2026' THEN 1
     WHEN period = 'T2-2026' THEN 2

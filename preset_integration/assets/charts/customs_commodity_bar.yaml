@@ -4,7 +4,7 @@ viz_type: dist_bar
 params:
   adhoc_filters: []
   groupby:
-  - period
+  - period_label
   metrics:
   - aggregate: MAX
     column:

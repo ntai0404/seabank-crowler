@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Mat bang Gia vang SJC hien tai
+slice_name: Mat bang Gia vang SJC hien tai (v2)
 viz_type: dist_bar
 params:
   adhoc_filters: []
@@ -8,12 +8,12 @@ params:
   metrics:
   - aggregate: MAX
     column:
-      column_name: sell_price
+      column_name: sell_price_num
       type: FLOAT
     expressionType: SIMPLE
     label: Gia ban
     optionName: metric_max_sell_price
-  row_limit: 20
+  row_limit: 10
   show_legend: false
   order_desc: true
   x_axis_label: Loai vang

@@ -19,10 +19,16 @@ columns:
 - column_name: sell_price
   verbose_name: Gia ban
   type: FLOAT
+- column_name: buy_price_num
+  verbose_name: Gia mua (so)
+  type: FLOAT
+- column_name: sell_price_num
+  verbose_name: Gia ban (so)
+  type: FLOAT
 metrics:
 - metric_name: avg_sell_price
   verbose_name: Gia ban trung binh
-  expression: AVG(sell_price)
+  expression: AVG(sell_price_num)
 database_uuid: ${DATABASE_UUID}
 schema: SeaBank_Data
 sql: SELECT
@@ -30,6 +36,8 @@ sql: SELECT
   gold_type,
   substr(timestamp, 1, 10) AS snapshot_date,
   buy_price,
-  sell_price
+  sell_price,
+  CAST(REPLACE(COALESCE(CAST(buy_price AS TEXT), '0'), ',', '') AS FLOAT) AS buy_price_num,
+  CAST(REPLACE(COALESCE(CAST(sell_price AS TEXT), '0'), ',', '') AS FLOAT) AS sell_price_num
   FROM "gold_prices"
 uuid: 44b8f6ce-d922-4857-8478-41d81a929219
