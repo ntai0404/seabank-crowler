@@ -1,27 +1,29 @@
 version: 1.0.0
-slice_name: Biến động Giá Cổ phiếu Ngân hàng & BĐS
+slice_name: Biến động % Cổ phiếu Ngân hàng (Top 12 mã)
 viz_type: echarts_timeseries_line
 params:
   adhoc_filters:
   - clause: WHERE
     expressionType: SQL
-    sqlExpression: "symbol IN ('VCB','BID','CTG','MBB','ACB','TCB','VPB','STB','LPB','HDB','SSB','SHB','EIB','TPB','VIB','OCB','MSB','BAB','NAB','KLB','SGB','NVB','BVB','VAB')"
+    sqlExpression: "symbol IN ('VCB','BID','CTG','MBB','ACB','TCB','VPB','STB','LPB','HDB','SHB','TPB')"
   time_range: No filter
   groupby:
   - symbol
   metrics:
   - aggregate: AVG
     column:
-      column_name: gia_dong_cua
+      column_name: pct_change_base
       type: FLOAT
     expressionType: SIMPLE
-    label: Giá đóng cửa TB
-    optionName: metric_avg_price
+    label: Bien dong TB (% so voi dau ky)
+    optionName: metric_avg_pct_change_base
   granularity_sqla: ngay
   series_type: line
   time_grain_sqla: P1D
-  row_limit: 50000
-  x_axis_label: Thời gian
-  y_axis_label: Giá (VND)
+  row_limit: 20000
+  x_axis_label: Thời gian (tháng/năm)
+  y_axis_label: Biến động so với đầu kỳ (%)
+  x_axis_time_format: '%b %Y'
+  rich_tooltip: true
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929212
-uuid: 5518f6ce-d922-4857-8478-41d81a929201
+uuid: 5518f6ce-d922-4857-8478-41d81a929231

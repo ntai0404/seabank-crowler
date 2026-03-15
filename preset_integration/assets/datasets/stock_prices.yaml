@@ -26,6 +26,12 @@ columns:
 - column_name: gia_dong_cua
   verbose_name: Giá đóng cửa
   type: FLOAT
+- column_name: base_close_price
+  verbose_name: Gia dong cua phien dau ky
+  type: FLOAT
+- column_name: pct_change_base
+  verbose_name: Bien dong % so voi dau ky
+  type: FLOAT
 - column_name: thay_doi
   verbose_name: "% Thay đổi"
   type: STRING
@@ -39,18 +45,46 @@ metrics:
 - metric_name: avg_price
   verbose_name: Giá trung bình
   expression: AVG(gia_dong_cua)
+- metric_name: avg_pct_change_base
+  verbose_name: Bien dong trung binh (% so voi dau ky)
+  expression: AVG(pct_change_base)
 database_uuid: 44b8f6ce-d922-4857-8478-41d81a929111
 schema: SeaBank_Data
-sql: SELECT
-  timestamp,
-  symbol,
-  datetime(ngay) AS ngay,
-  gia_mo_cua,
-  gia_cao_nhat,
-  gia_thap_nhat,
-  gia_dong_cua,
-  thay_doi,
-  khoi_luong,
-  gia_tri
-  FROM "stock_prices"
+sql: |
+  WITH enriched AS (
+    SELECT
+      timestamp,
+      symbol,
+      datetime(ngay) AS ngay,
+      gia_mo_cua,
+      gia_cao_nhat,
+      gia_thap_nhat,
+      gia_dong_cua,
+      thay_doi,
+      khoi_luong,
+      gia_tri,
+      FIRST_VALUE(gia_dong_cua) OVER (
+        PARTITION BY symbol
+        ORDER BY datetime(ngay) ASC
+      ) AS base_close_price
+    FROM "stock_prices"
+  )
+  SELECT
+    timestamp,
+    symbol,
+    ngay,
+    gia_mo_cua,
+    gia_cao_nhat,
+    gia_thap_nhat,
+    gia_dong_cua,
+    base_close_price,
+    CASE
+      WHEN base_close_price IS NOT NULL AND base_close_price > 0
+        THEN (gia_dong_cua / base_close_price - 1.0) * 100.0
+      ELSE 0
+    END AS pct_change_base,
+    thay_doi,
+    khoi_luong,
+    gia_tri
+  FROM enriched
 uuid: 44b8f6ce-d922-4857-8478-41d81a929112

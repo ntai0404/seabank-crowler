@@ -13,12 +13,21 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929212
+uuid: 5518f6ce-d922-4857-8478-41d81a929232
 metrics:
 - metric_name: avg_price
   verbose_name: Giá trung bình
   metric_type: null
   expression: AVG(gia_dong_cua)
+  description: null
+  d3format: null
+  currency: null
+  extra: null
+  warning_text: null
+- metric_name: avg_pct_change_base
+  verbose_name: Bien dong trung binh (% so voi dau ky)
+  metric_type: null
+  expression: AVG(pct_change_base)
   description: null
   d3format: null
   currency: null
@@ -116,6 +125,32 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
+- column_name: base_close_price
+  verbose_name: Gia dong cua phien dau ky
+  is_dttm: false
+  is_active: true
+  type: FLOAT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: pct_change_base
+  verbose_name: Bien dong % so voi dau ky
+  is_dttm: false
+  is_active: true
+  type: FLOAT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
 - column_name: thay_doi
   verbose_name: '% Thay đổi'
   is_dttm: false
@@ -155,7 +190,14 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-sql: SELECT timestamp, symbol, datetime(ngay) AS ngay, gia_mo_cua, gia_cao_nhat, gia_thap_nhat,
-  gia_dong_cua, thay_doi, khoi_luong, gia_tri FROM "stock_prices"
+sql: "WITH enriched AS (\n  SELECT\n    timestamp,\n    symbol,\n    datetime(ngay)\
+  \ AS ngay,\n    gia_mo_cua,\n    gia_cao_nhat,\n    gia_thap_nhat,\n    gia_dong_cua,\n\
+  \    thay_doi,\n    khoi_luong,\n    gia_tri,\n    FIRST_VALUE(gia_dong_cua) OVER\
+  \ (\n      PARTITION BY symbol\n      ORDER BY datetime(ngay) ASC\n    ) AS base_close_price\n\
+  \  FROM \"stock_prices\"\n)\nSELECT\n  timestamp,\n  symbol,\n  ngay,\n  gia_mo_cua,\n\
+  \  gia_cao_nhat,\n  gia_thap_nhat,\n  gia_dong_cua,\n  base_close_price,\n  CASE\n\
+  \    WHEN base_close_price IS NOT NULL AND base_close_price > 0\n      THEN (gia_dong_cua\
+  \ / base_close_price - 1.0) * 100.0\n    ELSE 0\n  END AS pct_change_base,\n  thay_doi,\n\
+  \  khoi_luong,\n  gia_tri\nFROM enriched\n"
 version: 1.0.0
 database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d

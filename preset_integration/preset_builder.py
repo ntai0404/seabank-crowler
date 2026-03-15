@@ -32,7 +32,7 @@ def build_preset_assets():
     
     # 3. UUID cố định (Dãy 551...) mới hoàn toàn cho v1.56
     U_DS_INTEREST  = "5518f6ce-d922-4857-8478-41d81a929111"
-    U_DS_STOCK     = "5518f6ce-d922-4857-8478-41d81a929212"
+    U_DS_STOCK     = "5518f6ce-d922-4857-8478-41d81a929232"
     U_DS_NEWS      = "5518f6ce-d922-4857-8478-41d81a929113"
     U_DS_METRICS   = "5518f6ce-d922-4857-8478-41d81a929114"
     U_DS_CUSTOMS   = "5518f6ce-d922-4857-8478-41d81a929115"
@@ -58,7 +58,7 @@ def build_preset_assets():
     
     CHART_UUIDS = {
         "interest_rate_bar.yaml":      "5518f6ce-d922-4857-8478-41d81a929121",
-        "stock_trend_line.yaml":       "5518f6ce-d922-4857-8478-41d81a929201",
+        "stock_trend_line.yaml":       "5518f6ce-d922-4857-8478-41d81a929231",
         "customs_trade_mixed.yaml":    "5518f6ce-d922-4857-8478-41d81a929230",
         "banking_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929154",
         "textile_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929125",

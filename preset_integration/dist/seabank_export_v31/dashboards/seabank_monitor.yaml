@@ -27,6 +27,7 @@ position:
   GRID_ID:
     children:
     - ROW-1
+    - ROW-1B
     - ROW-2
     - ROW-3
     - ROW-4
@@ -41,8 +42,17 @@ position:
   ROW-1:
     children:
     - CHART-1
-    - CHART-2
     id: ROW-1
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    type: ROW
+    parents:
+    - ROOT_ID
+    - GRID_ID
+  ROW-1B:
+    children:
+    - CHART-2
+    id: ROW-1B
     meta:
       background: BACKGROUND_TRANSPARENT
     type: ROW
@@ -129,7 +139,7 @@ position:
       height: 50
       sliceName: So sánh Lãi suất huy động giữa các Ngân hàng
       uuid: 5518f6ce-d922-4857-8478-41d81a929121
-      width: 6
+      width: 12
     type: CHART
     parents:
     - ROOT_ID
@@ -140,15 +150,15 @@ position:
     id: CHART-2
     meta:
       chartId: 2
-      height: 50
-      sliceName: Biến động Giá Cổ phiếu Ngân hàng & BĐS
-      uuid: 5518f6ce-d922-4857-8478-41d81a929201
-      width: 6
+      height: 62
+      sliceName: Biến động % Cổ phiếu Ngân hàng (Top 12 mã)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929231
+      width: 12
     type: CHART
     parents:
     - ROOT_ID
     - GRID_ID
-    - ROW-1
+    - ROW-1B
   CHART-3:
     children: []
     id: CHART-3
