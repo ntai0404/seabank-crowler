@@ -13,7 +13,7 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929221
+uuid: 5518f6ce-d922-4857-8478-41d81a929231
 metrics:
 - metric_name: company_count
   verbose_name: So doanh nghiep
@@ -103,8 +103,13 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-sql: SELECT timestamp, company_name, business_type, trim(substr(coalesce(business_type,
-  ''), 1, instr(coalesce(business_type, '') || '.', '.') - 1)) AS business_type_group,
-  address, website FROM "textile_directory"
+sql: SELECT timestamp, company_name, business_type, CASE WHEN lower(coalesce(business_type,
+  '')) LIKE '%may/thiet bi%' THEN 'May thiet bi' WHEN lower(coalesce(business_type,
+  '')) LIKE '%nguyen phu lieu%' THEN 'Nguyen phu lieu' WHEN lower(coalesce(business_type,
+  '')) LIKE '%nhuom%' THEN 'Nhuom/hoan tat' WHEN lower(coalesce(business_type, ''))
+  LIKE '%keo soi%' THEN 'Keo soi' WHEN lower(coalesce(business_type, '')) LIKE '%det
+  vai%' THEN 'Det vai' WHEN lower(coalesce(business_type, '')) LIKE '%det%' THEN 'Det
+  vai' WHEN lower(coalesce(business_type, '')) LIKE '%may%' THEN 'May mac' ELSE 'Khac'
+  END AS business_type_group, address, website FROM "textile_directory"
 version: 1.0.0
 database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d

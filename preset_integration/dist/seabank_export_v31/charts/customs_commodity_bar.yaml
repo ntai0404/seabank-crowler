@@ -4,7 +4,7 @@ viz_type: dist_bar
 params:
   adhoc_filters: []
   groupby:
-  - period
+  - period_label
   metrics:
   - aggregate: MAX
     column:
@@ -29,5 +29,5 @@ params:
   - 0
   - null
   viz_type: dist_bar
-dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929220
-uuid: 5518f6ce-d922-4857-8478-41d81a929204
+dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929230
+uuid: 5518f6ce-d922-4857-8478-41d81a929207

@@ -13,7 +13,7 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929220
+uuid: 5518f6ce-d922-4857-8478-41d81a929230
 metrics:
 - metric_name: max_export_value
   verbose_name: Xuat khau lon nhat
@@ -86,6 +86,19 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
+- column_name: period_label
+  verbose_name: Ky bao cao ngan
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
 - column_name: period_sort
   verbose_name: Thu tu ky bao cao
   is_dttm: false
@@ -139,9 +152,10 @@ columns:
   datetime_format: null
   extra: null
 sql: SELECT timestamp, category, period, CASE WHEN period LIKE 'T%-____' THEN 'Thang'
-  WHEN period LIKE 'K%-T%-____' THEN 'Ky' ELSE 'Khac' END AS period_group, CASE WHEN
-  period = 'K2-T1-2026' THEN 1 WHEN period = 'T2-2026' THEN 2 WHEN period = 'K1-T2-2026'
-  THEN 3 WHEN period = 'K2-T2-2026' THEN 4 ELSE 999 END AS period_sort, export_value,
-  import_value, change_pct FROM "customs_commodity_details"
+  WHEN period LIKE 'K%-T%-____' THEN 'Ky' ELSE 'Khac' END AS period_group, REPLACE(period,
+  '-20', '/') AS period_label, CASE WHEN period = 'K2-T1-2026' THEN 1 WHEN period
+  = 'T2-2026' THEN 2 WHEN period = 'K1-T2-2026' THEN 3 WHEN period = 'K2-T2-2026'
+  THEN 4 ELSE 999 END AS period_sort, export_value, import_value, change_pct FROM
+  "customs_commodity_details"
 version: 1.0.0
 database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d
