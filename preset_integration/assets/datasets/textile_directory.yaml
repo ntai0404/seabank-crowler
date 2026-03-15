@@ -45,13 +45,32 @@ sql: |
       MAX(timestamp) AS latest_ts
     FROM normalized
     GROUP BY business_type_group
+  ), latest_mark AS (
+    SELECT MAX(latest_ts) AS latest_ts FROM agg
+  ), canonical AS (
+    SELECT 'May mac' AS business_type_group, 1 AS sort_order
+    UNION ALL SELECT 'Det vai', 2
+    UNION ALL SELECT 'Nhuom/hoan tat', 3
+    UNION ALL SELECT 'Keo soi', 4
+    UNION ALL SELECT 'Nguyen phu lieu', 5
+    UNION ALL SELECT 'May thiet bi', 6
+    UNION ALL SELECT 'Khac', 7
+  ), base7 AS (
+    SELECT
+      c.business_type_group,
+      COALESCE(a.company_count, 0) AS company_count,
+      lm.latest_ts AS latest_ts,
+      c.sort_order
+    FROM canonical c
+    LEFT JOIN agg a ON a.business_type_group = c.business_type_group
+    CROSS JOIN latest_mark lm
   ), ranked AS (
     SELECT
       business_type_group,
       company_count,
       latest_ts,
-      ROW_NUMBER() OVER (ORDER BY company_count DESC, business_type_group ASC) AS rn
-    FROM agg
+      ROW_NUMBER() OVER (ORDER BY company_count DESC, sort_order ASC) AS rn
+    FROM base7
     WHERE business_type_group <> 'Khac'
   ), top6 AS (
     SELECT business_type_group, company_count, latest_ts, rn
@@ -63,7 +82,7 @@ sql: |
       COALESCE(SUM(company_count), 0) AS company_count,
       MAX(latest_ts) AS latest_ts,
       99 AS rn
-    FROM agg
+    FROM base7
     WHERE business_type_group NOT IN (SELECT business_type_group FROM top6)
   )
   SELECT
@@ -75,6 +94,5 @@ sql: |
     UNION ALL
     SELECT business_type_group, company_count, latest_ts, rn FROM others
   )
-  WHERE company_count > 0
   ORDER BY CASE WHEN business_type_group = 'Khac' THEN 999 ELSE rn END
-uuid: 44b8f6ce-d922-4857-8478-41d81a929254
+uuid: 44b8f6ce-d922-4857-8478-41d81a929255

@@ -13,7 +13,7 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929254
+uuid: 5518f6ce-d922-4857-8478-41d81a929255
 metrics:
 - metric_name: company_count
   verbose_name: So doanh nghiep
@@ -76,17 +76,24 @@ sql: "WITH cleaned AS (\n  SELECT\n    timestamp,\n    lower(replace(replace(rep
   \ LIKE '%may%' OR bt LIKE '%mc%' THEN 'May mac'\n      ELSE 'Khac'\n    END AS business_type_group\n\
   \  FROM cleaned\n), agg AS (\n  SELECT\n    business_type_group,\n    COUNT(*) AS\
   \ company_count,\n    MAX(timestamp) AS latest_ts\n  FROM normalized\n  GROUP BY\
-  \ business_type_group\n), ranked AS (\n  SELECT\n    business_type_group,\n    company_count,\n\
-  \    latest_ts,\n    ROW_NUMBER() OVER (ORDER BY company_count DESC, business_type_group\
-  \ ASC) AS rn\n  FROM agg\n  WHERE business_type_group <> 'Khac'\n), top6 AS (\n\
-  \  SELECT business_type_group, company_count, latest_ts, rn\n  FROM ranked\n  WHERE\
-  \ rn <= 6\n), others AS (\n  SELECT\n    'Khac' AS business_type_group,\n    COALESCE(SUM(company_count),\
-  \ 0) AS company_count,\n    MAX(latest_ts) AS latest_ts,\n    99 AS rn\n  FROM agg\n\
+  \ business_type_group\n), latest_mark AS (\n  SELECT MAX(latest_ts) AS latest_ts\
+  \ FROM agg\n), canonical AS (\n  SELECT 'May mac' AS business_type_group, 1 AS sort_order\n\
+  \  UNION ALL SELECT 'Det vai', 2\n  UNION ALL SELECT 'Nhuom/hoan tat', 3\n  UNION\
+  \ ALL SELECT 'Keo soi', 4\n  UNION ALL SELECT 'Nguyen phu lieu', 5\n  UNION ALL\
+  \ SELECT 'May thiet bi', 6\n  UNION ALL SELECT 'Khac', 7\n), base7 AS (\n  SELECT\n\
+  \    c.business_type_group,\n    COALESCE(a.company_count, 0) AS company_count,\n\
+  \    lm.latest_ts AS latest_ts,\n    c.sort_order\n  FROM canonical c\n  LEFT JOIN\
+  \ agg a ON a.business_type_group = c.business_type_group\n  CROSS JOIN latest_mark\
+  \ lm\n), ranked AS (\n  SELECT\n    business_type_group,\n    company_count,\n \
+  \   latest_ts,\n    ROW_NUMBER() OVER (ORDER BY company_count DESC, sort_order ASC)\
+  \ AS rn\n  FROM base7\n  WHERE business_type_group <> 'Khac'\n), top6 AS (\n  SELECT\
+  \ business_type_group, company_count, latest_ts, rn\n  FROM ranked\n  WHERE rn <=\
+  \ 6\n), others AS (\n  SELECT\n    'Khac' AS business_type_group,\n    COALESCE(SUM(company_count),\
+  \ 0) AS company_count,\n    MAX(latest_ts) AS latest_ts,\n    99 AS rn\n  FROM base7\n\
   \  WHERE business_type_group NOT IN (SELECT business_type_group FROM top6)\n)\n\
   SELECT\n  latest_ts AS timestamp,\n  business_type_group,\n  company_count\nFROM\
   \ (\n  SELECT business_type_group, company_count, latest_ts, rn FROM top6\n  UNION\
   \ ALL\n  SELECT business_type_group, company_count, latest_ts, rn FROM others\n\
-  )\nWHERE company_count > 0\nORDER BY CASE WHEN business_type_group = 'Khac' THEN\
-  \ 999 ELSE rn END\n"
+  )\nORDER BY CASE WHEN business_type_group = 'Khac' THEN 999 ELSE rn END\n"
 version: 1.0.0
 database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d

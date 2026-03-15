@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Gia vang SJC moi nhat theo loai (v7)
+slice_name: Giá vàng SJC mới nhất theo loại (v8)
 viz_type: dist_bar
 params:
   adhoc_filters:
@@ -20,12 +20,15 @@ params:
   show_legend: false
   order_desc: true
   orientation: horizontal
-  x_axis_label: Gia ban (trieu VND/luong)
+  x_axis_label: Giá bán (triệu VND/lượng)
   y_axis_label: ""
   x_axis_label_rotation: 0
   y_axis_label_rotation: 0
+  x_axis_label_margin: 18
+  rich_tooltip: true
+  truncate_axis: false
   y_axis_bounds:
   - 0
   - null
 dataset_uuid: 44b8f6ce-d922-4857-8478-41d81a929252
-uuid: 44b8f6ce-d922-4857-8478-41d81a929221
+uuid: 44b8f6ce-d922-4857-8478-41d81a929224
