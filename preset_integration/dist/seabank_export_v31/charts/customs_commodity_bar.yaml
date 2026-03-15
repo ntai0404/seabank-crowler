@@ -2,10 +2,7 @@ version: 1.0.0
 slice_name: Xuat khau vs Nhap khau theo Ky (Chi tiet Hai quan)
 viz_type: dist_bar
 params:
-  adhoc_filters:
-  - clause: WHERE
-    expressionType: SQL
-    sqlExpression: period NOT LIKE 'K%'
+  adhoc_filters: []
   groupby:
   - period
   metrics:
@@ -23,10 +20,14 @@ params:
     expressionType: SIMPLE
     label: Nhap khau
     optionName: metric_max_import
-  row_limit: 100
+  row_limit: 20
   show_legend: true
+  order_desc: false
   x_axis_label: Ky bao cao
   y_axis_label: Gia tri (ty USD)
+  y_axis_bounds:
+  - 0
+  - null
   viz_type: dist_bar
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929220
 uuid: 5518f6ce-d922-4857-8478-41d81a929204

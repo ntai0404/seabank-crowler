@@ -64,6 +64,19 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
+- column_name: business_type_group
+  verbose_name: Nhom nganh rut gon
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
 - column_name: address
   verbose_name: Dia chi
   is_dttm: false
@@ -90,6 +103,8 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-sql: SELECT * FROM "textile_directory"
+sql: SELECT timestamp, company_name, business_type, trim(substr(coalesce(business_type,
+  ''), 1, instr(coalesce(business_type, '') || '.', '.') - 1)) AS business_type_group,
+  address, website FROM "textile_directory"
 version: 1.0.0
 database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d

@@ -10,6 +10,9 @@ columns:
 - column_name: gold_type
   verbose_name: Loai vang
   type: STRING
+- column_name: snapshot_date
+  verbose_name: Ngay cap nhat
+  type: STRING
 - column_name: buy_price
   verbose_name: Gia mua
   type: FLOAT
@@ -22,5 +25,11 @@ metrics:
   expression: AVG(sell_price)
 database_uuid: ${DATABASE_UUID}
 schema: SeaBank_Data
-sql: SELECT * FROM "gold_prices"
+sql: SELECT
+  timestamp,
+  gold_type,
+  substr(timestamp, 1, 10) AS snapshot_date,
+  buy_price,
+  sell_price
+  FROM "gold_prices"
 uuid: 44b8f6ce-d922-4857-8478-41d81a929219

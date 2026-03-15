@@ -13,6 +13,12 @@ columns:
 - column_name: period
   verbose_name: Ky bao cao
   type: STRING
+- column_name: period_group
+  verbose_name: Nhom ky bao cao
+  type: STRING
+- column_name: period_sort
+  verbose_name: Thu tu ky bao cao
+  type: FLOAT
 - column_name: export_value
   verbose_name: Xuat khau
   type: FLOAT
@@ -31,5 +37,24 @@ metrics:
   expression: MAX(import_value)
 database_uuid: ${DATABASE_UUID}
 schema: SeaBank_Data
-sql: SELECT * FROM "customs_commodity_details"
+sql: SELECT
+  timestamp,
+  category,
+  period,
+  CASE
+    WHEN period LIKE 'T%-____' THEN 'Thang'
+    WHEN period LIKE 'K%-T%-____' THEN 'Ky'
+    ELSE 'Khac'
+  END AS period_group,
+  CASE
+    WHEN period = 'K2-T1-2026' THEN 1
+    WHEN period = 'T2-2026' THEN 2
+    WHEN period = 'K1-T2-2026' THEN 3
+    WHEN period = 'K2-T2-2026' THEN 4
+    ELSE 999
+  END AS period_sort,
+  export_value,
+  import_value,
+  change_pct
+  FROM "customs_commodity_details"
 uuid: 44b8f6ce-d922-4857-8478-41d81a929220

@@ -5,9 +5,9 @@ params:
   adhoc_filters:
   - clause: WHERE
     expressionType: SQL
-    sqlExpression: business_type IS NOT NULL AND business_type <> ''
+    sqlExpression: business_type_group IS NOT NULL AND business_type_group <> ''
   groupby:
-  - business_type
+  - business_type_group
   metrics:
   - aggregate: COUNT
     column:
@@ -16,10 +16,14 @@ params:
     expressionType: SIMPLE
     label: So doanh nghiep
     optionName: metric_count_company
-  row_limit: 50
+  row_limit: 10
   show_legend: false
+  order_desc: true
   x_axis_label: Nhom nganh
   y_axis_label: So doanh nghiep
+  y_axis_bounds:
+  - 0
+  - null
   viz_type: dist_bar
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929221
 uuid: 5518f6ce-d922-4857-8478-41d81a929205
