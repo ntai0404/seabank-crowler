@@ -12,13 +12,13 @@
 
 import json
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
 from core.base_agent import BaseAgent
 from core.config import (
-    STOCK_SYMBOLS, STOCK_HISTORY_DAYS, REQUEST_DELAY, BANK_STOCK_SYMBOLS
+    STOCK_SYMBOLS, REQUEST_DELAY, BANK_STOCK_SYMBOLS
 )
 
 
@@ -27,7 +27,7 @@ class CafeFAgent(BaseAgent):
 
     SOURCE_NAME = "cafef"
     SOURCE_URL  = "https://cafef.vn"
-    REPLACE_SHEETS = {"stock_prices", "banking_news"}
+    REPLACE_SHEETS = {"banking_news"}
 
     # ---- API endpoints ----
     _EP_STOCK   = "https://s.cafef.vn/Ajax/PageNew/DataHistory/PriceHistory.ashx"
@@ -78,13 +78,14 @@ class CafeFAgent(BaseAgent):
             return str(date_text).strip()
 
     def _crawl_stocks(self) -> dict:
-        """Crawl giá cổ phiếu qua JSON API — không cần Playwright."""
+        """Crawl giá cổ phiếu hôm nay qua JSON API, chỉ append dữ liệu mới theo ngày."""
         print(f"[CAFEF] Crawl cổ phiếu — {len(STOCK_SYMBOLS)} mã...")
         metrics, dedicated = [], []
         dashboard_symbols = set(BANK_STOCK_SYMBOLS)
 
-        end_date   = datetime.now().strftime("%d/%m/%Y")
-        start_date = (datetime.now() - timedelta(days=STOCK_HISTORY_DAYS)).strftime("%d/%m/%Y")
+        end_date = datetime.now().strftime("%d/%m/%Y")
+        start_date = end_date
+        today_key = datetime.now().strftime("%Y-%m-%d")
 
         for symbol in STOCK_SYMBOLS:
             try:
@@ -96,7 +97,7 @@ class CafeFAgent(BaseAgent):
                         "StartDate": start_date,
                         "EndDate":   end_date,
                         "PageIndex": 1,
-                        "PageSize":  STOCK_HISTORY_DAYS,
+                        "PageSize":  20,
                     }
                 )
                 records = data.get("Data", {}).get("Data", [])
@@ -126,9 +127,13 @@ class CafeFAgent(BaseAgent):
                 if symbol not in dashboard_symbols:
                     print(f"  ℹ️ {symbol}: chỉ lưu metric tổng hợp (bỏ lịch sử chi tiết)")
                     continue
+
                 for record in records:
                     trading_date = self._to_iso_date(record.get("Ngay", ""))
-                    if not trading_date or trading_date in seen_dates:
+                    # Chỉ lưu dữ liệu đúng ngày chạy để tránh rewrite các ngày cũ.
+                    if not trading_date or not trading_date.startswith(today_key):
+                        continue
+                    if trading_date in seen_dates:
                         continue
                     seen_dates.add(trading_date)
                     dedicated.append([
