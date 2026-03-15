@@ -52,8 +52,8 @@ def build_preset_assets():
     
     CHART_UUIDS = {
         "interest_rate_bar.yaml":      "5518f6ce-d922-4857-8478-41d81a929121",
-        "stock_trend_line.yaml":       "5518f6ce-d922-4857-8478-41d81a929161",
-        "customs_trade_mixed.yaml":    "5518f6ce-d922-4857-8478-41d81a929162",
+        "stock_trend_line.yaml":       "5518f6ce-d922-4857-8478-41d81a929171",
+        "customs_trade_mixed.yaml":    "5518f6ce-d922-4857-8478-41d81a929172",
         "banking_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929154",
         "textile_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929125",
         "exchange_rates_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929152",
