@@ -3,16 +3,13 @@ slice_name: Biến động Giá Cổ phiếu Ngân hàng & BĐS
 viz_type: echarts_timeseries_line
 params:
   adhoc_filters: []
-  time_range: No filter
+  time_range: Last year
   groupby:
   - symbol
   metrics:
-  - aggregate: AVG
-    column:
-      column_name: gia_dong_cua
-      type: FLOAT
-    expressionType: SIMPLE
-    label: AVG(gia_dong_cua)
+  - expressionType: SQL
+    sqlExpression: AVG(CAST(gia_dong_cua AS FLOAT))
+    label: Giá đóng cửa TB
     optionName: metric_avg_price
   granularity_sqla: ngay
   series_type: line
