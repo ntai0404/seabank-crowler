@@ -14,6 +14,7 @@
 import json
 import re
 import time
+from datetime import datetime
 from bs4 import BeautifulSoup
 
 from core.base_agent import BaseAgent
@@ -24,6 +25,25 @@ class TextileAgent(BaseAgent):
 
     SOURCE_NAME = "vitas"
     SOURCE_URL  = "http://www.vietnamtextile.org.vn"
+
+    @staticmethod
+    def _normalize_published_date(raw_date: str) -> str:
+        """Chuẩn hoá ngày về YYYY-MM-DD và loại bỏ mốc năm bất thường."""
+        if not raw_date:
+            return ""
+        text = str(raw_date).strip()
+
+        # Ưu tiên format chuẩn đang dùng trong sheet.
+        for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%d-%m-%Y"):
+            try:
+                dt = datetime.strptime(text, fmt)
+                # VITAS là tin tức hiện đại, năm quá cũ thường là parse lỗi.
+                if 2000 <= dt.year <= datetime.now().year + 1:
+                    return dt.strftime("%Y-%m-%d")
+                return ""
+            except ValueError:
+                continue
+        return ""
 
     # Crawl 3 trang đầu mỗi chuyên mục để có ~20-25 bài
     _PAGES = [
@@ -60,6 +80,7 @@ class TextileAgent(BaseAgent):
                         seen_urls.add(dedup_key)
                         # Nếu không có ngày từ tóm tắt, fetch trang bài để lấy pc_datetime
                         date = article.get("published_date", "")
+                        date = self._normalize_published_date(date)
                         if not date and url_key:
                             try:
                                 art_resp = self.get(url_key)
@@ -69,8 +90,9 @@ class TextileAgent(BaseAgent):
                                     dm2 = re.search(r"(\d{1,2})/(\d{1,2})/(\d{4})",
                                                     dt_el.get_text())
                                     if dm2:
-                                        date = (f"{dm2.group(3)}-{dm2.group(2).zfill(2)}"
-                                                f"-{dm2.group(1).zfill(2)}")
+                                        parsed = (f"{dm2.group(3)}-{dm2.group(2).zfill(2)}"
+                                                  f"-{dm2.group(1).zfill(2)}")
+                                        date = self._normalize_published_date(parsed)
                             except Exception:
                                 pass
                         rows.append([
@@ -204,7 +226,8 @@ class TextileAgent(BaseAgent):
             date_text = ""
             dm = re.search(r"(\d{1,2})/(\d{1,2})/(\d{4})", summary)
             if dm:
-                date_text = f"{dm.group(3)}-{dm.group(2).zfill(2)}-{dm.group(1).zfill(2)}"
+                parsed = f"{dm.group(3)}-{dm.group(2).zfill(2)}-{dm.group(1).zfill(2)}"
+                date_text = self._normalize_published_date(parsed)
 
             articles.append({
                 "title":          title,
