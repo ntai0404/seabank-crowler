@@ -219,8 +219,8 @@ position:
     meta:
       chartId: 9
       height: 45
-      sliceName: Mat bang Gia vang SJC hien tai (v2)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929206
+      sliceName: Xu huong Gia vang SJC theo ngay (v3)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929209
       width: 4
     type: CHART
     parents:
@@ -234,7 +234,7 @@ position:
       chartId: 10
       height: 45
       sliceName: Xuat khau vs Nhap khau theo Ky (Chi tiet Hai quan)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929207
+      uuid: 5518f6ce-d922-4857-8478-41d81a929210
       width: 4
     type: CHART
     parents:
@@ -247,8 +247,8 @@ position:
     meta:
       chartId: 11
       height: 45
-      sliceName: Co cau Hoi vien VITAS theo Nhom nganh (v2)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929208
+      sliceName: Co cau Hoi vien VITAS theo Nhom nganh (v3)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929211
       width: 4
     type: CHART
     parents:

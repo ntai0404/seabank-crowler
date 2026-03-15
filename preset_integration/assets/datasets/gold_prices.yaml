@@ -13,6 +13,10 @@ columns:
 - column_name: snapshot_date
   verbose_name: Ngay cap nhat
   type: STRING
+- column_name: snapshot_dttm
+  verbose_name: Ngay cap nhat (datetime)
+  is_dttm: true
+  type: DATETIME
 - column_name: buy_price
   verbose_name: Gia mua
   type: FLOAT
@@ -35,6 +39,7 @@ sql: SELECT
   timestamp,
   gold_type,
   substr(timestamp, 1, 10) AS snapshot_date,
+  datetime(substr(timestamp, 1, 10) || ' 00:00:00') AS snapshot_dttm,
   buy_price,
   sell_price,
   CAST(REPLACE(COALESCE(CAST(buy_price AS TEXT), '0'), ',', '') AS FLOAT) AS buy_price_num,

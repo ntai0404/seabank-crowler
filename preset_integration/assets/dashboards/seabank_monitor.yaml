@@ -218,7 +218,7 @@ position:
     meta:
       chartId: 9
       height: 45
-      sliceName: Mat bang Gia vang SJC hien tai (v2)
+      sliceName: Xu huong Gia vang SJC theo ngay (v3)
       uuid: 1318f6ce-d922-4857-8478-41d81a929203
       width: 4
     type: CHART
@@ -246,7 +246,7 @@ position:
     meta:
       chartId: 11
       height: 45
-      sliceName: Co cau Hoi vien VITAS theo Nhom nganh (v2)
+      sliceName: Co cau Hoi vien VITAS theo Nhom nganh (v3)
       uuid: 1318f6ce-d922-4857-8478-41d81a929205
       width: 4
     type: CHART

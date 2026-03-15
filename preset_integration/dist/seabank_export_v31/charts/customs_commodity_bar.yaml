@@ -23,11 +23,11 @@ params:
   row_limit: 20
   show_legend: true
   order_desc: false
-  x_axis_label: Ky bao cao
+  x_axis_label: ''
   y_axis_label: Gia tri (ty USD)
   y_axis_bounds:
   - 0
   - null
   viz_type: dist_bar
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929230
-uuid: 5518f6ce-d922-4857-8478-41d81a929207
+uuid: 5518f6ce-d922-4857-8478-41d81a929210

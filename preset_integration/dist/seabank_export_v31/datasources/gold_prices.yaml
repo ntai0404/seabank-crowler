@@ -13,7 +13,7 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929229
+uuid: 5518f6ce-d922-4857-8478-41d81a929239
 metrics:
 - metric_name: avg_sell_price
   verbose_name: Gia ban trung binh
@@ -56,6 +56,19 @@ columns:
   is_dttm: false
   is_active: true
   type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: snapshot_dttm
+  verbose_name: Ngay cap nhat (datetime)
+  is_dttm: true
+  is_active: true
+  type: DATETIME
   advanced_data_type: null
   groupby: true
   filterable: true
@@ -116,9 +129,9 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-sql: SELECT timestamp, gold_type, substr(timestamp, 1, 10) AS snapshot_date, buy_price,
-  sell_price, CAST(REPLACE(COALESCE(CAST(buy_price AS TEXT), '0'), ',', '') AS FLOAT)
-  AS buy_price_num, CAST(REPLACE(COALESCE(CAST(sell_price AS TEXT), '0'), ',', '')
-  AS FLOAT) AS sell_price_num FROM "gold_prices"
+sql: SELECT timestamp, gold_type, substr(timestamp, 1, 10) AS snapshot_date, datetime(substr(timestamp,
+  1, 10) || ' 00:00:00') AS snapshot_dttm, buy_price, sell_price, CAST(REPLACE(COALESCE(CAST(buy_price
+  AS TEXT), '0'), ',', '') AS FLOAT) AS buy_price_num, CAST(REPLACE(COALESCE(CAST(sell_price
+  AS TEXT), '0'), ',', '') AS FLOAT) AS sell_price_num FROM "gold_prices"
 version: 1.0.0
 database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d

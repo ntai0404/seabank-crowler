@@ -39,7 +39,7 @@ def build_preset_assets():
     U_DASH         = "5518f6ce-d922-4857-8478-41d81a929116"
     U_DS_EXCHANGE  = "5518f6ce-d922-4857-8478-41d81a929117"
     U_DS_BANKING   = "5518f6ce-d922-4857-8478-41d81a929118"
-    U_DS_GOLD      = "5518f6ce-d922-4857-8478-41d81a929229"
+    U_DS_GOLD      = "5518f6ce-d922-4857-8478-41d81a929239"
     U_DS_CUSTOMS_DETAIL = "5518f6ce-d922-4857-8478-41d81a929230"
     U_DS_TEXTILE_DIR = "5518f6ce-d922-4857-8478-41d81a929231"
 
@@ -65,9 +65,9 @@ def build_preset_assets():
         "exchange_rates_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929152",
         "bank_stocks_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929153",
         "interest_rate_12m_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929149",
-        "gold_prices_trend_line.yaml": "5518f6ce-d922-4857-8478-41d81a929206",
-        "customs_commodity_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929207",
-        "textile_directory_type_bar.yaml": "5518f6ce-d922-4857-8478-41d81a929208",
+        "gold_prices_trend_line.yaml": "5518f6ce-d922-4857-8478-41d81a929209",
+        "customs_commodity_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929210",
+        "textile_directory_type_bar.yaml": "5518f6ce-d922-4857-8478-41d81a929211",
     }
 
     CHART_MAP = {

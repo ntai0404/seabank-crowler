@@ -23,7 +23,7 @@ params:
   row_limit: 20
   show_legend: true
   order_desc: false
-  x_axis_label: Ky bao cao
+  x_axis_label: ""
   y_axis_label: Gia tri (ty USD)
   y_axis_bounds:
   - 0
