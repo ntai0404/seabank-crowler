@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Cơ cấu Hội viên VITAS Top6 + Khác (v8)
+slice_name: Cơ cấu Hội viên VITAS Top6 + Khác
 viz_type: dist_bar
 params:
   adhoc_filters: []

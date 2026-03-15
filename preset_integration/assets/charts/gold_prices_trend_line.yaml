@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Giá vàng SJC mới nhất theo loại (v8)
+slice_name: Giá vàng SJC mới nhất theo loại
 viz_type: dist_bar
 params:
   adhoc_filters:

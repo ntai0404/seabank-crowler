@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Xuất khẩu vs Nhập khẩu theo kỳ (v8)
+slice_name: Xuất khẩu vs Nhập khẩu theo kỳ
 viz_type: dist_bar
 params:
   adhoc_filters: []
