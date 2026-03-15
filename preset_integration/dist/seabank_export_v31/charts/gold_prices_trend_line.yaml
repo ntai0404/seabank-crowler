@@ -1,25 +1,25 @@
 version: 1.0.0
-slice_name: Mat bang Gia vang SJC hien tai (v4)
+slice_name: Mặt bằng Giá vàng SJC theo ngày (v5)
 viz_type: dist_bar
 params:
   adhoc_filters: []
   groupby:
-  - gold_type
+  - snapshot_date
   metrics:
   - aggregate: MAX
     column:
       column_name: sell_price_num
       type: FLOAT
     expressionType: SIMPLE
-    label: Gia ban
+    label: Giá bán cao nhất
     optionName: metric_max_sell_price
-  row_limit: 20
+  row_limit: 30
   show_legend: false
-  order_desc: true
-  x_axis_label: Loai vang
-  y_axis_label: Gia ban (VND)
+  order_desc: false
+  x_axis_label: Ngày
+  y_axis_label: Giá bán (VND)
   y_axis_bounds:
   - 0
   - null
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929239
-uuid: 5518f6ce-d922-4857-8478-41d81a929212
+uuid: 5518f6ce-d922-4857-8478-41d81a929215

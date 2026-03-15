@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Xuat khau vs Nhap khau theo Ky (Chi tiet Hai quan) (v4)
+slice_name: Xuất khẩu vs Nhập khẩu theo Kỳ (v5)
 viz_type: dist_bar
 params:
   adhoc_filters: []
@@ -11,24 +11,24 @@ params:
       column_name: export_value
       type: FLOAT
     expressionType: SIMPLE
-    label: Xuat khau
+    label: Xuất khẩu
     optionName: metric_max_export
   - aggregate: MAX
     column:
       column_name: import_value
       type: FLOAT
     expressionType: SIMPLE
-    label: Nhap khau
+    label: Nhập khẩu
     optionName: metric_max_import
-  row_limit: 20
+  row_limit: 4
   show_legend: true
   order_desc: false
-  orientation: horizontal
-  x_axis_label: Gia tri (ty USD)
+  orientation: vertical
+  x_axis_label: ''
   y_axis_label: ''
   y_axis_bounds:
   - 0
   - null
   viz_type: dist_bar
 dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929230
-uuid: 5518f6ce-d922-4857-8478-41d81a929213
+uuid: 5518f6ce-d922-4857-8478-41d81a929216
