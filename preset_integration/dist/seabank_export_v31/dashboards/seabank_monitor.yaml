@@ -32,6 +32,8 @@ position:
     - ROW-4
     - ROW-5
     - ROW-6
+    - ROW-7
+    - ROW-8
     id: GRID_ID
     type: GRID
     parents:
@@ -92,9 +94,27 @@ position:
   ROW-6:
     children:
     - CHART-9
-    - CHART-10
-    - CHART-11
     id: ROW-6
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    type: ROW
+    parents:
+    - ROOT_ID
+    - GRID_ID
+  ROW-7:
+    children:
+    - CHART-10
+    id: ROW-7
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    type: ROW
+    parents:
+    - ROOT_ID
+    - GRID_ID
+  ROW-8:
+    children:
+    - CHART-11
+    id: ROW-8
     meta:
       background: BACKGROUND_TRANSPARENT
     type: ROW
@@ -219,9 +239,9 @@ position:
     meta:
       chartId: 9
       height: 45
-      sliceName: Gia vang SJC moi nhat theo loai (v6)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929218
-      width: 4
+      sliceName: Gia vang SJC moi nhat theo loai (v7)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929221
+      width: 12
     type: CHART
     parents:
     - ROOT_ID
@@ -233,27 +253,27 @@ position:
     meta:
       chartId: 10
       height: 45
-      sliceName: Xuat khau vs Nhap khau theo Ky (v6)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929219
-      width: 4
+      sliceName: Xuat khau vs Nhap khau theo Ky (v7)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929222
+      width: 12
     type: CHART
     parents:
     - ROOT_ID
     - GRID_ID
-    - ROW-6
+    - ROW-7
   CHART-11:
     children: []
     id: CHART-11
     meta:
       chartId: 11
       height: 45
-      sliceName: Co cau Hoi vien VITAS Top6 + Khac (v6)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929220
-      width: 4
+      sliceName: Co cau Hoi vien VITAS Top6 + Khac (v7)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929223
+      width: 12
     type: CHART
     parents:
     - ROOT_ID
     - GRID_ID
-    - ROW-6
+    - ROW-8
 uuid: 5518f6ce-d922-4857-8478-41d81a929116
 slug: seabank-monitor

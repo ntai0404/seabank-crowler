@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Gia vang SJC moi nhat theo loai (v6)
+slice_name: Gia vang SJC moi nhat theo loai (v7)
 viz_type: dist_bar
 params:
   adhoc_filters:
@@ -7,23 +7,25 @@ params:
     expressionType: SQL
     sqlExpression: is_latest = 1
   groupby:
-  - gold_label
+  - gold_type_short
   metrics:
   - aggregate: MAX
     column:
-      column_name: sell_price_num
+      column_name: sell_price_million
       type: FLOAT
     expressionType: SIMPLE
-    label: Gia ban cao nhat
-    optionName: metric_max_sell_price
+    label: Gia ban cao nhat (trieu)
+    optionName: metric_max_sell_price_million
   row_limit: 20
   show_legend: false
   order_desc: true
   orientation: horizontal
-  x_axis_label: Gia ban (VND)
+  x_axis_label: Gia ban (trieu VND/luong)
   y_axis_label: ''
+  x_axis_label_rotation: 0
+  y_axis_label_rotation: 0
   y_axis_bounds:
   - 0
   - null
-dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929249
-uuid: 5518f6ce-d922-4857-8478-41d81a929218
+dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929252
+uuid: 5518f6ce-d922-4857-8478-41d81a929221

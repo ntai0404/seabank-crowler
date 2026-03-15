@@ -16,8 +16,14 @@ columns:
 - column_name: gold_label
   verbose_name: Nhan cot
   type: STRING
+- column_name: gold_type_short
+  verbose_name: Loai vang rut gon
+  type: STRING
 - column_name: sell_price_num
   verbose_name: Gia ban (so)
+  type: FLOAT
+- column_name: sell_price_million
+  verbose_name: Gia ban (trieu VND)
   type: FLOAT
 - column_name: is_latest
   verbose_name: Ban ghi moi nhat
@@ -26,6 +32,9 @@ metrics:
 - metric_name: max_sell_price
   verbose_name: Gia ban cao nhat
   expression: MAX(sell_price_num)
+- metric_name: max_sell_price_million
+  verbose_name: Gia ban cao nhat (trieu)
+  expression: MAX(sell_price_million)
 database_uuid: ${DATABASE_UUID}
 schema: SeaBank_Data
 sql: |
@@ -44,8 +53,17 @@ sql: |
     b.gold_type,
     b.snapshot_date,
     b.snapshot_date || ' | ' || b.gold_type AS gold_label,
+    CASE
+      WHEN b.gold_type LIKE '%nhan SJC 99,99% 1 chi, 2 chi, 5 chi%' OR b.gold_type LIKE '%nhẫn SJC 99,99% 1 chỉ, 2 chỉ, 5 chỉ%' THEN 'Nhan 99.99 1-5 chi'
+      WHEN b.gold_type LIKE '%nhan SJC 99,99% 0.5 chi, 0.3 chi%' OR b.gold_type LIKE '%nhẫn SJC 99,99% 0.5 chỉ, 0.3 chỉ%' THEN 'Nhan 99.99 0.3-0.5 chi'
+      WHEN b.gold_type LIKE '%SJC 5 chi%' OR b.gold_type LIKE '%SJC 5 chỉ%' THEN 'SJC 5 chi'
+      WHEN b.gold_type LIKE '%SJC 1L, 10L, 1KG%' THEN 'SJC 1L-1KG'
+      WHEN b.gold_type LIKE '%SJC 0.5 chi, 1 chi, 2 chi%' OR b.gold_type LIKE '%SJC 0.5 chỉ, 1 chỉ, 2 chỉ%' THEN 'SJC 0.5-2 chi'
+      ELSE substr(b.gold_type, 1, 24)
+    END AS gold_type_short,
     b.sell_price_num,
+    b.sell_price_num / 1000000.0 AS sell_price_million,
     CASE WHEN b.snapshot_date = l.max_snapshot_date THEN 1 ELSE 0 END AS is_latest
   FROM base b
   CROSS JOIN latest l
-uuid: 44b8f6ce-d922-4857-8478-41d81a929219
+uuid: 44b8f6ce-d922-4857-8478-41d81a929252

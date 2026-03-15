@@ -13,12 +13,21 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929249
+uuid: 5518f6ce-d922-4857-8478-41d81a929252
 metrics:
 - metric_name: max_sell_price
   verbose_name: Gia ban cao nhat
   metric_type: null
   expression: MAX(sell_price_num)
+  description: null
+  d3format: null
+  currency: null
+  extra: null
+  warning_text: null
+- metric_name: max_sell_price_million
+  verbose_name: Gia ban cao nhat (trieu)
+  metric_type: null
+  expression: MAX(sell_price_million)
   description: null
   d3format: null
   currency: null
@@ -77,8 +86,34 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
+- column_name: gold_type_short
+  verbose_name: Loai vang rut gon
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
 - column_name: sell_price_num
   verbose_name: Gia ban (so)
+  is_dttm: false
+  is_active: true
+  type: FLOAT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: sell_price_million
+  verbose_name: Gia ban (trieu VND)
   is_dttm: false
   is_active: true
   type: FLOAT
@@ -108,7 +143,16 @@ sql: "WITH base AS (\n  SELECT\n    timestamp,\n    gold_type,\n    substr(times
   \ '0'), ',', '') AS FLOAT) AS sell_price_num\n  FROM \"gold_prices\"\n), latest\
   \ AS (\n  SELECT MAX(snapshot_date) AS max_snapshot_date FROM base\n)\nSELECT\n\
   \  b.timestamp,\n  b.gold_type,\n  b.snapshot_date,\n  b.snapshot_date || ' | '\
-  \ || b.gold_type AS gold_label,\n  b.sell_price_num,\n  CASE WHEN b.snapshot_date\
+  \ || b.gold_type AS gold_label,\n  CASE\n    WHEN b.gold_type LIKE '%nhan SJC 99,99%\
+  \ 1 chi, 2 chi, 5 chi%' OR b.gold_type LIKE '%nhẫn SJC 99,99% 1 chỉ, 2 chỉ, 5 chỉ%'\
+  \ THEN 'Nhan 99.99 1-5 chi'\n    WHEN b.gold_type LIKE '%nhan SJC 99,99% 0.5 chi,\
+  \ 0.3 chi%' OR b.gold_type LIKE '%nhẫn SJC 99,99% 0.5 chỉ, 0.3 chỉ%' THEN 'Nhan\
+  \ 99.99 0.3-0.5 chi'\n    WHEN b.gold_type LIKE '%SJC 5 chi%' OR b.gold_type LIKE\
+  \ '%SJC 5 chỉ%' THEN 'SJC 5 chi'\n    WHEN b.gold_type LIKE '%SJC 1L, 10L, 1KG%'\
+  \ THEN 'SJC 1L-1KG'\n    WHEN b.gold_type LIKE '%SJC 0.5 chi, 1 chi, 2 chi%' OR\
+  \ b.gold_type LIKE '%SJC 0.5 chỉ, 1 chỉ, 2 chỉ%' THEN 'SJC 0.5-2 chi'\n    ELSE\
+  \ substr(b.gold_type, 1, 24)\n  END AS gold_type_short,\n  b.sell_price_num,\n \
+  \ b.sell_price_num / 1000000.0 AS sell_price_million,\n  CASE WHEN b.snapshot_date\
   \ = l.max_snapshot_date THEN 1 ELSE 0 END AS is_latest\nFROM base b\nCROSS JOIN\
   \ latest l\n"
 version: 1.0.0

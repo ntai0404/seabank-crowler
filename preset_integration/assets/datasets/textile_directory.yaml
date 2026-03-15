@@ -20,20 +20,24 @@ metrics:
 database_uuid: ${DATABASE_UUID}
 schema: SeaBank_Data
 sql: |
-  WITH normalized AS (
+  WITH cleaned AS (
+    SELECT
+      timestamp,
+      lower(replace(replace(replace(coalesce(business_type, ''), '.', ' '), '/', ' '), '-', ' ')) AS bt
+    FROM "textile_directory"
+  ), normalized AS (
     SELECT
       timestamp,
       CASE
-        WHEN lower(coalesce(business_type, '')) LIKE '%may/thiet bi%' THEN 'May thiet bi'
-        WHEN lower(coalesce(business_type, '')) LIKE '%nguyen phu lieu%' THEN 'Nguyen phu lieu'
-        WHEN lower(coalesce(business_type, '')) LIKE '%nhuom%' THEN 'Nhuom/hoan tat'
-        WHEN lower(coalesce(business_type, '')) LIKE '%keo soi%' THEN 'Keo soi'
-        WHEN lower(coalesce(business_type, '')) LIKE '%det vai%' THEN 'Det vai'
-        WHEN lower(coalesce(business_type, '')) LIKE '%det%' THEN 'Det vai'
-        WHEN lower(coalesce(business_type, '')) LIKE '%may%' THEN 'May mac'
+        WHEN bt LIKE '%thiet bi%' OR bt LIKE '%thit bi%' THEN 'May thiet bi'
+        WHEN bt LIKE '%nguyen phu%' OR bt LIKE '%nguyn phu%' OR bt LIKE '%phu lieu%' OR bt LIKE '%phu liu%' THEN 'Nguyen phu lieu'
+        WHEN bt LIKE '%nhuom%' OR bt LIKE '%nhum%' OR bt LIKE '%hoan tat%' OR bt LIKE '%hoan tt%' THEN 'Nhuom/hoan tat'
+        WHEN bt LIKE '%keo soi%' OR bt LIKE '%keo si%' THEN 'Keo soi'
+        WHEN bt LIKE '%det vai%' OR bt LIKE '%dt vai%' OR bt LIKE '%det%' OR bt LIKE '%dt%' THEN 'Det vai'
+        WHEN bt LIKE '%may%' OR bt LIKE '%mc%' THEN 'May mac'
         ELSE 'Khac'
       END AS business_type_group
-    FROM "textile_directory"
+    FROM cleaned
   ), agg AS (
     SELECT
       business_type_group,
@@ -73,4 +77,4 @@ sql: |
   )
   WHERE company_count > 0
   ORDER BY CASE WHEN business_type_group = 'Khac' THEN 999 ELSE rn END
-uuid: 44b8f6ce-d922-4857-8478-41d81a929221
+uuid: 44b8f6ce-d922-4857-8478-41d81a929254

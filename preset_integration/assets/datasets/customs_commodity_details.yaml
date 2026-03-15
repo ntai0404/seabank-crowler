@@ -54,10 +54,10 @@ sql: SELECT
   END AS period_group,
   REPLACE(period, '-20', '/') AS period_label,
   CASE
-    WHEN period = 'K2-T1-2026' THEN 'K2-T1/26'
-    WHEN period = 'T2-2026' THEN 'T2/26'
-    WHEN period = 'K1-T2-2026' THEN 'K1-T2/26'
-    WHEN period = 'K2-T2-2026' THEN 'K2-T2/26'
+    WHEN period = 'K2-T1-2026' THEN 'K2T1-26'
+    WHEN period = 'T2-2026' THEN 'T2-26'
+    WHEN period = 'K1-T2-2026' THEN 'K1T2-26'
+    WHEN period = 'K2-T2-2026' THEN 'K2T2-26'
     ELSE REPLACE(period, '-20', '/')
   END AS period_label_short,
   CASE
@@ -71,4 +71,4 @@ sql: SELECT
   import_value,
   change_pct
   FROM "customs_commodity_details"
-uuid: 44b8f6ce-d922-4857-8478-41d81a929220
+uuid: 44b8f6ce-d922-4857-8478-41d81a929253

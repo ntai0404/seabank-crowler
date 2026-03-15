@@ -13,7 +13,7 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929251
+uuid: 5518f6ce-d922-4857-8478-41d81a929254
 metrics:
 - metric_name: company_count
   verbose_name: So doanh nghiep
@@ -64,26 +64,28 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-sql: "WITH normalized AS (\n  SELECT\n    timestamp,\n    CASE\n      WHEN lower(coalesce(business_type,\
-  \ '')) LIKE '%may/thiet bi%' THEN 'May thiet bi'\n      WHEN lower(coalesce(business_type,\
-  \ '')) LIKE '%nguyen phu lieu%' THEN 'Nguyen phu lieu'\n      WHEN lower(coalesce(business_type,\
-  \ '')) LIKE '%nhuom%' THEN 'Nhuom/hoan tat'\n      WHEN lower(coalesce(business_type,\
-  \ '')) LIKE '%keo soi%' THEN 'Keo soi'\n      WHEN lower(coalesce(business_type,\
-  \ '')) LIKE '%det vai%' THEN 'Det vai'\n      WHEN lower(coalesce(business_type,\
-  \ '')) LIKE '%det%' THEN 'Det vai'\n      WHEN lower(coalesce(business_type, ''))\
-  \ LIKE '%may%' THEN 'May mac'\n      ELSE 'Khac'\n    END AS business_type_group\n\
-  \  FROM \"textile_directory\"\n), agg AS (\n  SELECT\n    business_type_group,\n\
-  \    COUNT(*) AS company_count,\n    MAX(timestamp) AS latest_ts\n  FROM normalized\n\
-  \  GROUP BY business_type_group\n), ranked AS (\n  SELECT\n    business_type_group,\n\
-  \    company_count,\n    latest_ts,\n    ROW_NUMBER() OVER (ORDER BY company_count\
-  \ DESC, business_type_group ASC) AS rn\n  FROM agg\n  WHERE business_type_group\
-  \ <> 'Khac'\n), top6 AS (\n  SELECT business_type_group, company_count, latest_ts,\
-  \ rn\n  FROM ranked\n  WHERE rn <= 6\n), others AS (\n  SELECT\n    'Khac' AS business_type_group,\n\
-  \    COALESCE(SUM(company_count), 0) AS company_count,\n    MAX(latest_ts) AS latest_ts,\n\
-  \    99 AS rn\n  FROM agg\n  WHERE business_type_group NOT IN (SELECT business_type_group\
-  \ FROM top6)\n)\nSELECT\n  latest_ts AS timestamp,\n  business_type_group,\n  company_count\n\
-  FROM (\n  SELECT business_type_group, company_count, latest_ts, rn FROM top6\n \
-  \ UNION ALL\n  SELECT business_type_group, company_count, latest_ts, rn FROM others\n\
+sql: "WITH cleaned AS (\n  SELECT\n    timestamp,\n    lower(replace(replace(replace(coalesce(business_type,\
+  \ ''), '.', ' '), '/', ' '), '-', ' ')) AS bt\n  FROM \"textile_directory\"\n),\
+  \ normalized AS (\n  SELECT\n    timestamp,\n    CASE\n      WHEN bt LIKE '%thiet\
+  \ bi%' OR bt LIKE '%thit bi%' THEN 'May thiet bi'\n      WHEN bt LIKE '%nguyen phu%'\
+  \ OR bt LIKE '%nguyn phu%' OR bt LIKE '%phu lieu%' OR bt LIKE '%phu liu%' THEN 'Nguyen\
+  \ phu lieu'\n      WHEN bt LIKE '%nhuom%' OR bt LIKE '%nhum%' OR bt LIKE '%hoan\
+  \ tat%' OR bt LIKE '%hoan tt%' THEN 'Nhuom/hoan tat'\n      WHEN bt LIKE '%keo soi%'\
+  \ OR bt LIKE '%keo si%' THEN 'Keo soi'\n      WHEN bt LIKE '%det vai%' OR bt LIKE\
+  \ '%dt vai%' OR bt LIKE '%det%' OR bt LIKE '%dt%' THEN 'Det vai'\n      WHEN bt\
+  \ LIKE '%may%' OR bt LIKE '%mc%' THEN 'May mac'\n      ELSE 'Khac'\n    END AS business_type_group\n\
+  \  FROM cleaned\n), agg AS (\n  SELECT\n    business_type_group,\n    COUNT(*) AS\
+  \ company_count,\n    MAX(timestamp) AS latest_ts\n  FROM normalized\n  GROUP BY\
+  \ business_type_group\n), ranked AS (\n  SELECT\n    business_type_group,\n    company_count,\n\
+  \    latest_ts,\n    ROW_NUMBER() OVER (ORDER BY company_count DESC, business_type_group\
+  \ ASC) AS rn\n  FROM agg\n  WHERE business_type_group <> 'Khac'\n), top6 AS (\n\
+  \  SELECT business_type_group, company_count, latest_ts, rn\n  FROM ranked\n  WHERE\
+  \ rn <= 6\n), others AS (\n  SELECT\n    'Khac' AS business_type_group,\n    COALESCE(SUM(company_count),\
+  \ 0) AS company_count,\n    MAX(latest_ts) AS latest_ts,\n    99 AS rn\n  FROM agg\n\
+  \  WHERE business_type_group NOT IN (SELECT business_type_group FROM top6)\n)\n\
+  SELECT\n  latest_ts AS timestamp,\n  business_type_group,\n  company_count\nFROM\
+  \ (\n  SELECT business_type_group, company_count, latest_ts, rn FROM top6\n  UNION\
+  \ ALL\n  SELECT business_type_group, company_count, latest_ts, rn FROM others\n\
   )\nWHERE company_count > 0\nORDER BY CASE WHEN business_type_group = 'Khac' THEN\
   \ 999 ELSE rn END\n"
 version: 1.0.0

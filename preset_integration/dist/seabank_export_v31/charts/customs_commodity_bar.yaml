@@ -1,5 +1,5 @@
 version: 1.0.0
-slice_name: Xuat khau vs Nhap khau theo Ky (v6)
+slice_name: Xuat khau vs Nhap khau theo Ky (v7)
 viz_type: dist_bar
 params:
   adhoc_filters: []
@@ -26,9 +26,11 @@ params:
   orientation: vertical
   x_axis_label: ''
   y_axis_label: Gia tri (ty USD)
+  x_axis_label_rotation: 0
+  y_axis_label_rotation: 0
   y_axis_bounds:
   - 0
   - null
   viz_type: dist_bar
-dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929250
-uuid: 5518f6ce-d922-4857-8478-41d81a929219
+dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929253
+uuid: 5518f6ce-d922-4857-8478-41d81a929222
