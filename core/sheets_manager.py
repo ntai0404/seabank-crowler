@@ -132,3 +132,88 @@ def clear_sheet_data(sheet_name: str) -> None:
         print(f"[SHEETS] 🗑️  Đã xóa dữ liệu tab '{sheet_name}' (giữ header).")
     except HttpError as e:
         print(f"[SHEETS] ❌ Lỗi khi xóa '{sheet_name}': {e}")
+
+
+def _build_contiguous_ranges(row_numbers: list[int]) -> list[tuple[int, int]]:
+    """Gộp danh sách số dòng thành các đoạn liên tiếp để xóa hiệu quả hơn."""
+    if not row_numbers:
+        return []
+
+    ranges: list[tuple[int, int]] = []
+    start = prev = row_numbers[0]
+    for n in row_numbers[1:]:
+        if n == prev + 1:
+            prev = n
+            continue
+        ranges.append((start, prev))
+        start = prev = n
+    ranges.append((start, prev))
+    return ranges
+
+
+def delete_existing_rows_by_key(sheet_name: str, incoming_rows: list[list], key_cols: list[int]) -> int:
+    """Xóa các dòng hiện có trùng key với incoming_rows trước khi append (upsert theo key)."""
+    if not incoming_rows or not key_cols:
+        return 0
+
+    incoming_keys = set()
+    for row in incoming_rows:
+        key = tuple(str(row[idx]).strip() if idx < len(row) else "" for idx in key_cols)
+        if any(key):
+            incoming_keys.add(key)
+
+    if not incoming_keys:
+        return 0
+
+    try:
+        service = _build_service()
+        sheet_resp = service.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()
+        sheets = sheet_resp.get("sheets", [])
+        sheet_info = next((s for s in sheets if s.get("properties", {}).get("title") == sheet_name), None)
+        if not sheet_info:
+            return 0
+
+        sheet_id = sheet_info["properties"]["sheetId"]
+        values_resp = service.spreadsheets().values().get(
+            spreadsheetId=SPREADSHEET_ID,
+            range=f"{sheet_name}!A2:ZZ",
+        ).execute()
+        existing_rows = values_resp.get("values", [])
+        if not existing_rows:
+            return 0
+
+        matched_rows: list[int] = []
+        for idx, row in enumerate(existing_rows):
+            key = tuple(str(row[col]).strip() if col < len(row) else "" for col in key_cols)
+            if key in incoming_keys:
+                matched_rows.append(idx + 2)
+
+        if not matched_rows:
+            return 0
+
+        requests = []
+        for start, end in reversed(_build_contiguous_ranges(matched_rows)):
+            requests.append(
+                {
+                    "deleteDimension": {
+                        "range": {
+                            "sheetId": sheet_id,
+                            "dimension": "ROWS",
+                            "startIndex": start - 1,
+                            "endIndex": end,
+                        }
+                    }
+                }
+            )
+
+        service.spreadsheets().batchUpdate(
+            spreadsheetId=SPREADSHEET_ID,
+            body={"requests": requests},
+        ).execute()
+        print(f"[SHEETS] ♻️  '{sheet_name}': xóa {len(matched_rows)} dòng trùng key trước khi append")
+        return len(matched_rows)
+    except HttpError as e:
+        print(f"[SHEETS] ❌ Lỗi dedupe '{sheet_name}': {e}")
+    except Exception as e:
+        print(f"[SHEETS] ❌ Lỗi không xác định dedupe '{sheet_name}': {e}")
+    return 0

@@ -28,6 +28,7 @@ class BaseAgent(ABC):
     SOURCE_NAME: str = "unknown"
     SOURCE_URL: str  = ""
     REPLACE_SHEETS: set[str] = set()
+    UPSERT_KEY_COLUMNS: dict[str, list[int]] = {}
 
     def __init__(self):
         self.timestamp: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -88,7 +89,7 @@ class BaseAgent(ABC):
         Chạy crawl và ghi toàn bộ dữ liệu vào Google Sheets.
         Trả về summary: { sheet_name: số_hàng_đã_ghi }.
         """
-        from core.sheets_manager import append_rows, clear_sheet_data
+        from core.sheets_manager import append_rows, clear_sheet_data, delete_existing_rows_by_key
 
         print(f"\n{'='*55}")
         print(f"[{self.SOURCE_NAME.upper()}] Bắt đầu crawl: {self.SOURCE_URL}")
@@ -106,6 +107,9 @@ class BaseAgent(ABC):
             if rows:
                 if sheet_name in self.REPLACE_SHEETS:
                     clear_sheet_data(sheet_name)
+                key_cols = self.UPSERT_KEY_COLUMNS.get(sheet_name)
+                if key_cols:
+                    delete_existing_rows_by_key(sheet_name, rows, key_cols)
                 append_rows(sheet_name, rows)
                 summary[sheet_name] = len(rows)
             else:

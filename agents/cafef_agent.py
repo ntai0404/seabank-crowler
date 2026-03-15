@@ -28,6 +28,7 @@ class CafeFAgent(BaseAgent):
     SOURCE_NAME = "cafef"
     SOURCE_URL  = "https://cafef.vn"
     REPLACE_SHEETS = {"banking_news"}
+    UPSERT_KEY_COLUMNS = {"stock_prices": [1, 2]}
 
     # ---- API endpoints ----
     _EP_STOCK   = "https://s.cafef.vn/Ajax/PageNew/DataHistory/PriceHistory.ashx"
