@@ -1,24 +1,21 @@
 version: 1.0.0
-slice_name: Cơ cấu Hội viên VITAS theo Nhóm ngành (v5)
+slice_name: Co cau Hoi vien VITAS Top6 + Khac (v6)
 viz_type: dist_bar
 params:
-  adhoc_filters:
-  - clause: WHERE
-    expressionType: SQL
-    sqlExpression: business_type_group IS NOT NULL AND business_type_group <> ''
+  adhoc_filters: []
   groupby:
   - business_type_group
   metrics:
-  - aggregate: COUNT
+  - aggregate: SUM
     column:
-      column_name: company_name
-      type: STRING
+      column_name: company_count
+      type: FLOAT
     expressionType: SIMPLE
-    label: Số doanh nghiệp
-    optionName: metric_count_company
-  row_limit: 8
+    label: So doanh nghiep
+    optionName: metric_sum_company_count
+  row_limit: 7
   show_legend: false
-  order_desc: true
+  order_desc: false
   orientation: horizontal
   x_axis_label: ''
   y_axis_label: ''
@@ -26,5 +23,5 @@ params:
   - 0
   - null
   viz_type: dist_bar
-dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929231
-uuid: 5518f6ce-d922-4857-8478-41d81a929217
+dataset_uuid: 5518f6ce-d922-4857-8478-41d81a929251
+uuid: 5518f6ce-d922-4857-8478-41d81a929220

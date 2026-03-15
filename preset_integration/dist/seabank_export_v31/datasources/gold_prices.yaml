@@ -13,12 +13,12 @@ extra: null
 normalize_columns: false
 always_filter_main_dttm: false
 folders: null
-uuid: 5518f6ce-d922-4857-8478-41d81a929239
+uuid: 5518f6ce-d922-4857-8478-41d81a929249
 metrics:
-- metric_name: avg_sell_price
-  verbose_name: Gia ban trung binh
+- metric_name: max_sell_price
+  verbose_name: Gia ban cao nhat
   metric_type: null
-  expression: AVG(sell_price_num)
+  expression: MAX(sell_price_num)
   description: null
   d3format: null
   currency: null
@@ -64,50 +64,11 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-- column_name: snapshot_dttm
-  verbose_name: Ngay cap nhat (datetime)
-  is_dttm: true
-  is_active: true
-  type: DATETIME
-  advanced_data_type: null
-  groupby: true
-  filterable: true
-  expression: null
-  description: null
-  python_date_format: null
-  datetime_format: null
-  extra: null
-- column_name: buy_price
-  verbose_name: Gia mua
+- column_name: gold_label
+  verbose_name: Nhan cot
   is_dttm: false
   is_active: true
-  type: FLOAT
-  advanced_data_type: null
-  groupby: true
-  filterable: true
-  expression: null
-  description: null
-  python_date_format: null
-  datetime_format: null
-  extra: null
-- column_name: sell_price
-  verbose_name: Gia ban
-  is_dttm: false
-  is_active: true
-  type: FLOAT
-  advanced_data_type: null
-  groupby: true
-  filterable: true
-  expression: null
-  description: null
-  python_date_format: null
-  datetime_format: null
-  extra: null
-- column_name: buy_price_num
-  verbose_name: Gia mua (so)
-  is_dttm: false
-  is_active: true
-  type: FLOAT
+  type: STRING
   advanced_data_type: null
   groupby: true
   filterable: true
@@ -129,9 +90,26 @@ columns:
   python_date_format: null
   datetime_format: null
   extra: null
-sql: SELECT timestamp, gold_type, substr(timestamp, 1, 10) AS snapshot_date, datetime(substr(timestamp,
-  1, 10) || ' 00:00:00') AS snapshot_dttm, buy_price, sell_price, CAST(REPLACE(COALESCE(CAST(buy_price
-  AS TEXT), '0'), ',', '') AS FLOAT) AS buy_price_num, CAST(REPLACE(COALESCE(CAST(sell_price
-  AS TEXT), '0'), ',', '') AS FLOAT) AS sell_price_num FROM "gold_prices"
+- column_name: is_latest
+  verbose_name: Ban ghi moi nhat
+  is_dttm: false
+  is_active: true
+  type: FLOAT
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+sql: "WITH base AS (\n  SELECT\n    timestamp,\n    gold_type,\n    substr(timestamp,\
+  \ 1, 10) AS snapshot_date,\n    CAST(REPLACE(COALESCE(CAST(sell_price AS TEXT),\
+  \ '0'), ',', '') AS FLOAT) AS sell_price_num\n  FROM \"gold_prices\"\n), latest\
+  \ AS (\n  SELECT MAX(snapshot_date) AS max_snapshot_date FROM base\n)\nSELECT\n\
+  \  b.timestamp,\n  b.gold_type,\n  b.snapshot_date,\n  b.snapshot_date || ' | '\
+  \ || b.gold_type AS gold_label,\n  b.sell_price_num,\n  CASE WHEN b.snapshot_date\
+  \ = l.max_snapshot_date THEN 1 ELSE 0 END AS is_latest\nFROM base b\nCROSS JOIN\
+  \ latest l\n"
 version: 1.0.0
 database_uuid: 767718e8-0cab-4d05-8b85-49c7b5949e6d

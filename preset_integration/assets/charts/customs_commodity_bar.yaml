@@ -1,31 +1,31 @@
 version: 1.0.0
-slice_name: Xuất khẩu vs Nhập khẩu theo Kỳ (v5)
+slice_name: Xuat khau vs Nhap khau theo Ky (v6)
 viz_type: dist_bar
 params:
   adhoc_filters: []
   groupby:
-  - period_label
+  - period_label_short
   metrics:
   - aggregate: MAX
     column:
       column_name: export_value
       type: FLOAT
     expressionType: SIMPLE
-    label: Xuất khẩu
+    label: Xuat khau
     optionName: metric_max_export
   - aggregate: MAX
     column:
       column_name: import_value
       type: FLOAT
     expressionType: SIMPLE
-    label: Nhập khẩu
+    label: Nhap khau
     optionName: metric_max_import
   row_limit: 4
   show_legend: true
   order_desc: false
   orientation: vertical
   x_axis_label: ""
-  y_axis_label: ""
+  y_axis_label: Gia tri (ty USD)
   y_axis_bounds:
   - 0
   - null

@@ -13,36 +13,39 @@ columns:
 - column_name: snapshot_date
   verbose_name: Ngay cap nhat
   type: STRING
-- column_name: snapshot_dttm
-  verbose_name: Ngay cap nhat (datetime)
-  is_dttm: true
-  type: DATETIME
-- column_name: buy_price
-  verbose_name: Gia mua
-  type: FLOAT
-- column_name: sell_price
-  verbose_name: Gia ban
-  type: FLOAT
-- column_name: buy_price_num
-  verbose_name: Gia mua (so)
-  type: FLOAT
+- column_name: gold_label
+  verbose_name: Nhan cot
+  type: STRING
 - column_name: sell_price_num
   verbose_name: Gia ban (so)
   type: FLOAT
+- column_name: is_latest
+  verbose_name: Ban ghi moi nhat
+  type: FLOAT
 metrics:
-- metric_name: avg_sell_price
-  verbose_name: Gia ban trung binh
-  expression: AVG(sell_price_num)
+- metric_name: max_sell_price
+  verbose_name: Gia ban cao nhat
+  expression: MAX(sell_price_num)
 database_uuid: ${DATABASE_UUID}
 schema: SeaBank_Data
-sql: SELECT
-  timestamp,
-  gold_type,
-  substr(timestamp, 1, 10) AS snapshot_date,
-  datetime(substr(timestamp, 1, 10) || ' 00:00:00') AS snapshot_dttm,
-  buy_price,
-  sell_price,
-  CAST(REPLACE(COALESCE(CAST(buy_price AS TEXT), '0'), ',', '') AS FLOAT) AS buy_price_num,
-  CAST(REPLACE(COALESCE(CAST(sell_price AS TEXT), '0'), ',', '') AS FLOAT) AS sell_price_num
-  FROM "gold_prices"
+sql: |
+  WITH base AS (
+    SELECT
+      timestamp,
+      gold_type,
+      substr(timestamp, 1, 10) AS snapshot_date,
+      CAST(REPLACE(COALESCE(CAST(sell_price AS TEXT), '0'), ',', '') AS FLOAT) AS sell_price_num
+    FROM "gold_prices"
+  ), latest AS (
+    SELECT MAX(snapshot_date) AS max_snapshot_date FROM base
+  )
+  SELECT
+    b.timestamp,
+    b.gold_type,
+    b.snapshot_date,
+    b.snapshot_date || ' | ' || b.gold_type AS gold_label,
+    b.sell_price_num,
+    CASE WHEN b.snapshot_date = l.max_snapshot_date THEN 1 ELSE 0 END AS is_latest
+  FROM base b
+  CROSS JOIN latest l
 uuid: 44b8f6ce-d922-4857-8478-41d81a929219

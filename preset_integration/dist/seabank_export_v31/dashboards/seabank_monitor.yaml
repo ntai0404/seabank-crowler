@@ -219,8 +219,8 @@ position:
     meta:
       chartId: 9
       height: 45
-      sliceName: Mặt bằng Giá vàng SJC theo ngày (v5)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929215
+      sliceName: Gia vang SJC moi nhat theo loai (v6)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929218
       width: 4
     type: CHART
     parents:
@@ -233,8 +233,8 @@ position:
     meta:
       chartId: 10
       height: 45
-      sliceName: Xuất khẩu vs Nhập khẩu theo Kỳ (v5)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929216
+      sliceName: Xuat khau vs Nhap khau theo Ky (v6)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929219
       width: 4
     type: CHART
     parents:
@@ -247,8 +247,8 @@ position:
     meta:
       chartId: 11
       height: 45
-      sliceName: Cơ cấu Hội viên VITAS theo Nhóm ngành (v5)
-      uuid: 5518f6ce-d922-4857-8478-41d81a929217
+      sliceName: Co cau Hoi vien VITAS Top6 + Khac (v6)
+      uuid: 5518f6ce-d922-4857-8478-41d81a929220
       width: 4
     type: CHART
     parents:

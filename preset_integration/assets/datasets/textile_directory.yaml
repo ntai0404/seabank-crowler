@@ -7,42 +7,70 @@ columns:
   verbose_name: Thoi gian cap nhat
   is_dttm: true
   type: DATETIME
-- column_name: company_name
-  verbose_name: Ten doanh nghiep
-  type: STRING
-- column_name: business_type
+- column_name: business_type_group
   verbose_name: Nhom nganh
   type: STRING
-- column_name: business_type_group
-  verbose_name: Nhom nganh rut gon
-  type: STRING
-- column_name: address
-  verbose_name: Dia chi
-  type: STRING
-- column_name: website
-  verbose_name: Website
-  type: STRING
+- column_name: company_count
+  verbose_name: So doanh nghiep
+  type: FLOAT
 metrics:
 - metric_name: company_count
   verbose_name: So doanh nghiep
-  expression: COUNT(company_name)
+  expression: SUM(company_count)
 database_uuid: ${DATABASE_UUID}
 schema: SeaBank_Data
-sql: SELECT
-  timestamp,
-  company_name,
-  business_type,
-  CASE
-    WHEN lower(coalesce(business_type, '')) LIKE '%may/thiet bi%' THEN 'May thiet bi'
-    WHEN lower(coalesce(business_type, '')) LIKE '%nguyen phu lieu%' THEN 'Nguyen phu lieu'
-    WHEN lower(coalesce(business_type, '')) LIKE '%nhuom%' THEN 'Nhuom/hoan tat'
-    WHEN lower(coalesce(business_type, '')) LIKE '%keo soi%' THEN 'Keo soi'
-    WHEN lower(coalesce(business_type, '')) LIKE '%det vai%' THEN 'Det vai'
-    WHEN lower(coalesce(business_type, '')) LIKE '%det%' THEN 'Det vai'
-    WHEN lower(coalesce(business_type, '')) LIKE '%may%' THEN 'May mac'
-    ELSE 'Khac'
-  END AS business_type_group,
-  address,
-  website
-  FROM "textile_directory"
+sql: |
+  WITH normalized AS (
+    SELECT
+      timestamp,
+      CASE
+        WHEN lower(coalesce(business_type, '')) LIKE '%may/thiet bi%' THEN 'May thiet bi'
+        WHEN lower(coalesce(business_type, '')) LIKE '%nguyen phu lieu%' THEN 'Nguyen phu lieu'
+        WHEN lower(coalesce(business_type, '')) LIKE '%nhuom%' THEN 'Nhuom/hoan tat'
+        WHEN lower(coalesce(business_type, '')) LIKE '%keo soi%' THEN 'Keo soi'
+        WHEN lower(coalesce(business_type, '')) LIKE '%det vai%' THEN 'Det vai'
+        WHEN lower(coalesce(business_type, '')) LIKE '%det%' THEN 'Det vai'
+        WHEN lower(coalesce(business_type, '')) LIKE '%may%' THEN 'May mac'
+        ELSE 'Khac'
+      END AS business_type_group
+    FROM "textile_directory"
+  ), agg AS (
+    SELECT
+      business_type_group,
+      COUNT(*) AS company_count,
+      MAX(timestamp) AS latest_ts
+    FROM normalized
+    GROUP BY business_type_group
+  ), ranked AS (
+    SELECT
+      business_type_group,
+      company_count,
+      latest_ts,
+      ROW_NUMBER() OVER (ORDER BY company_count DESC, business_type_group ASC) AS rn
+    FROM agg
+    WHERE business_type_group <> 'Khac'
+  ), top6 AS (
+    SELECT business_type_group, company_count, latest_ts, rn
+    FROM ranked
+    WHERE rn <= 6
+  ), others AS (
+    SELECT
+      'Khac' AS business_type_group,
+      COALESCE(SUM(company_count), 0) AS company_count,
+      MAX(latest_ts) AS latest_ts,
+      99 AS rn
+    FROM agg
+    WHERE business_type_group NOT IN (SELECT business_type_group FROM top6)
+  )
+  SELECT
+    latest_ts AS timestamp,
+    business_type_group,
+    company_count
+  FROM (
+    SELECT business_type_group, company_count, latest_ts, rn FROM top6
+    UNION ALL
+    SELECT business_type_group, company_count, latest_ts, rn FROM others
+  )
+  WHERE company_count > 0
+  ORDER BY CASE WHEN business_type_group = 'Khac' THEN 999 ELSE rn END
 uuid: 44b8f6ce-d922-4857-8478-41d81a929221

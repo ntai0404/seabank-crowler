@@ -19,6 +19,9 @@ columns:
 - column_name: period_label
   verbose_name: Ky bao cao ngan
   type: STRING
+- column_name: period_label_short
+  verbose_name: Ky bao cao rut gon
+  type: STRING
 - column_name: period_sort
   verbose_name: Thu tu ky bao cao
   type: FLOAT
@@ -50,6 +53,13 @@ sql: SELECT
     ELSE 'Khac'
   END AS period_group,
   REPLACE(period, '-20', '/') AS period_label,
+  CASE
+    WHEN period = 'K2-T1-2026' THEN 'K2-T1/26'
+    WHEN period = 'T2-2026' THEN 'T2/26'
+    WHEN period = 'K1-T2-2026' THEN 'K1-T2/26'
+    WHEN period = 'K2-T2-2026' THEN 'K2-T2/26'
+    ELSE REPLACE(period, '-20', '/')
+  END AS period_label_short,
   CASE
     WHEN period = 'K2-T1-2026' THEN 1
     WHEN period = 'T2-2026' THEN 2
