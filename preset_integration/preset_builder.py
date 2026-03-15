@@ -59,15 +59,15 @@ def build_preset_assets():
     CHART_UUIDS = {
         "interest_rate_bar.yaml":      "5518f6ce-d922-4857-8478-41d81a929121",
         "stock_trend_line.yaml":       "5518f6ce-d922-4857-8478-41d81a929201",
-        "customs_trade_mixed.yaml":    "5518f6ce-d922-4857-8478-41d81a929202",
+        "customs_trade_mixed.yaml":    "5518f6ce-d922-4857-8478-41d81a929230",
         "banking_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929154",
         "textile_news_table.yaml":     "5518f6ce-d922-4857-8478-41d81a929125",
         "exchange_rates_table.yaml":   "5518f6ce-d922-4857-8478-41d81a929152",
         "bank_stocks_table.yaml":      "5518f6ce-d922-4857-8478-41d81a929153",
         "interest_rate_12m_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929149",
-        "gold_prices_trend_line.yaml": "5518f6ce-d922-4857-8478-41d81a929224",
-        "customs_commodity_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929225",
-        "textile_directory_type_bar.yaml": "5518f6ce-d922-4857-8478-41d81a929226",
+        "gold_prices_trend_line.yaml": "5518f6ce-d922-4857-8478-41d81a929227",
+        "customs_commodity_bar.yaml":  "5518f6ce-d922-4857-8478-41d81a929228",
+        "textile_directory_type_bar.yaml": "5518f6ce-d922-4857-8478-41d81a929229",
     }
 
     CHART_MAP = {
