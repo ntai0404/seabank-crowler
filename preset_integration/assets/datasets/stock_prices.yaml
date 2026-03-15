@@ -41,5 +41,16 @@ metrics:
   expression: AVG(gia_dong_cua)
 database_uuid: 44b8f6ce-d922-4857-8478-41d81a929111
 schema: SeaBank_Data
-sql: SELECT * FROM "stock_prices"
+sql: SELECT
+  timestamp,
+  symbol,
+  datetime(ngay) AS ngay,
+  gia_mo_cua,
+  gia_cao_nhat,
+  gia_thap_nhat,
+  gia_dong_cua,
+  thay_doi,
+  khoi_luong,
+  gia_tri
+  FROM "stock_prices"
 uuid: 44b8f6ce-d922-4857-8478-41d81a929112
