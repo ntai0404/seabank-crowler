@@ -23,6 +23,9 @@ class VinatexAgent(BaseAgent):
     SOURCE_NAME = "vinatex"
     SOURCE_URL  = "http://www.vinatex.com"
 
+    # Dedup theo URL (col 3) để không ghi trùng bài cũ khi chạy lại
+    UPSERT_KEY_COLUMNS = {"vinatex_news": [3]}
+
     _NEWS_PAGES = [
         {"url": "http://www.vinatex.com/news/",        "lang": "en", "category": "News"},
         {"url": "http://www.vinatex.com/tin-tuc/",     "lang": "vi", "category": "Tin tức"},

@@ -26,6 +26,9 @@ class TextileAgent(BaseAgent):
     SOURCE_NAME = "vitas"
     SOURCE_URL  = "http://www.vietnamtextile.org.vn"
 
+    # Dedup theo URL (col 3) để không ghi trùng bài cũ khi chạy lại
+    UPSERT_KEY_COLUMNS = {"textile_news": [3]}
+
     @staticmethod
     def _normalize_published_date(raw_date: str) -> str:
         """Chuẩn hoá ngày về YYYY-MM-DD và loại bỏ mốc năm bất thường."""

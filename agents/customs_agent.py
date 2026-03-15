@@ -28,6 +28,12 @@ class CustomsAgent(BaseAgent):
     SOURCE_NAME = "customs"
     SOURCE_URL  = "https://www.customs.gov.vn"
 
+    # Dedup theo (category, period) để không ghi trùng khi chạy lại cùng ngày
+    UPSERT_KEY_COLUMNS = {
+        "customs_trade": [2, 3],
+        "customs_commodity_details": [1, 2],
+    }
+
     # Trang thống kê nhanh hàng ngày
     _URL_QUICK_STATS  = "https://www.customs.gov.vn/index.jsp?pageCode=THONG_KE_NHANH"
     # Trang tìm kiếm báo cáo thống kê
