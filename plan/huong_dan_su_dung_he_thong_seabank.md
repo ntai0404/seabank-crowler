@@ -94,12 +94,44 @@ Các cột:
 - metric_value
 - meta_json
 
-G. Các tab phụ khác
+G. Tab gold_prices - Giá vàng SJC
+
+Mục đích: Theo dõi giá mua bán vàng SJC theo từng loại sản phẩm.
+
+Các cột:
+- timestamp: thời điểm crawler ghi dữ liệu.
+- gold_type: tên loại vàng, ví dụ Vàng SJC 1L, 10L, 1KG.
+- buy_price: giá mua vào.
+- sell_price: giá bán ra.
+
+H. Tab customs_commodity_details - Chi tiết xuất nhập khẩu theo kỳ
+
+Mục đích: Theo dõi kim ngạch xuất khẩu và nhập khẩu theo từng kỳ báo cáo của Tổng cục Hải quan.
+
+Các cột:
+- timestamp: thời điểm crawler ghi dữ liệu.
+- category: nhóm dữ liệu, ví dụ Xuất khẩu hoặc Nhập khẩu.
+- period: kỳ báo cáo, ví dụ K1-T2-2026.
+- export_value: kim ngạch xuất khẩu tỷ USD.
+- import_value: kim ngạch nhập khẩu tỷ USD.
+- change_pct: biến động so với kỳ trước.
+
+I. Tab textile_directory - Danh bạ hội viên VITAS
+
+Mục đích: Lưu thông tin các doanh nghiệp hội viên của Hiệp hội Dệt may Việt Nam VITAS.
+
+Các cột:
+- timestamp: thời điểm crawler ghi dữ liệu.
+- company_name: tên doanh nghiệp.
+- business_type: loại hình sản xuất, ví dụ May mặc, Dệt vải, Nhuộm, Kéo sợi.
+- address: địa chỉ.
+- phone: số điện thoại.
+
+J. Các tab phụ khác
 
 - macro_indicators: chỉ số vĩ mô quốc tế.
-- gold_prices: giá vàng nếu nguồn có dữ liệu hợp lệ.
-- vinatex_news: tin từ Vinatex.
-- customs_commodity_details và textile_directory: tab mở rộng theo nhu cầu.
+- vinatex_news: tin tức từ Vinatex.
+- banking_news: tin tức ngân hàng và bất động sản từ CafeF.
 
 1.2. Agent bot: code đang chạy trên GitHub Actions
 
@@ -117,6 +149,10 @@ Luồng chạy của hệ thống:
 3. Hệ thống chạy lệnh python main.py --agents all hoặc chỉ định từng agent.
 4. Các agent crawl dữ liệu, chuẩn hóa dữ liệu và ghi vào Google Sheets.
 
+Cơ chế bảo vệ dữ liệu lịch sử:
+
+Tất cả các agent đều có UPSERT_KEY_COLUMNS. Trước khi ghi dữ liệu mới, hệ thống tự động xóa các hàng trùng key trong cùng ngày rồi mới append. Nhờ đó dữ liệu của các ngày trước không bao giờ bị ảnh hưởng khi chạy lại agent nhiều lần trong cùng một ngày.
+
 Lịch chạy hiện tại trong GitHub Actions:
 
 - 01:00 UTC, tương đương 08:00 giờ Việt Nam.
@@ -129,20 +165,83 @@ Workflow có hỗ trợ chạy tay với các tham số:
 
 1.3. Preset: các biểu đồ hiện có
 
-Dashboard hiện có 8 biểu đồ chính:
+Dashboard hiện có 11 biểu đồ, mỗi biểu đồ nằm trên một hàng riêng để hiển thị rõ ràng:
 
-1. So sánh lãi suất huy động giữa các ngân hàng.
-2. Biến động giá cổ phiếu ngân hàng và các mã liên quan.
-3. So sánh kim ngạch xuất nhập khẩu Hải quan.
-4. Thống kê tin tức theo chủ đề trong 24 giờ gần nhất.
-5. Danh sách tin tức ngành dệt may mới nhất.
-6. Tỷ giá ngoại tệ Vietcombank theo giá mua và giá bán.
-7. So sánh lãi suất tiền gửi kỳ hạn 12 tháng.
-8. Bảng giá cổ phiếu ngân hàng như VCB, BID, CTG, MBB, ACB, TCB.
+Biểu đồ 1 - So sánh Lãi suất huy động giữa các Ngân hàng
 
-Lưu ý:
+Loại biểu đồ: Cột nhóm theo kỳ hạn (1 tháng, 3 tháng, 6 tháng, 12 tháng...).
+Nội dung: So sánh lãi suất huy động của nhiều ngân hàng trên cùng một khung nhìn. Mỗi nhóm cột là một kỳ hạn, mỗi cột là một ngân hàng.
+Dùng để làm gì: Nhận diện nhanh ngân hàng nào đang trả lãi cao nhất hoặc thấp nhất theo từng kỳ hạn, phục vụ theo dõi cạnh tranh lãi suất huy động trên thị trường.
 
-Preset đôi khi cache chart cũ theo UUID. Khi có lỗi hiển thị kéo dài, quản trị có thể phải import bản mới hoặc cập nhật lại chart trong bộ asset.
+Biểu đồ 2 - Biến động % Cổ phiếu Ngân hàng (Top 12 mã)
+
+Loại biểu đồ: Đường thời gian (line chart) theo ngày.
+Nội dung: Hiển thị 12 mã cổ phiếu ngân hàng lớn gồm VCB, BID, CTG, MBB, ACB, TCB, VPB, STB, LPB, HDB, SHB, TPB. Trục dọc là phần trăm tăng hoặc giảm so với phiên đầu tiên trong bộ dữ liệu, không phải giá tuyệt đối.
+Lý do dùng %: Vì các mã có giá rất khác nhau, ví dụ VCB ở vùng 90 trong khi có mã chỉ ở vùng 10, nếu vẽ theo giá tuyệt đối thì các mã thấp giá sẽ bị nén sát trục và không đọc được biến động. Dùng % giúp so sánh hiệu suất thực sự của các mã trên cùng một thước đo.
+Dùng để làm gì: Theo dõi xu hướng nhóm cổ phiếu ngân hàng trong trung và dài hạn, phát hiện mã nào vượt trội hoặc tụt hậu so với nhóm.
+Lưu ý: Muốn xem giá đóng cửa cụ thể từng phiên, dùng biểu đồ số 8.
+
+Biểu đồ 3 - So sánh Kim ngạch Xuất nhập khẩu Hải quan
+
+Loại biểu đồ: Cột nhóm.
+Nội dung: Hiển thị tổng kim ngạch xuất khẩu và nhập khẩu theo dữ liệu tổng hợp từ Tổng cục Hải quan, đơn vị tỷ USD.
+Dùng để làm gì: Theo dõi cán cân thương mại, so sánh xuất siêu hay nhập siêu qua từng kỳ cập nhật.
+
+Biểu đồ 4 - Danh sách Tin tức Ngân hàng và Bất động sản mới nhất
+
+Loại biểu đồ: Bảng dữ liệu có thể nhấp vào tiêu đề để mở bài viết.
+Nội dung: Liệt kê các bài viết mới nhất được thu thập từ CafeF về chủ đề ngân hàng và bất động sản. Mỗi dòng gồm tiêu đề, ngày đăng và đường dẫn bài viết.
+Dùng để làm gì: Cập nhật nhanh tin tức thị trường tài chính và bất động sản mà không cần rời khỏi dashboard.
+
+Biểu đồ 5 - Danh sách Tin tức Ngành Dệt may mới nhất
+
+Loại biểu đồ: Bảng dữ liệu tương tự biểu đồ 4.
+Nội dung: Tin tức từ nguồn VITAS về ngành dệt may, sợi, nguyên phụ liệu và thị trường xuất khẩu.
+Dùng để làm gì: Theo dõi diễn biến ngành dệt may phục vụ đánh giá rủi ro cho vay doanh nghiệp dệt may.
+
+Biểu đồ 6 - Tỷ giá Ngoại tệ Vietcombank
+
+Loại biểu đồ: Bảng tra cứu.
+Nội dung: Tỷ giá mua vào và bán ra của các ngoại tệ phổ biến như USD, EUR, JPY, AUD được cập nhật từ bảng tỷ giá Vietcombank.
+Dùng để làm gì: Tra cứu nhanh tỷ giá tham chiếu phục vụ nghiệp vụ ngoại hối hoặc so sánh với tỷ giá nội bộ của ngân hàng.
+
+Biểu đồ 7 - So sánh Lãi suất Tiền gửi kỳ hạn 12 tháng
+
+Loại biểu đồ: Cột nằm ngang hoặc cột đứng theo ngân hàng.
+Nội dung: So sánh riêng lãi suất tiền gửi kỳ hạn 12 tháng giữa các ngân hàng, tách biệt với biểu đồ 1 để dễ nhìn hơn cho kỳ hạn dài.
+Dùng để làm gì: Đánh giá vị thế cạnh tranh lãi suất tiền gửi trung dài hạn, phục vụ họp hội đồng lãi suất hoặc báo cáo định kỳ cho ban lãnh đạo.
+
+Biểu đồ 8 - Bảng Giá Cổ phiếu Ngân hàng chi tiết
+
+Loại biểu đồ: Bảng tra cứu có tìm kiếm và sắp xếp.
+Nội dung: Hiển thị dữ liệu từng phiên giao dịch gồm giá mở cửa, giá cao nhất, giá thấp nhất, giá đóng cửa và phần trăm thay đổi. Bao gồm 24 mã cổ phiếu ngân hàng trong danh sách theo dõi.
+Dùng để làm gì: Tra cứu giá cụ thể của một mã trong một ngày bất kỳ, xuất dữ liệu cho báo cáo phân tích riêng.
+
+Biểu đồ 9 - Giá vàng SJC mới nhất theo loại
+
+Loại biểu đồ: Thanh ngang (horizontal bar), sắp xếp giảm dần theo giá bán.
+Nội dung: Hiển thị giá bán ra của từng loại vàng SJC trong ngày gần nhất, đơn vị triệu VND trên lượng. Tên loại vàng được rút gọn để dễ đọc, ví dụ SJC 1L-1KG, Nhẫn 99.99 1-5 chỉ.
+Dùng để làm gì: Theo dõi diễn biến giá vàng trong nước, tham chiếu khi xử lý nghiệp vụ liên quan đến tài sản đảm bảo là vàng.
+
+Biểu đồ 10 - Xuất khẩu vs Nhập khẩu theo kỳ báo cáo
+
+Loại biểu đồ: Cột nhóm đứng, mỗi nhóm là một kỳ báo cáo.
+Nội dung: Hiển thị kim ngạch xuất khẩu và nhập khẩu theo từng kỳ ngắn hạn của Tổng cục Hải quan như K1-T2/26, K2-T2/26, đơn vị tỷ USD. Trục thời gian sắp xếp theo thứ tự kỳ báo cáo từ cũ đến mới.
+Dùng để làm gì: Nhìn thấy xu hướng ngắn hạn của hoạt động ngoại thương trong tháng hiện tại, phát hiện biến động bất thường giữa các nửa tháng.
+
+Biểu đồ 11 - Cơ cấu Hội viên VITAS Top6 + Khác
+
+Loại biểu đồ: Thanh ngang (horizontal bar), sắp xếp từ nhiều doanh nghiệp nhất đến ít nhất.
+Nội dung: Phân loại các doanh nghiệp hội viên VITAS theo nhóm ngành sản xuất gồm May mặc, Dệt vải, Nhuộm/hoàn tất, Kéo sợi, Nguyên phụ liệu, Máy thiết bị và nhóm Khác. Hiển thị 6 nhóm lớn nhất và gộp phần còn lại vào nhóm Khác.
+Dùng để làm gì: Hiểu cơ cấu ngành dệt may Việt Nam theo số lượng doanh nghiệp, phục vụ phân tích danh mục cho vay và đánh giá mức độ tập trung rủi ro theo phân ngành.
+
+Lưu ý về Preset cache:
+
+Preset cache chart cũ theo UUID slice. Khi import bản mới, luôn chọn Overwrite và hard refresh trình duyệt sau khi import để tránh thấy biểu đồ phiên bản cũ. Nếu chart vẫn hiển thị tên hoặc dữ liệu cũ sau khi import, thử xóa cache trình duyệt hoặc mở tab ẩn danh.
+
+Cập nhật dashboard:
+
+Mỗi lần cần cập nhật cấu hình hiển thị, kỹ thuật viên chạy lại `python preset_integration/preset_builder.py` trên máy cục bộ để tạo file ZIP mới, rồi import vào Preset với tùy chọn Overwrite. Không cần sửa chart trực tiếp trên giao diện Preset.
 
 2. Cách sử dụng hệ thống hiện tại
 
@@ -169,8 +268,9 @@ Bước 2. Truy cập và sử dụng Google Sheets
 Bước 3. Truy cập và sử dụng Dashboard Preset
 
 - Mở dashboard Preset của hệ thống SeaBank Monitor.
-- Theo dõi 8 biểu đồ theo nhu cầu nghiệp vụ.
+- Theo dõi 11 biểu đồ theo nhu cầu nghiệp vụ.
 - Nếu thấy số liệu cũ, bấm refresh dashboard. Nếu vẫn chưa cập nhật, báo quản trị để kiểm tra lịch chạy crawler hoặc cache Preset.
+- Lưu ý đặc biệt: Biểu đồ cổ phiếu số 2 hiển thị % biến động so với đầu kỳ, không phải giá tuyệt đối. Muốn xem giá cụ thể từng phiên, dùng bảng giá cổ phiếu số 8.
 
 Bước 4. Quy trình báo lỗi chuẩn
 
