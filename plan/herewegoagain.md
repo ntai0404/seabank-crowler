@@ -1,6 +1,6 @@
 # Project Milestone & Status Report: SeaBank Crawler
 
-> **Cập nhật lần cuối:** 2026-03-11 | **Commit hiện tại:** `2540157`
+> **Cập nhật lần cuối:** 2026-03-16 | **Commit hiện tại:** `2528dca`
 
 ---
 
@@ -21,21 +21,25 @@
 - Tự động cài đặt môi trường trình duyệt (Playwright) và xử lý bảo mật (Secrets) an toàn.
 - Cơ chế chống lỗi "404 Not Found" do ký tự rác trong cấu hình.
 
-### 4. Preset.io Dashboard (5 → 8 charts) ✅
+
+### 4. Preset.io Dashboard (now 11 charts) ✅
 - **Workspace:** `86253470.us2a.app.preset.io`
 - **preset_builder.py** đọc `assets/` → build `dist/` → đóng gói ZIP → import vào Preset
-- Dashboard hiện có **8 charts** trên **5 rows:**
+- Dashboard hiện có **11 charts** trên nhiều hàng (full-width khi cần):
 
 | Row | Tên chart | Dataset | Width |
 |-----|-----------|---------|-------|
-| ROW-1 | So sánh Lãi suất huy động (tất cả kỳ hạn) | bank_interest_rates | 6 |
-| ROW-1 | Xu hướng giá cổ phiếu | stock_prices | 6 |
-| ROW-2 | Thống kê XNK Hải quan | customs_trade | 12 |
-| ROW-3 | Tin tức Banking/BĐS | web_metrics | 12 |
-| ROW-3 (riêng) | Tin tức Dệt may VITAS | textile_news | 12 |
-| ROW-4 | **Tỷ giá ngoại tệ** (table) | exchange_rates | 5 |
-| ROW-4 | **Lãi suất 12 tháng** (bar) | bank_interest_rates | 7 |
-| ROW-5 | **Cổ phiếu ngân hàng** (table, 24 mã) | stock_prices | 12 |
+| ROW-1 | So sánh Lãi suất huy động (các kỳ hạn) | bank_interest_rates | 6 |
+| ROW-1 | Biến động % Cổ phiếu Ngân hàng (Top 12) | stock_prices | 6 |
+| ROW-2 | So sánh Kim ngạch Xuất nhập khẩu (Hải quan) | customs_trade | 12 |
+| ROW-3 | Danh sách Tin tức Ngân hàng & BĐS | web_metrics | 12 |
+| ROW-3 | Danh sách Tin tức Ngành Dệt may | textile_news | 12 |
+| ROW-4 | Tỷ giá Ngoại tệ Vietcombank (Mua/Bán) | exchange_rates | 5 |
+| ROW-4 | So sánh Lãi suất Tiền gửi 12 tháng | bank_interest_rates | 7 |
+| ROW-5 | Bảng Giá Cổ phiếu chi tiết (24 mã) | stock_prices | 12 |
+| ROW-6 | Giá vàng SJC mới nhất theo loại | gold_prices | 6 |
+| ROW-6 | Xuất khẩu vs Nhập khẩu theo kỳ | customs_commodity_details | 6 |
+| ROW-7 | Cơ cấu Hội viên VITAS Top6 + Khác | textile_directory | 12 |
 
 ---
 
